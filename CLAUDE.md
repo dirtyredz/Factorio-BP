@@ -77,8 +77,13 @@ to an entity field **by matching the stored value**, not by any explicit link.
 
 Consequences that cost real debugging:
 
-- **Never overwrite a `parameter-N` reference.** A concrete item name in its place is always
-  paste substitution, never an edit worth keeping.
+- **Never orphan a `parameter-N` reference — but the token is what's sacred, not the whole
+  string.** A name like `[item=parameter-0][virtual-signal=down-arrow]` is a template: only the
+  `parameter-0` token must survive. If the rebuilt value dropped it — a concrete item name in its
+  place is paste substitution — keep the base. If it still carries every `parameter-N` the base
+  had, the binding can't break, so take the edit: renaming a `[item=parameter-0]` stop (dropping
+  the arrow, or adding free text around the token) is a real change worth keeping. `protect()`
+  compares the two token sets to decide.
 - **Do overwrite plain numbers.** They are only "parameter-bound" by coincidence of value, and
   the owner may have deliberately changed one — the train stop's enable condition went 2 → 1
   while `Limit` was also 2, and protecting it silently reverted the exact edit they asked for.

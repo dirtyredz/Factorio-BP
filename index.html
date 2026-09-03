@@ -1280,7 +1280,20 @@
   // Take the rebuilt entity's settings, except wherever the base value is one a
   // parameter binds to — those stay, or the parameter loses its anchor.
   function protect(base, inc, params) {
-    if (bound(base, params)) return base;
+    if (bound(base, params)) {
+      // The base value anchors a parameter. Normally it must stay — but a name string
+      // like `[item=parameter-0][virtual-signal=down-arrow]` is a template, not just
+      // the substituted item: only the `parameter-N` token is sacred, the rest is
+      // editable. If the rebuilt value still carries every `parameter-N` the base had,
+      // the binding survives (paramsStillBind confirms it), so an edit around the token
+      // — renaming a `[item=parameter-0]` stop — is a real change worth keeping.
+      if (typeof base === "string" && typeof inc === "string") {
+        const need = base.match(/parameter-\d+/g) || [];
+        const have = new Set(inc.match(/parameter-\d+/g) || []);
+        if (need.every(p => have.has(p))) return inc;
+      }
+      return base;
+    }
     if (Array.isArray(inc)) {
       if (!Array.isArray(base)) return inc;
       return inc.map((v, i) => (i < base.length ? protect(base[i], v, params) : v));

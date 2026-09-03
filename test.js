@@ -151,6 +151,43 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
     })()]
   );
 
+  // --- scenario 3b: a parametrised name that KEEPS its parameter is editable ---
+  // Scenario 3 renames the stop to something concrete, which drops parameter-0, so it
+  // is held back. But renaming a `[item=parameter-0]` stop while keeping the token —
+  // dropping the trailing arrow, or adding free text around it — leaves the binding
+  // intact, so the edit must carry across. Regression guard for protect()'s check that
+  // every base `parameter-N` still appears in the rebuilt value.
+  const renameStop = async newName => {
+    const ed = JSON.parse(JSON.stringify(B));
+    ed.blueprint.entities.find(e => e.name === 'train-stop').station = newName;
+    const E2 = await api.decode(await api.encode(ed));
+    const dd = api.compare(A, E2);
+    const st = dd.modified.find(e => e.name === 'train-stop');
+    const on = api.merge(A, E2, dd, false, new Set([api.key(st, api.ZERO)])).out;
+    const off = api.merge(A, E2, dd, false, new Set()).out;
+    return {
+      seen: !!st,
+      on: api.bpOf(on).entities.find(e => e.name === 'train-stop').station,
+      off: api.bpOf(off).entities.find(e => e.name === 'train-stop').station,
+      binds: api.paramsStillBind(api.bpOf(await api.decode(await api.encode(on)))),
+    };
+  };
+  const dropArrow = await renameStop('[item=parameter-0]');
+  const addText = await renameStop('[item=parameter-0] Unload');
+  const concrete = await renameStop('[item=iron-plate][virtual-signal=down-arrow]');
+
+  checks.push(
+    ['rename: dropping the arrow but keeping parameter-0 is seen as changed', dropArrow.seen],
+    ['rename: ticked takes the edit when parameter-0 survives', dropArrow.on === '[item=parameter-0]'],
+    ['rename: dropping the arrow still binds every parameter', dropArrow.binds],
+    ['rename: unticked still leaves the name alone',
+      dropArrow.off === '[item=parameter-0][virtual-signal=down-arrow]'],
+    ['rename: adding text around parameter-0 carries across', addText.on === '[item=parameter-0] Unload'],
+    ['rename: adding text still binds every parameter', addText.binds],
+    ['rename: a substituted concrete item is still held back',
+      concrete.on === '[item=parameter-0][virtual-signal=down-arrow]']
+  );
+
   // --- scenario 4: rotating a blueprint on its own ---
   // Compare entities regardless of key order (a turn can move `direction` in the
   // object) and treat an absent direction as north.

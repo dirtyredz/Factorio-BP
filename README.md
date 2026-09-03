@@ -208,9 +208,12 @@ rarely changes between versions, and it spans the whole build.
 **Changed settings need opting in, per entity.** Tick **use rebuilt settings** on the ones you
 want (or `--apply-changes` on the CLI). They're off by default because the base holds the
 parametrised version of that entity and the rebuilt copy holds whatever your test paste
-substituted. When you do opt in, the copy goes field by field: `parameter-0`-style references
-keep the base value, so a stop named `[item=parameter-0]` stays parametrised while its logic
-updates. **Every parameter still binds** in the verification list confirms it worked.
+substituted. When you do opt in, the copy goes field by field, and a `parameter-N` token is the
+one thing it won't let you break: if your rebuilt value dropped it (a concrete item the paste
+substituted in), the base value is kept; if it still carries the token, your edit is taken — so a
+stop named `[item=parameter-0]` stays parametrised, and *renaming* it while keeping the token
+(e.g. `[item=parameter-0] Unload`, or dropping a trailing arrow) carries across. **Every parameter
+still binds** in the verification list confirms it worked.
 
 **A quarter turn's grid alignment is a best guess.** A 180° turn restores the build's bounding
 box exactly, which is provably right, and so does a flip. A quarter turn changes the build's
