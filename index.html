@@ -1,0 +1,2557 @@
+<title>Blueprint Merge</title>
+
+<style>
+  :root {
+    --ground:      #16171a;
+    --panel:       #1e2024;
+    --panel-2:     #25282d;
+    --edge:        #33373e;
+    --edge-bright: #454a53;
+    --ink:         #dcdde0;
+    --ink-dim:     #9a9da4;
+    --ink-faint:   #6c7078;
+    --accent:      #e8a33d;
+    --accent-dim:  #a8752a;
+    --add:         #7fb356;
+    --remove:      #cf6248;
+    --modify:      #d9a72c;
+    --field:       #131417;
+
+    --face-display: "Bahnschrift", "DIN Alternate", "Roboto Condensed", system-ui, sans-serif;
+    --face-ui: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    --face-data: "Cascadia Mono", Consolas, ui-monospace, monospace;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --ground:      #e4e6e9;
+      --panel:       #f4f5f6;
+      --panel-2:     #e9ebee;
+      --edge:        #c6cad0;
+      --edge-bright: #a8aeb7;
+      --ink:         #1f2126;
+      --ink-dim:     #565b63;
+      --ink-faint:   #7e848d;
+      --accent:      #a86616;
+      --accent-dim:  #c98a2c;
+      --add:         #47761f;
+      --remove:      #a83d26;
+      --modify:      #8a6a10;
+      --field:       #ffffff;
+    }
+  }
+
+  :root[data-theme="light"] {
+    --ground:      #e4e6e9;
+    --panel:       #f4f5f6;
+    --panel-2:     #e9ebee;
+    --edge:        #c6cad0;
+    --edge-bright: #a8aeb7;
+    --ink:         #1f2126;
+    --ink-dim:     #565b63;
+    --ink-faint:   #7e848d;
+    --accent:      #a86616;
+    --accent-dim:  #c98a2c;
+    --add:         #47761f;
+    --remove:      #a83d26;
+    --modify:      #8a6a10;
+    --field:       #ffffff;
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #16171a;
+    --panel:       #1e2024;
+    --panel-2:     #25282d;
+    --edge:        #33373e;
+    --edge-bright: #454a53;
+    --ink:         #dcdde0;
+    --ink-dim:     #9a9da4;
+    --ink-faint:   #6c7078;
+    --accent:      #e8a33d;
+    --accent-dim:  #a8752a;
+    --add:         #7fb356;
+    --remove:      #cf6248;
+    --modify:      #d9a72c;
+    --field:       #131417;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--face-ui);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 20px 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  header { display: flex; flex-direction: column; gap: 6px; }
+
+  .topbar {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--edge);
+  }
+
+  .brand {
+    font-family: var(--face-display);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    text-decoration: none;
+  }
+
+  .brand:hover { color: var(--accent); }
+  .brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .crumb {
+    font-family: var(--face-display);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .crumb::before { content: "/"; margin-right: 12px; color: var(--edge-bright); }
+  .crumb:empty { display: none; }
+
+  .view { display: none; }
+  .view.on { display: flex; flex-direction: column; gap: 22px; }
+
+  .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 800px) { .tools { grid-template-columns: 1fr; } }
+
+  .tool {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 20px;
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    border-top: 2px solid var(--edge-bright);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .tool:hover { background: var(--panel-2); border-top-color: var(--accent); }
+  .tool:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .tool-name {
+    font-family: var(--face-display);
+    font-size: 21px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .tool-line {
+    font-family: var(--face-data);
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  .tool-say { font-size: 13.5px; color: var(--ink-dim); }
+
+  .eyebrow {
+    font-family: var(--face-display);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--face-display);
+    font-size: clamp(30px, 5vw, 42px);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--ink-dim); max-width: 66ch; margin: 0; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .inputs { grid-template-columns: 1fr; } }
+
+  .slot {
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slot-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--edge);
+    background: var(--panel-2);
+  }
+
+  .slot-name {
+    font-family: var(--face-display);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .slot-role { font-size: 12px; color: var(--ink-faint); text-align: right; }
+
+  textarea {
+    font-family: var(--face-data);
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink);
+    background: var(--field);
+    border: 0;
+    padding: 12px 14px;
+    resize: vertical;
+    min-height: 132px;
+    width: 100%;
+    box-sizing: border-box;
+    word-break: break-all;
+  }
+
+  textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .slot-foot {
+    padding: 8px 14px;
+    border-top: 1px solid var(--edge);
+    font-family: var(--face-data);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    min-height: 19px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .slot-foot.bad { color: var(--remove); }
+  .slot-foot.good { color: var(--ink-dim); }
+
+  .bar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .bar .split { width: 1px; align-self: stretch; min-height: 20px; background: var(--edge); }
+
+  button {
+    font-family: var(--face-display);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ground);
+    background: var(--accent);
+    border: 0;
+    padding: 11px 26px;
+    cursor: pointer;
+  }
+
+  button:hover { background: var(--accent-dim); }
+  button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  button:disabled { background: var(--edge); color: var(--ink-faint); cursor: not-allowed; }
+
+  button.ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--edge-bright);
+    padding: 9px 18px;
+  }
+
+  button.ghost:hover { background: var(--panel-2); color: var(--accent); }
+
+  button.busy {
+    background: var(--edge);
+    color: var(--ink-dim);
+    cursor: progress;
+  }
+
+  .status {
+    font-family: var(--face-data);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .status.done { color: var(--add); }
+  .status.bad { color: var(--remove); }
+
+  @keyframes pulse { 50% { opacity: 0.45; } }
+  button.busy { animation: pulse 0.9s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { button.busy { animation: none; } }
+
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    cursor: pointer;
+  }
+
+  .toggle input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+  select {
+    font-family: var(--face-data);
+    font-size: 12.5px;
+    color: var(--ink);
+    background: var(--field);
+    border: 1px solid var(--edge-bright);
+    padding: 5px 8px;
+    max-width: 220px;
+  }
+
+  select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .out { display: none; flex-direction: column; gap: 16px; }
+  .out.on { display: flex; }
+
+  .align {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: 1px solid var(--edge);
+    background: var(--panel);
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    padding: 12px 18px;
+    border-right: 1px solid var(--edge);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 128px;
+  }
+
+  .stat:last-child { border-right: 0; }
+
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .stat-value {
+    font-family: var(--face-data);
+    font-size: 19px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .stat-value.add { color: var(--add); }
+  .stat-value.remove { color: var(--remove); }
+  .stat-value.modify { color: var(--modify); }
+  .stat-note { font-size: 11.5px; color: var(--ink-faint); }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 800px) { .cols { grid-template-columns: 1fr; } }
+
+  .card { border: 1px solid var(--edge); background: var(--panel); }
+
+  .card-head {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--edge);
+    background: var(--panel-2);
+    font-family: var(--face-display);
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .card-body { padding: 10px 14px; overflow-x: auto; }
+
+  /* Blueprint preview. The stage is laid out once at PREVIEW_TILE px per tile
+     and then scaled with a transform, so zooming never re-renders it. Factorio's
+     own dirt colour is used regardless of theme — the sprites are lit for it. */
+  .preview {
+    position: relative;
+    overflow: auto;
+    max-height: 60vh;
+    background: #3b3b32;
+    border-bottom: 1px solid var(--edge);
+  }
+
+  .preview-stage {
+    position: relative;
+    transform-origin: 0 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  }
+
+  .preview-stage img,
+  .preview-stage i {
+    position: absolute;
+    display: block;
+  }
+
+  /* Entities with no extracted sprite, and sprites that fail to load — the
+     published copy ships without the sprites folder, so this is the whole
+     picture there rather than a rare fallback. */
+  .preview-stage i,
+  .preview-stage img.miss {
+    background: rgba(232, 163, 61, 0.22);
+    outline: 1px solid rgba(232, 163, 61, 0.5);
+    outline-offset: -1px;
+  }
+
+  /* Grid overlay. The cell is Factorio's green box, drawn at the origin rather
+     than around the build — the gap between the two is the thing to look at. */
+  .preview-stage b {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* Circuit wires, drawn between entity centres. The real attachment points are
+     offset from the centre by a per-entity amount the string doesn't carry, so
+     this shows what connects to what, not the exact cable path. */
+  .pv-wires {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* Held to one screen pixel however far the stage is scaled. */
+  .pv-wires path,
+  .pv-wires circle {
+    fill: none;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pv-wires .w-rd { stroke: #e8574a; }
+  .pv-wires .w-gn { stroke: #63c74d; }
+  .pv-wires .w-cu { stroke: #c8804a; }
+  .pv-wires .w-self { stroke-dasharray: 2 2; }
+
+  .pv-cell {
+    border: 1px solid rgba(127, 200, 90, 0.85);
+    background: rgba(127, 200, 90, 0.09);
+    pointer-events: auto;
+  }
+
+  .pv-bbox {
+    border: 1px dashed rgba(232, 163, 61, 0.8);
+    pointer-events: auto;
+  }
+
+  /* Crosshair on 0,0, drawn from the element's own centre. */
+  .pv-origin {
+    width: 13px;
+    height: 13px;
+    margin: -7px 0 0 -7px;
+    background:
+      linear-gradient(to right, transparent 6px, rgba(255, 255, 255, 0.9) 6px 7px, transparent 7px),
+      linear-gradient(to bottom, transparent 6px, rgba(255, 255, 255, 0.9) 6px 7px, transparent 7px);
+  }
+
+  /* Merge marks. Outlines rather than fills, so the entity underneath stays
+     readable — the question is "which tile changed", not "what colour is it". */
+  .preview-stage u {
+    position: absolute;
+    display: block;
+    pointer-events: auto;
+    border: 2px solid transparent;
+    border-radius: 2px;
+  }
+
+  .mk-add  { border-color: #7fd45a; background: rgba(127, 212, 90, 0.18); }
+  .mk-swap { border-color: #e8a33d; background: rgba(232, 163, 61, 0.18); }
+  .mk-mod  { border-color: #d9c22c; background: rgba(217, 194, 44, 0.15); border-style: dashed; }
+  .mk-gone { border-color: #cf6248; background: rgba(207, 98, 72, 0.18); border-style: dashed; }
+
+  /* Entities that are gone from the result, shown where they used to be. */
+  .preview-stage img.ghost { opacity: 0.3; filter: grayscale(0.6); }
+
+  .preview-legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .preview-legend b { font-weight: 600; color: var(--ink-dim); }
+  .preview-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .preview-legend i {
+    width: 11px; height: 11px; border-radius: 2px; border: 2px solid;
+  }
+
+  .preview-foot {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  .preview-foot .zoom { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .preview-foot .zoom button { padding: 2px 9px; font-size: 13px; line-height: 1.4; }
+  .preview-foot .lvl { font-family: var(--face-data); color: var(--ink-dim); min-width: 4ch; text-align: center; }
+
+  ul.rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
+
+  ul.rows li {
+    font-family: var(--face-data);
+    font-size: 12px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-dim);
+  }
+
+  .mark { display: inline-block; width: 14px; font-weight: 700; }
+  .mark.add { color: var(--add); }
+  .mark.remove { color: var(--remove); }
+  .mark.modify { color: var(--modify); }
+  .ent { color: var(--ink); }
+
+  .empty { font-size: 12.5px; color: var(--ink-faint); font-style: italic; }
+
+  .pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+    padding: 1px 7px 1px 5px;
+    border: 1px solid var(--edge-bright);
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .pick:hover { background: var(--panel-2); }
+  .pick input { accent-color: var(--accent); width: 13px; height: 13px; margin: 0; }
+  .note code { font-family: var(--face-data); font-size: 12px; color: var(--accent); }
+
+  .grid-fix { display: none; }
+  .grid-fix.on { display: block; }
+  .grid-fix .card-body { display: flex; flex-direction: column; gap: 12px; }
+
+  .toggle input[type="number"] {
+    font-family: var(--face-data);
+    font-size: 13px;
+    width: 78px;
+    color: var(--ink);
+    background: var(--field);
+    border: 1px solid var(--edge-bright);
+    padding: 5px 7px;
+  }
+
+  .toggle input[type="number"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .hint { margin: 0; font-size: 13px; color: var(--ink-faint); max-width: 68ch; }
+  .hint span { font-family: var(--face-data); color: var(--ink-dim); }
+  .card-head .sub {
+    font-family: var(--face-ui);
+    font-size: 11.5px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-faint);
+  }
+  .note em { color: var(--ink); font-style: normal; font-weight: 600; }
+
+  .checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+
+  .checks li {
+    font-family: var(--face-data);
+    font-size: 12px;
+    display: flex;
+    gap: 10px;
+    color: var(--ink-dim);
+  }
+
+  .checks .ok { color: var(--add); }
+  .checks .no { color: var(--remove); }
+
+  .note {
+    border-left: 2px solid var(--modify);
+    padding: 9px 0 9px 13px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    background: var(--panel);
+  }
+
+  .note strong { color: var(--ink); font-weight: 600; }
+
+  .result-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .result textarea { min-height: 108px; border: 1px solid var(--edge); }
+  .copied { font-size: 12.5px; color: var(--add); font-family: var(--face-data); }
+
+  .err {
+    border: 1px solid var(--remove);
+    border-left-width: 3px;
+    background: var(--panel);
+    color: var(--ink);
+    padding: 12px 15px;
+    font-size: 13.5px;
+    display: none;
+  }
+
+  .err.on { display: block; }
+  .err code { font-family: var(--face-data); color: var(--remove); }
+
+  footer {
+    border-top: 1px solid var(--edge);
+    padding-top: 16px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    max-width: 74ch;
+  }
+
+  footer b { color: var(--ink-dim); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <nav class="topbar">
+    <a class="brand" href="#/">Blueprint Tools</a>
+    <span class="crumb" id="crumb"></span>
+  </nav>
+
+  <section class="view" id="view-home">
+    <header>
+      <div class="eyebrow">Factorio</div>
+      <h1>Blueprint Tools</h1>
+      <p class="lede">
+        Editing a blueprint in game means re-selecting it, and a re-select throws away its
+        snap-to-grid and its parametrisation. These work on the blueprint's own data instead,
+        so both survive.
+      </p>
+    </header>
+
+    <div class="tools">
+      <a class="tool" href="#/merge">
+        <span class="tool-name">Merge</span>
+        <span class="tool-line">Two versions in, one out</span>
+        <span class="tool-say">Take a rebuilt copy and fold its additions, upgrades, and setting
+          changes back into the parametrised original. Handles a rebuild that moved, turned, or
+          swapped entities out.</span>
+      </a>
+      <a class="tool" href="#/rotate">
+        <span class="tool-name">Rotate &amp; flip</span>
+        <span class="tool-line">Turn or mirror one in place</span>
+        <span class="tool-say">Quarter or half turns, with the grid dimensions swapped and its
+          offset carried round. Flips too — the mirror image of a curved rail is the
+          other-handed curve, which is why the game won't do it for a rail build.</span>
+      </a>
+      <a class="tool" href="#/normalise">
+        <span class="tool-name">Normalise</span>
+        <span class="tool-line">Same grid, same spot</span>
+        <span class="tool-say">Move a build to a fixed place relative to the blueprint origin, so
+          that anything normalised the same way and sharing a grid size lands identically in
+          game. Entities are translated — the only thing that actually moves a build.</span>
+      </a>
+      <a class="tool" href="#/inspect">
+        <span class="tool-name">Inspect</span>
+        <span class="tool-line">Read one without importing</span>
+        <span class="tool-say">What's actually in a string: entity counts, wires, grid settings,
+          and every parameter with its value, variable, and formula.</span>
+      </a>
+    </div>
+
+    <footer>
+      <div><b>Nothing leaves your browser.</b> The strings are decoded and rebuilt on this page.</div>
+      <div><b>Blueprint books aren't supported.</b> Open a book and export a single blueprint.</div>
+    </footer>
+  </section>
+
+  <section class="view" id="view-merge">
+  <header>
+    <h1>Merge</h1>
+    <p class="lede">
+      Paste the <strong>parametrised original</strong> and the <strong>rebuilt version</strong>.
+      The changes get copied into the original, so its snap-to-grid, parameters, and formulas
+      survive — the things a re-select in game throws away.
+    </p>
+  </header>
+
+  <div class="inputs">
+    <div class="slot">
+      <div class="slot-head">
+        <span class="slot-name">Base</span>
+        <span class="slot-role">keeps grid + parameters</span>
+      </div>
+      <textarea id="a" spellcheck="false" placeholder="0eNq..."></textarea>
+      <div class="slot-foot" id="a-info"></div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-head">
+        <span class="slot-name">Rebuilt</span>
+        <span class="slot-role">only its entities are read</span>
+      </div>
+      <textarea id="b" spellcheck="false" placeholder="0eNq..."></textarea>
+      <div class="slot-foot" id="b-info"></div>
+    </div>
+  </div>
+
+  <div class="bar">
+    <button id="go">Merge</button>
+    <label class="toggle" for="anchor">
+      Line up on
+      <select id="anchor"><option value="">whatever fits best</option></select>
+    </label>
+    <label class="toggle">
+      <input type="checkbox" id="rm" />
+      Also delete entities missing from the rebuilt version
+    </label>
+    <span class="status" id="status"></span>
+  </div>
+
+  <div class="err" id="err"></div>
+
+  <div class="out" id="out">
+    <div class="align" id="align"></div>
+
+    <div class="cols">
+      <div class="card">
+        <div class="card-head"><span>Changes</span><span id="chg-count"></span></div>
+        <div class="card-body" id="changes"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span>Verification</span><span id="verdict"></span></div>
+        <div class="card-body"><ul class="checks" id="checks"></ul></div>
+      </div>
+    </div>
+
+    <div id="notes"></div>
+
+    <div class="card">
+      <div class="card-head"><span>Preview</span><span class="sub" id="mrg-preview-name"></span></div>
+      <div class="preview" id="mrg-preview"></div>
+      <div class="preview-foot">
+        <span id="mrg-preview-note"></span>
+        <span id="mrg-preview-legend"></span>
+        <label class="toggle" for="mrg-overlay"><input type="checkbox" id="mrg-overlay" checked /> Grid box</label>
+        <label class="toggle" for="mrg-wires"><input type="checkbox" id="mrg-wires" checked /> Wires</label>
+        <span class="zoom">
+          <button class="ghost" id="mrg-zoom-out">&minus;</button>
+          <span class="lvl" id="mrg-zoom-lvl"></span>
+          <button class="ghost" id="mrg-zoom-in">+</button>
+          <button class="ghost" id="mrg-zoom-fit">Fit</button>
+        </span>
+      </div>
+    </div>
+
+    <div class="card result">
+      <div class="card-head result-head">
+        <span>Merged blueprint</span>
+        <span class="bar">
+          <span class="copied" id="copied"></span>
+          <button class="ghost" id="copy">Copy</button>
+        </span>
+      </div>
+      <textarea id="result" spellcheck="false" readonly></textarea>
+    </div>
+  </div>
+
+  <footer>
+    <div><b>Which string goes where.</b> Base is the one you built the parameters on. Rebuilt is what you get after pasting it down, changing it, and selecting the whole thing into a fresh blueprint — its own grid and parameters are ignored.</div>
+    <div><b>Origins don't have to match, and neither does the facing.</b> The alignment step tries all four rotations and every sensible offset, keeping whichever lands the most entities on the same tiles — tiles, not matching names, so an upgraded build still lines up. If it picks badly, name the anchor yourself; rail is usually the best choice, since there's a lot of it and it rarely changes.</div>
+    <div><b>Swaps are handled as swaps.</b> An upgraded belt is one replacement, not a delete plus an add — otherwise both belts would end up stacked on the same tile. Replacements are applied; plain removals aren't unless you ask.</div>
+    <div><b>Changed settings are opt-in, per entity.</b> Tick <b>use rebuilt settings</b> on the ones you want updated. The copy goes field by field and leaves <code>parameter-0</code>-style references alone, so a stop named <code>[item=parameter-0]</code> stays parametrised while its logic updates. <b>Every parameter still binds</b> in the verification list is the proof it worked.</div>
+  </footer>
+  </section>
+
+  <section class="view" id="view-rotate">
+    <header>
+      <h1>Rotate &amp; flip</h1>
+      <p class="lede">
+        Turn or mirror a blueprint without re-selecting it in game. The grid, the parameters,
+        and the formulas come through untouched; a quarter turn swaps the grid's dimensions and
+        carries its offset round with the entities, and a flip keeps both as they are.
+      </p>
+    </header>
+
+    <div class="slot">
+      <div class="slot-head">
+        <span class="slot-name">Blueprint</span>
+        <span class="slot-role">grid and parameters are kept</span>
+      </div>
+      <textarea id="rot-in" spellcheck="false" placeholder="0eNq..."></textarea>
+      <div class="slot-foot" id="rot-info"></div>
+    </div>
+
+    <div class="bar">
+      <button id="rot-cw">Turn right 90°</button>
+      <button id="rot-180">Turn 180°</button>
+      <button id="rot-ccw">Turn left 90°</button>
+      <span class="split"></span>
+      <button id="rot-fx">Flip horizontally</button>
+      <button id="rot-fy">Flip vertically</button>
+      <span class="status" id="rot-status"></span>
+    </div>
+
+    <div class="card grid-fix" id="rot-grid">
+      <div class="card-head"><span>Grid</span><span class="sub" id="rot-grid-note"></span></div>
+      <div class="card-body">
+        <div class="bar">
+          <label class="toggle" for="rot-ox">Offset X <input type="number" id="rot-ox" step="0.5" /></label>
+          <label class="toggle" for="rot-oy">Y <input type="number" id="rot-oy" step="0.5" /></label>
+          <button class="ghost" id="rot-apply">Apply</button>
+          <span class="status" id="rot-grid-status"></span>
+        </div>
+        <p class="hint">
+          This is the <span>Absolute X / Y</span> box in Factorio's blueprint dialog — it pins the
+          blueprint to particular world coordinates so it lands on the same lattice every time.
+          Nothing about a turn or a flip says where you want the new one to sit, so the value is
+          carried over as-is (swapped on a quarter turn, since the axes swap with the grid). Set it
+          to wherever this copy belongs, here or in game. Grid is <span id="rot-grid-dims"></span>.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span>Preview</span><span class="sub" id="rot-preview-name"></span></div>
+      <div class="preview" id="rot-preview"></div>
+      <div class="preview-foot">
+        <span id="rot-preview-note"></span>
+        <label class="toggle" for="rot-overlay"><input type="checkbox" id="rot-overlay" checked /> Grid box</label>
+        <label class="toggle" for="rot-wires"><input type="checkbox" id="rot-wires" checked /> Wires</label>
+        <span class="zoom">
+          <button class="ghost" id="rot-zoom-out">&minus;</button>
+          <span class="lvl" id="rot-zoom-lvl"></span>
+          <button class="ghost" id="rot-zoom-in">+</button>
+          <button class="ghost" id="rot-zoom-fit">Fit</button>
+        </span>
+      </div>
+    </div>
+
+    <div class="card result">
+      <div class="card-head result-head">
+        <span>Turned blueprint</span>
+        <span class="bar">
+          <span class="copied" id="rot-copied"></span>
+          <button class="ghost" id="rot-copy">Copy</button>
+        </span>
+      </div>
+      <textarea id="rot-out" spellcheck="false" readonly placeholder="the result appears here"></textarea>
+    </div>
+
+    <footer>
+      <div><b>Rails don't turn.</b> A horizontal rail reads the same from either end, so Factorio stores only half the circle for them and leaves the value alone however you spin the blueprint. Same treatment here.</div>
+      <div><b>An absent facing means north, not "no facing".</b> Inserters pointing north store no direction at all, so they still have to turn. Chests, poles, lamps and the like genuinely have none and are left as they are.</div>
+      <div><b>Horizontally swaps left and right</b> — the build is mirrored about a vertical line, which is Factorio's <span>F</span>. Vertically swaps top and bottom, its <span>G</span>. Both keep the grid size, since a mirror image is the same size as what it came from.</div>
+      <div><b>Curved rails are the hard part of a flip.</b> A curve's mirror image is the opposite-handed curve, not the same one at a mirrored angle, and Factorio numbers it two slots along. That mapping was measured off the rail loop in Drop Off A, which is exactly mirror-symmetric — flipping it reproduces it entity for entity. Splitter priorities swap too, for the same reason: left and right trade places in a mirror.</div>
+      <div><b>A flip changes which way trains run through the build.</b> Signals and stops stay on the correct side of their own track, because the track mirrors with them — but the traffic now goes the other way. Check the stop faces the direction you meant before committing it.</div>
+    </footer>
+  </section>
+
+  <section class="view" id="view-normalise">
+    <header>
+      <h1>Normalise</h1>
+      <p class="lede">
+        Put a build in a fixed place relative to the blueprint <strong>origin</strong>. Two
+        blueprints normalised to the same corner, sharing a grid size, land on the same spot
+        in game.
+      </p>
+    </header>
+
+    <div class="slot">
+      <div class="slot-head">
+        <span class="slot-name">Blueprint</span>
+        <span class="slot-role">entities get translated</span>
+      </div>
+      <textarea id="nrm-in" spellcheck="false" placeholder="0eNq..."></textarea>
+      <div class="slot-foot" id="nrm-info"></div>
+    </div>
+
+    <div class="bar">
+      <label class="toggle" for="nrm-x">Corner X <input type="number" id="nrm-x" step="1" value="0" /></label>
+      <label class="toggle" for="nrm-y">Y <input type="number" id="nrm-y" step="1" value="0" /></label>
+      <span class="split"></span>
+      <label class="toggle" for="nrm-pin"><input type="checkbox" id="nrm-pin" /> Also set Absolute</label>
+      <label class="toggle" for="nrm-px">X <input type="number" id="nrm-px" step="1" value="0" /></label>
+      <label class="toggle" for="nrm-py">Y <input type="number" id="nrm-py" step="1" value="0" /></label>
+      <button id="nrm-go">Normalise</button>
+      <span class="status" id="nrm-status"></span>
+    </div>
+
+    <div class="out" id="nrm-out">
+      <div class="align" id="nrm-stats"></div>
+
+      <div class="card">
+        <div class="card-head"><span>Must match to land together</span><span class="sub">compare these across blueprints</span></div>
+        <div class="card-body" id="nrm-match"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>Preview</span><span class="sub" id="nrm-preview-name"></span></div>
+        <div class="preview" id="nrm-preview"></div>
+        <div class="preview-foot">
+          <span id="nrm-preview-note"></span>
+          <label class="toggle" for="nrm-overlay"><input type="checkbox" id="nrm-overlay" checked /> Grid box</label>
+        <label class="toggle" for="nrm-wires"><input type="checkbox" id="nrm-wires" checked /> Wires</label>
+          <span class="zoom">
+            <button class="ghost" id="nrm-zoom-out">&minus;</button>
+            <span class="lvl" id="nrm-zoom-lvl"></span>
+            <button class="ghost" id="nrm-zoom-in">+</button>
+            <button class="ghost" id="nrm-zoom-fit">Fit</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="card result">
+        <div class="card-head result-head">
+          <span>Normalised blueprint</span>
+          <span class="bar">
+            <span class="copied" id="nrm-copied"></span>
+            <button class="ghost" id="nrm-copy">Copy</button>
+          </span>
+        </div>
+        <textarea id="nrm-result" spellcheck="false" readonly placeholder="the result appears here"></textarea>
+      </div>
+    </div>
+
+    <footer>
+      <div><b>Only the entities move.</b> Editing <span>position-relative-to-grid</span> to shift a build was tried three times and was wrong every time — translating the entities is what actually works. A correction made in game moved all 104 entities by (+96, +8) and changed nothing else.</div>
+      <div><b>Whole tiles only.</b> A 1×1 entity sits at half-integer coordinates and a 2×2 on integers, so a half-tile shift would put entities off-tile and Factorio would reject the result. If a build can't reach the corner exactly, the leftover is reported rather than hidden.</div>
+      <div><b>Two builds also need the same grid size, snapping mode, and Absolute X/Y</b> to land together. Those are placement choices this doesn't touch — they're listed above so you can check they match.</div>
+      <div><b>Watch the green box.</b> It's the grid cell at the origin. After normalising, the build sits where you put it relative to that cell, which is what makes two blueprints agree.</div>
+    </footer>
+  </section>
+
+  <section class="view" id="view-inspect">
+    <header>
+      <h1>Inspect</h1>
+      <p class="lede">
+        Read a blueprint string without importing it — useful for checking a parametrisation
+        survived, or working out which of two similar builds you're holding.
+      </p>
+    </header>
+
+    <div class="slot">
+      <div class="slot-head">
+        <span class="slot-name">Blueprint</span>
+        <span class="slot-role">nothing is modified</span>
+      </div>
+      <textarea id="ins-in" spellcheck="false" placeholder="0eNq..."></textarea>
+      <div class="slot-foot" id="ins-info"></div>
+    </div>
+
+    <div class="bar">
+      <button id="ins-go">Inspect</button>
+      <span class="status" id="ins-status"></span>
+    </div>
+
+    <div class="out" id="ins-out">
+      <div class="align" id="ins-stats"></div>
+
+      <div class="card">
+        <div class="card-head"><span>Preview</span><span class="sub" id="ins-preview-name"></span></div>
+        <div class="preview" id="ins-preview"></div>
+        <div class="preview-foot">
+          <span id="ins-preview-note"></span>
+          <label class="toggle" for="ins-overlay"><input type="checkbox" id="ins-overlay" checked /> Grid box</label>
+          <label class="toggle" for="ins-wires"><input type="checkbox" id="ins-wires" checked /> Wires</label>
+          <span class="zoom">
+            <button class="ghost" id="ins-zoom-out">&minus;</button>
+            <span class="lvl" id="ins-zoom-lvl"></span>
+            <button class="ghost" id="ins-zoom-in">+</button>
+            <button class="ghost" id="ins-zoom-fit">Fit</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="card">
+          <div class="card-head"><span>Parameters</span><span id="ins-pcount"></span></div>
+          <div class="card-body" id="ins-params"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span>Entities</span><span id="ins-ecount"></span></div>
+          <div class="card-body" id="ins-ents"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  /* ---- blueprint string <-> object ---- */
+
+  async function pipe(bytes, stream) {
+    const s = new Blob([bytes]).stream().pipeThrough(stream);
+    return new Uint8Array(await new Response(s).arrayBuffer());
+  }
+
+  const b64bytes = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+  function bytesB64(b) {
+    let s = "";
+    for (let i = 0; i < b.length; i += 0x8000) {
+      s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000));
+    }
+    return btoa(s);
+  }
+
+  async function decode(str) {
+    const s = (str || "").trim();
+    if (!s) throw new Error("Nothing pasted.");
+    if (s[0] !== "0") throw new Error("This doesn't start with <code>0</code>, so it isn't a blueprint string. Copy it again from the export dialog.");
+    const body = s.slice(1);
+    if (/[^A-Za-z0-9+/=]/.test(body)) throw new Error("The string has characters that don't belong in it — usually a line break picked up while copying. Copy it again in one go.");
+    let raw;
+    try {
+      raw = await pipe(b64bytes(body), new DecompressionStream("deflate"));
+    } catch (e) {
+      throw new Error("The string is damaged and won't decompress. It's almost always truncated or missing a character — copy it again.");
+    }
+    return JSON.parse(new TextDecoder().decode(raw));
+  }
+
+  async function encode(obj) {
+    const bytes = new TextEncoder().encode(JSON.stringify(obj));
+    return "0" + bytesB64(await pipe(bytes, new CompressionStream("deflate")));
+  }
+
+  function bpOf(obj) {
+    if (obj && obj.blueprint) return obj.blueprint;
+    if (obj && obj.blueprint_book) throw new Error("That's a blueprint book. Open it and export a single blueprint instead.");
+    throw new Error("That decoded, but it isn't a blueprint.");
+  }
+
+  /* ---- alignment + diff ---- */
+
+  const at = (e, o) => (e.position.x + o.x).toFixed(3) + "," + (e.position.y + o.y).toFixed(3);
+  const key = (e, o) => e.name + "@" + at(e, o);
+  const ZERO = { x: 0, y: 0 };
+
+  function shape(e) {
+    const src = Object.assign({}, e);
+    delete src.entity_number;
+    delete src.position;
+    if (src.direction === undefined) src.direction = 0;   // an absent direction is north
+    const r = {};
+    for (const k of Object.keys(src).sort()) r[k] = src[k];
+    return JSON.stringify(r);
+  }
+
+  function tally(list) {
+    const c = {};
+    for (const e of list) c[e.name] = (c[e.name] || 0) + 1;
+    return c;
+  }
+
+  // Rails read the same from either end, so Factorio never stores the second half
+  // of the circle for them — turning one has to wrap at 8, not 16.
+  const SYMMETRIC = new Set(["straight-rail", "half-diagonal-rail", "rail",
+    "elevated-straight-rail", "elevated-half-diagonal-rail"]);
+
+  // Things with no facing at all. Everything else turns — an absent direction means
+  // north, not "no direction", and guessing from the data gets inserters wrong when
+  // they all happen to face north.
+  const FACELESS = /chest|electric-pole|substation|accumulator|roboport|radar|beacon|lamp|solar-panel|rocket-silo|^lab$|storage-tank-remnant/;
+
+  // Curved rails are the one thing a mirror can't just negate. A left-hand curve's
+  // mirror image is the right-hand one, which Factorio stores two slots along
+  // rather than at the mirrored angle.
+  const CURVED = /^(elevated-)?curved-rail-[ab]$/;
+
+  // q quarter-turns clockwise. Screen y grows downward, so clockwise is (x,y) -> (-y,x),
+  // and Factorio's directions also run clockwise, so each turn is +4.
+  function spin(e, q) {
+    if (!q) return e;
+    const pt = p => {
+      let x = p.x, y = p.y;
+      for (let i = 0; i < q; i++) { const nx = -y; y = x; x = nx; }
+      return { x: x, y: y };
+    };
+    const n = JSON.parse(JSON.stringify(e));
+    n.position = pt(e.position);
+
+    if (!FACELESS.test(e.name)) {
+      const wrap = SYMMETRIC.has(e.name) ? 8 : 16;
+      const turned = ((e.direction === undefined ? 0 : e.direction) + q * 4) % wrap;
+      if (turned) n.direction = turned; else delete n.direction;   // Factorio omits north
+    }
+    for (const f of ["drop_position", "pickup_position"]) if (n[f]) n[f] = pt(e[f]);
+    return n;
+  }
+
+  // Reflecting a facing negates its angle, so a normal entity goes to -d. Two things
+  // bend that. Rails read the same from both ends, so they wrap at 8 exactly as they
+  // do when turning. And a curved rail is chiral: its mirror image is the other-handed
+  // curve, which reads -d + 2.
+  //
+  // The +2 is measured, not reasoned: the rail loop in Drop Off A is exactly
+  // mirror-symmetric about x = 48, and all four curved pairs — both curved-rail-a and
+  // curved-rail-b — read 0 against 2 and 6 against 12.
+  //
+  // A vertical flip is a horizontal one turned 180°, which is where the +8 comes from.
+  function mirrorDir(name, d, axis) {
+    const wrap = SYMMETRIC.has(name) ? 8 : 16;
+    const k = (CURVED.test(name) ? 2 : 0) + (axis === "y" ? 8 : 0);
+    return (((k - d) % wrap) + wrap) % wrap;
+  }
+
+  // axis "x" mirrors left to right (about a vertical line), "y" top to bottom.
+  function mirror(e, axis) {
+    const sx = axis === "x" ? -1 : 1, sy = axis === "y" ? -1 : 1;
+    const pt = p => ({ x: p.x * sx, y: p.y * sy });
+    const n = JSON.parse(JSON.stringify(e));
+    n.position = pt(e.position);
+
+    if (!FACELESS.test(e.name)) {
+      const flipped = mirrorDir(e.name, e.direction === undefined ? 0 : e.direction, axis);
+      if (flipped) n.direction = flipped; else delete n.direction;   // Factorio omits north
+    }
+    // These are offsets from the entity, not world points, so they mirror as vectors.
+    for (const f of ["drop_position", "pickup_position"]) if (n[f]) n[f] = pt(e[f]);
+    if (n.orientation !== undefined) {
+      const o = axis === "x" ? -n.orientation : 0.5 - n.orientation;
+      n.orientation = ((o % 1) + 1) % 1;
+    }
+    // Left and right trade places in a mirror, and a splitter states its priorities
+    // in exactly those terms.
+    for (const f of ["input_priority", "output_priority"]) {
+      if (n[f] === "left") n[f] = "right";
+      else if (n[f] === "right") n[f] = "left";
+    }
+    return n;
+  }
+
+  // Rank offsets by how many tiles line up at all, not by how many entities are
+  // identical — an upgraded or swapped entity still occupies its old tile, so
+  // geometry survives a rebuild that names don't.
+  function findOffset(ea, eb, forced) {
+    const ca = tally(ea), cb = tally(eb);
+    const shared = Object.keys(cb).filter(n => ca[n]);
+    if (!shared.length) throw new Error("These two blueprints have no entity types in common, so they can't be lined up. Check you pasted the right pair.");
+    shared.sort((x, y) => (ca[x] + cb[x]) - (ca[y] + cb[y]));
+
+    const names = forced && ca[forced] && cb[forced] ? [forced] : shared.slice(0, 5);
+    const byName = new Set(ea.map(e => key(e, ZERO)));
+    const byTile = new Set(ea.map(e => at(e, ZERO)));
+
+    const seen = new Set();
+    let best = null, tried = 0;
+    for (const n of names) {
+      const as = ea.filter(e => e.name === n).slice(0, 24);
+      const bs = eb.filter(e => e.name === n).slice(0, 24);
+      for (const a of as) {
+        for (const b of bs) {
+          const off = { x: a.position.x - b.position.x, y: a.position.y - b.position.y };
+          const sig = off.x + ":" + off.y;
+          if (seen.has(sig)) continue;
+          seen.add(sig);
+          tried++;
+          let tiles = 0, ident = 0;
+          for (const e of eb) {
+            if (byTile.has(at(e, off))) tiles++;
+            if (byName.has(key(e, off))) ident++;
+          }
+          if (!best || tiles > best.tiles || (tiles === best.tiles && ident > best.ident)) {
+            best = { off: off, tiles: tiles, ident: ident, anchor: n };
+          }
+        }
+      }
+      if (tried > 1500) break;
+    }
+    return { off: best.off, score: best.tiles, ident: best.ident, anchor: best.anchor, tried: tried };
+  }
+
+  function compare(A, B, forced) {
+    const ea = bpOf(A).entities || [], raw = bpOf(B).entities || [];
+    if (!ea.length || !raw.length) throw new Error("One of these has no entities in it.");
+
+    // A rebuild can come back turned. Try all four and keep whichever lands best.
+    let al = null, eb = raw;
+    for (const q of [0, 1, 2, 3]) {
+      const spun = q ? raw.map(e => spin(e, q)) : raw;
+      const r = findOffset(ea, spun, forced);
+      if (!al || r.score > al.score || (r.score === al.score && r.ident > al.ident)) {
+        al = r; al.q = q; eb = spun;
+      }
+    }
+
+    // Symmetric things — a horizontal rail, a straight belt run — keep the same
+    // direction value however the blueprint is turned. Spinning theirs invented a
+    // difference; undo it where the base's own value is what the rebuild recorded.
+    if (al.q) {
+      const base0 = new Map(ea.map(e => [key(e, ZERO), e]));
+      eb = eb.map(e => {
+        const a = base0.get(key(e, al.off));
+        if (!a || e.direction === undefined) return e;
+        const ad = a.direction === undefined ? 0 : a.direction;
+        if (ad === e.direction) return e;
+        const undone = (((e.direction - 4 * al.q) % 16) + 16) % 16;
+        if (undone !== ad) return e;
+        const t = JSON.parse(JSON.stringify(e));
+        t.direction = ad;
+        return t;
+      });
+    }
+
+    const mapA = new Map(ea.map(e => [key(e, ZERO), e]));
+    const mapB = new Map(eb.map(e => [key(e, al.off), e]));
+
+    const gained = eb.filter(e => !mapA.has(key(e, al.off)));
+    const lost = ea.filter(e => !mapB.has(key(e, ZERO)));
+
+    // Same tile, different entity: one thing swapped for another, not a delete
+    // plus an unrelated add. Pairing them keeps the merge from stacking both.
+    const lostAt = new Map();
+    for (const e of lost) {
+      const t = at(e, ZERO);
+      if (!lostAt.has(t)) lostAt.set(t, []);
+      lostAt.get(t).push(e);
+    }
+
+    const replaced = [], added = [];
+    for (const e of gained) {
+      const list = lostAt.get(at(e, al.off));
+      if (list && list.length) replaced.push({ from: list.shift(), to: e });
+      else added.push(e);
+    }
+    const removed = [];
+    for (const list of lostAt.values()) for (const e of list) removed.push(e);
+
+    const modified = [];
+    for (const e of eb) {
+      const a = mapA.get(key(e, al.off));
+      if (a && shape(a) !== shape(e)) modified.push(a);
+    }
+    return { al: al, added: added, replaced: replaced, removed: removed,
+             modified: modified, ea: ea, eb: eb, mapA: mapA };
+  }
+
+  // Does this entity carry something the parameter list is bound to? Factorio ties
+  // a parameter to a field by matching its stored value, so dropping such an entity
+  // orphans the parameter.
+  function paramBound(bp, e) {
+    const s = JSON.stringify(e);
+    if (/parameter-\d/.test(s)) return true;
+    for (const p of bp.parameters || []) {
+      if (p.number !== undefined &&
+          new RegExp("(^|[^0-9])" + String(p.number) + "([^0-9]|$)").test(s)) return true;
+    }
+    return false;
+  }
+
+  // Which values must survive an opted-in settings update?
+  //
+  // A "parameter-0" reference is an explicit marker — a concrete item in its place
+  // is always just what the paste substituted, never an edit worth keeping.
+  //
+  // A number is different: it only looks parameter-bound because it happens to equal
+  // a parameter's value, and you may well have meant to change it. So numbers are
+  // taken from the rebuild — except where the parameter is formula-derived, since
+  // those values are computed on paste and can only be substitution noise.
+  // "Every parameter still binds" is what catches a change that orphans a parameter.
+  function bound(v, params) {
+    if (typeof v === "string") return /parameter-\d/.test(v);
+    if (typeof v === "number") {
+      return params.some(p => p.dependent && p.number !== undefined && Number(p.number) === v);
+    }
+    return false;
+  }
+
+  function boundDeep(v, params) {
+    if (bound(v, params)) return true;
+    if (Array.isArray(v)) return v.some(x => boundDeep(x, params));
+    if (v && typeof v === "object") return Object.keys(v).some(k => boundDeep(v[k], params));
+    return false;
+  }
+
+  // Take the rebuilt entity's settings, except wherever the base value is one a
+  // parameter binds to — those stay, or the parameter loses its anchor.
+  function protect(base, inc, params) {
+    if (bound(base, params)) return base;
+    if (Array.isArray(inc)) {
+      if (!Array.isArray(base)) return inc;
+      return inc.map((v, i) => (i < base.length ? protect(base[i], v, params) : v));
+    }
+    if (inc && typeof inc === "object") {
+      if (!base || typeof base !== "object" || Array.isArray(base)) return inc;
+      const out = {};
+      for (const k of Object.keys(inc)) out[k] = k in base ? protect(base[k], inc[k], params) : inc[k];
+      for (const k of Object.keys(base)) {
+        if (!(k in inc) && boundDeep(base[k], params)) out[k] = base[k];
+      }
+      return out;
+    }
+    return inc === undefined ? base : inc;
+  }
+
+  // Turn a whole blueprint, keeping everything that isn't geometry. The grid's
+  // dimensions swap on a quarter turn, and its offset rotates with the entities.
+  function turnBlueprint(obj, q) {
+    const out = JSON.parse(JSON.stringify(obj));
+    const b = bpOf(out);
+    const ents = b.entities || [];
+    const pt = p => {
+      let x = p.x, y = p.y;
+      for (let i = 0; i < q; i++) { const nx = -y; y = x; x = nx; }
+      return { x: x, y: y };
+    };
+
+    b.entities = ents.map(e => {
+      const n = spin(e, q);
+      if (n.orientation !== undefined) n.orientation = (((n.orientation + q * 0.25) % 1) + 1) % 1;
+      return n;
+    });
+    if (b.tiles) {
+      // A tile's stored position is its top-left CORNER, not its centre, so
+      // rotating the corner is not the same as rotating the tile. Rotate the
+      // square [x,x+1]x[y,y+1] and its new minimum corner sits one along:
+      // a quarter turn clockwise sends corner (x,y) to (-y-1, x), while pt()
+      // alone gives (-y, x). Entities need no such fix — their position is a
+      // centre, and a centre rotates to a centre.
+      const nudge = [[0, 0], [-1, 0], [-1, -1], [0, -1]][q % 4];
+      b.tiles = b.tiles.map(t => {
+        const p = pt(t.position);
+        return Object.assign({}, t, { position: { x: p.x + nudge[0], y: p.y + nudge[1] } });
+      });
+    }
+    if (b["snap-to-grid"] && q % 2 === 1) {
+      b["snap-to-grid"] = { x: b["snap-to-grid"].y, y: b["snap-to-grid"].x };
+    }
+
+    reanchor(b, ents, q % 2 === 1);
+
+    // The Absolute offset pins the blueprint to world coordinates and belongs to the
+    // axis its grid dimension does, so it only swaps when they do.
+    const off = b["position-relative-to-grid"];
+    if (off && q % 2 === 1) {
+      b["position-relative-to-grid"] = { x: off.y, y: off.x };
+    }
+    return out;
+  }
+
+  // Where the snapping grid sits is not stored anywhere — Factorio derives it from
+  // where the entities sit relative to the blueprint origin. (Editing "Grid position"
+  // in game moves every entity by the difference; measured it, exactly one cell.)
+  // So keeping the grid aligned through a transform means putting the bounding box
+  // back on the cells it came from: the same entities occupy the same box, so
+  // whatever the offset is between their centres and the true footprint cancels out.
+  // `swap` is for a quarter turn, where the box's axes have traded places along with
+  // the grid's — and where there is no exact answer, since the build changes shape.
+  function reanchor(b, was, swap) {
+    if (!b["snap-to-grid"]) return;
+    const least = list => {
+      let x = Infinity, y = Infinity;
+      for (const e of list) { x = Math.min(x, e.position.x); y = Math.min(y, e.position.y); }
+      return { x: x, y: y };
+    };
+    const a = least(was), n = least(b.entities);
+    const dx = (swap ? a.y : a.x) - n.x;
+    const dy = (swap ? a.x : a.y) - n.y;
+    if (!dx && !dy) return;
+    for (const e of b.entities) { e.position.x += dx; e.position.y += dy; }
+    if (b.tiles) for (const t of b.tiles) { t.position.x += dx; t.position.y += dy; }
+  }
+
+  // Mirror a whole blueprint. Unlike a turn this keeps the grid's dimensions — a
+  // mirror image is the same size — and the Absolute offset stays on the axis it
+  // was already on, so neither needs touching.
+  function flipBlueprint(obj, axis) {
+    if (axis !== "x" && axis !== "y") throw new Error("Flip axis must be x or y.");
+    const out = JSON.parse(JSON.stringify(obj));
+    const b = bpOf(out);
+    const ents = b.entities || [];
+
+    b.entities = ents.map(e => mirror(e, axis));
+    if (b.tiles) {
+      // A tile's position is its corner, not its centre, so its mirror image is the
+      // next tile along — hence the -1 that entities don't need.
+      b.tiles = b.tiles.map(t => Object.assign({}, t, {
+        position: {
+          x: axis === "x" ? -t.position.x - 1 : t.position.x,
+          y: axis === "y" ? -t.position.y - 1 : t.position.y,
+        },
+      }));
+    }
+    reanchor(b, ents, false);
+    return out;
+  }
+
+  // After everything: does every parameter still have a value to latch onto?
+  /* Move a build to a fixed place relative to the blueprint origin, so that two
+     blueprints normalised the same way land on the same spot in game.
+
+     Only entity translation is done here, because that is the only lever that
+     actually works — editing `position-relative-to-grid` to move a build was
+     tried three times and was wrong every time. A grid-position correction the
+     owner made in game moved all 104 entities by (+96, +8) and changed nothing
+     else in the JSON, which is exactly what this does.
+
+     **Translations are whole tiles only.** A 1x1 entity's centre sits at
+     half-integer coordinates and a 2x2's at integers, so a half-tile shift would
+     put entities off-tile and Factorio would reject the blueprint. That means the
+     build can only be placed to the nearest tile: if one blueprint's edge entity
+     is 1x1 and another's is 2x2, their minima keep a 0.5 difference that no
+     translation can remove. `residual` reports it rather than hiding it.
+
+     Landing two blueprints in the same spot also needs the same grid size, the
+     same absolute-snapping and the same Absolute X/Y. Those are placement choices
+     this doesn't touch; `normaliseReport` surfaces them for comparison. */
+  function normalise(obj, target) {
+    const b = bpOf(obj);
+    const ents = b.entities || [];
+    if (!ents.length) return { obj: obj, moved: { x: 0, y: 0 }, entities: 0 };
+
+    const tx = target && isFinite(target.x) ? target.x : 0;
+    const ty = target && isFinite(target.y) ? target.y : 0;
+
+    let minX = Infinity, minY = Infinity;
+    for (const e of ents) {
+      minX = Math.min(minX, e.position.x);
+      minY = Math.min(minY, e.position.y);
+    }
+
+    const dx = Math.round(tx - minX), dy = Math.round(ty - minY);
+    for (const e of ents) {
+      e.position = { x: e.position.x + dx, y: e.position.y + dy };
+      // Inserters store their reach as absolute positions, not offsets.
+      for (const k of ["pickup_position", "drop_position"]) {
+        if (e[k]) e[k] = { x: e[k].x + dx, y: e[k].y + dy };
+      }
+    }
+    // Tiles are stored by corner rather than centre, but a pure translation
+    // shifts a corner exactly as it shifts a centre — no -1 correction here.
+    for (const t of b.tiles || []) {
+      t.position = { x: t.position.x + dx, y: t.position.y + dy };
+    }
+
+    return {
+      obj: obj,
+      moved: { x: dx, y: dy },
+      entities: ents.length,
+      from: { x: minX, y: minY },
+      to: { x: minX + dx, y: minY + dy },
+      // How far off the target the whole-tile constraint left it.
+      residual: { x: +(minX + dx - tx).toFixed(3), y: +(minY + dy - ty).toFixed(3) },
+    };
+  }
+
+  /* What Factorio shows as "Grid position" in the blueprint dialog.
+
+     `gridpos = 1 - min(entity centre)`, on both axes.
+
+     Verified against the one piece of ground truth there is: the owner
+     hand-corrected Drop Off B's Grid position to (-2, 6), and `dropoff-b-fixed`
+     has a minimum entity centre of (3, -5). 1-3 = -2 and 1-(-5) = 6. The same
+     formula on `dropoff-b` gives (94, 14), which differs by exactly (96, 8) —
+     one grid cell — matching the correction that produced the fixed copy.
+
+     Collision boxes, which the old note in this file suggested were needed, turn
+     out to be the wrong tool: solving for the constant from the footprint edges
+     gives 0 on one axis and -2 on the other, because the extreme entity is a
+     curved rail and its collision box is the runtime-generated placeholder.
+     Centres are what work.
+
+     `whole` is false when the answer isn't an integer, which happens when the
+     extreme entity isn't 2x2 — a 1x1 sits on a half tile. Grid position in the
+     dialog is an integer, so a fractional result means this rule doesn't cover
+     that build and the number should not be trusted. No stored blueprint but
+     `dropoff-b-toolturned` does that, and that one is a known-bad turn. */
+  function gridPosition(bp) {
+    const ents = (bp && bp.entities) || [];
+    if (!ents.length) return null;
+    let mx = Infinity, my = Infinity;
+    for (const e of ents) {
+      mx = Math.min(mx, e.position.x);
+      my = Math.min(my, e.position.y);
+    }
+    const x = 1 - mx, y = 1 - my;
+    return { x: x, y: y, whole: Number.isInteger(x) && Number.isInteger(y) };
+  }
+
+  // The settings that must match for two normalised blueprints to land together.
+  function normaliseReport(b) {
+    const g = b["snap-to-grid"], off = b["position-relative-to-grid"];
+    return {
+      grid: g ? g.x + " × " + g.y : "none",
+      snapping: g ? (b["absolute-snapping"] ? "absolute" : "relative") : "not snapped",
+      offset: off ? "(" + off.x + ", " + off.y + ")" : "—",
+    };
+  }
+
+  function paramsStillBind(bp) {
+    const s = JSON.stringify(bp.entities || []);
+    for (const p of bp.parameters || []) {
+      if (p.type === "id" && p.id && s.indexOf(p.id) < 0) return false;
+      if (p.number !== undefined &&
+          !new RegExp("(^|[^0-9.])" + String(p.number) + "([^0-9.]|$)").test(s)) return false;
+    }
+    return true;
+  }
+
+  function merge(A, B, d, dropMissing, applySet) {
+    const out = JSON.parse(JSON.stringify(A));
+    const ob = bpOf(out);
+    const params = ob.parameters || [];
+    let next = 1;
+    for (const e of ob.entities) next = Math.max(next, e.entity_number + 1);
+
+    // opted-in setting changes, merged field by field so parameters survive
+    if (applySet && applySet.size) {
+      const byNum = new Map(ob.entities.map(e => [e.entity_number, e]));
+      for (const e of d.eb) {
+        const a = d.mapA.get(key(e, d.al.off));
+        if (!a || !applySet.has(key(a, ZERO))) continue;
+        const target = byNum.get(a.entity_number);
+        if (!target) continue;
+        const merged = protect(a, e, params);
+        for (const k of Object.keys(target)) {
+          if (k !== "entity_number" && k !== "position" && !(k in merged)) delete target[k];
+        }
+        for (const k of Object.keys(merged)) {
+          if (k !== "entity_number" && k !== "position") target[k] = merged[k];
+        }
+      }
+    }
+
+    // a swapped-out entity always goes; a plain removal only on request
+    const gone = new Set(d.replaced.map(r => r.from.entity_number));
+    if (dropMissing) for (const e of d.removed) gone.add(e.entity_number);
+
+    const remap = new Map();
+    for (const e of d.eb) {
+      const a = d.mapA.get(key(e, d.al.off));
+      if (a && !gone.has(a.entity_number)) remap.set(e.entity_number, a.entity_number);
+    }
+
+    const fresh = new Set();
+    for (const e of d.added.concat(d.replaced.map(r => r.to))) {
+      const n = JSON.parse(JSON.stringify(e));
+      n.entity_number = next++;
+      n.position = { x: e.position.x + d.al.off.x, y: e.position.y + d.al.off.y };
+      ob.entities.push(n);
+      remap.set(e.entity_number, n.entity_number);
+      fresh.add(n.entity_number);
+    }
+
+    if (gone.size) {
+      ob.entities = ob.entities.filter(e => !gone.has(e.entity_number));
+      ob.wires = (ob.wires || []).filter(w => !gone.has(w[0]) && !gone.has(w[2]));
+    }
+
+    const have = new Set((ob.wires || []).map(w => w.join(",")));
+    let wires = 0;
+    for (const w of bpOf(B).wires || []) {
+      if (!remap.has(w[0]) || !remap.has(w[2])) continue;
+      const m = [remap.get(w[0]), w[1], remap.get(w[2]), w[3]];
+      if (!fresh.has(m[0]) && !fresh.has(m[2])) continue;
+      if (have.has(m.join(","))) continue;
+      (ob.wires = ob.wires || []).push(m);
+      have.add(m.join(","));
+      wires++;
+    }
+    return { out: out, wires: wires };
+  }
+
+  /* ---- rendering ---- */
+
+  const same = (x, y) => JSON.stringify(x) === JSON.stringify(y);
+
+  function label(e, off) {
+    const o = off || ZERO;
+    const d = e.direction === undefined ? 0 : e.direction;
+    return '<span class="ent">' + e.name + "</span> (" +
+      (e.position.x + o.x) + ", " + (e.position.y + o.y) + ") dir " + d;
+  }
+
+  function stat(l, v, cls, note) {
+    return '<div class="stat"><span class="stat-label">' + l + "</span>" +
+      '<span class="stat-value ' + (cls || "") + '">' + v + "</span>" +
+      (note ? '<span class="stat-note">' + note + "</span>" : "") + "</div>";
+  }
+
+  function rows(list, mark, off, none) {
+    if (!list.length) return '<div class="empty">' + none + "</div>";
+    return '<ul class="rows">' + list.map(e =>
+      '<li><span class="mark ' + mark + '">' + (mark === "add" ? "+" : mark === "remove" ? "−" : "~") +
+      "</span>" + label(e, off) + "</li>").join("") + "</ul>";
+  }
+
+  async function describe(txt, el) {
+    el.className = "slot-foot";
+    el.textContent = "";
+    if (!txt.trim()) return null;
+    try {
+      const obj = await decode(txt);
+      const b = bpOf(obj);
+      const bits = [(b.entities || []).length + " entities"];
+      if (b["snap-to-grid"]) bits.push("grid " + b["snap-to-grid"].x + "×" + b["snap-to-grid"].y);
+      if ((b.parameters || []).length) bits.push(b.parameters.length + " params");
+      if (b.label) bits.push(b.label);
+      el.className = "slot-foot good";
+      el.textContent = bits.join("  ·  ");
+      return obj;
+    } catch (e) {
+      el.className = "slot-foot bad";
+      el.textContent = "unreadable";
+      return null;
+    }
+  }
+
+  function fail(html) {
+    $("err").innerHTML = html;
+    $("err").classList.add("on");
+    $("out").classList.remove("on");
+    const s = $("status");
+    s.className = "status bad";
+    s.textContent = "stopped — see below";
+    $("err").scrollIntoView({ behavior: motion(), block: "center" });
+  }
+
+  const motion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+
+  // The work is fast enough to look like nothing happened, and the results sit
+  // below the fold — so say what's happening and take the eye there.
+  async function run() {
+    const go = $("go");
+    if (go.classList.contains("busy")) return;
+    go.classList.add("busy");
+    go.disabled = true;
+    go.textContent = "Merging";
+    $("status").className = "status";
+    $("status").textContent = "reading both strings…";
+    await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
+    try {
+      await build();
+    } catch (e) {
+      fail("Something went wrong building the result: <code>" +
+        (e && e.message ? e.message : String(e)) + "</code>");
+    } finally {
+      go.classList.remove("busy");
+      go.disabled = false;
+      go.textContent = "Merge";
+    }
+  }
+
+  async function build() {
+    $("err").classList.remove("on");
+    $("copied").textContent = "";
+
+    let A, B;
+    try {
+      A = await decode($("a").value);
+    } catch (e) { return fail("<b>Base blueprint:</b> " + e.message); }
+    try {
+      B = await decode($("b").value);
+    } catch (e) { return fail("<b>Rebuilt blueprint:</b> " + e.message); }
+
+    let d, res, str;
+    try {
+      bpOf(A); bpOf(B);
+      d = compare(A, B, $("anchor").value);
+      res = merge(A, B, d, $("rm").checked, applyMods);
+      str = await encode(res.out);
+    } catch (e) { return fail(e.message); }
+
+    const a = bpOf(A), v = bpOf(await decode(str));
+    const matched = d.al.score;
+    const expected = d.eb.length - d.added.length;
+    const solid = matched >= expected && matched > 0;
+
+    $("align").innerHTML =
+      stat("Tiles lined up", matched + " / " + d.eb.length, solid ? "" : "remove",
+           "on " + d.al.anchor) +
+      stat("Offset", "(" + d.al.off.x + ", " + d.al.off.y + ")", "",
+           d.al.tried + " offset" + (d.al.tried === 1 ? "" : "s") + " tested") +
+      stat("Added", d.added.length, "add", d.added.length ? "copied over" : "nothing new") +
+      stat("Replaced", d.replaced.length, "modify",
+           d.replaced.length ? "swapped in" : "no swaps") +
+      stat("Removed", d.removed.length, "remove", $("rm").checked ? "deleted" : "left in place") +
+      stat("Changed", d.modified.length, "modify", "not applied") +
+      stat("Entities", (a.entities || []).length + " → " + v.entities.length, "",
+           res.wires ? res.wires + " wires carried" : "");
+
+    $("chg-count").textContent =
+      (d.added.length + d.replaced.length + d.removed.length + d.modified.length) + " total";
+    $("changes").innerHTML =
+      (d.replaced.length ? '<ul class="rows">' + d.replaced.map(r =>
+        '<li><span class="mark modify">⇄</span><span class="ent">' + r.from.name + "</span> → " +
+        label(r.to, d.al.off) + "</li>").join("") + "</ul>" : "") +
+      rows(d.added, "add", d.al.off, d.replaced.length ? "" : "Nothing was added.") +
+      (d.removed.length ? rows(d.removed, "remove", ZERO, "") : "") +
+      (d.modified.length ? '<ul class="rows">' + d.modified.map(e => {
+        const k = key(e, ZERO);
+        return '<li><span class="mark modify">~</span>' + label(e, ZERO) +
+          ' <label class="pick"><input type="checkbox" class="mod" data-k="' + k + '"' +
+          (applyMods.has(k) ? " checked" : "") + " /> use rebuilt settings</label></li>";
+      }).join("") + "</ul>" : "");
+
+    for (const cb of document.querySelectorAll("input.mod")) {
+      cb.addEventListener("change", function () {
+        if (this.checked) applyMods.add(this.dataset.k); else applyMods.delete(this.dataset.k);
+        run();
+      });
+    }
+
+    const checks = [
+      ["Alignment is solid", solid],
+      ["Result re-decodes", true],
+      ["Snap-to-grid kept", same(a["snap-to-grid"], v["snap-to-grid"])],
+      ["Absolute snapping kept", a["absolute-snapping"] === v["absolute-snapping"]],
+      ["Grid offset kept", same(a["position-relative-to-grid"], v["position-relative-to-grid"])],
+      ["Parameters kept", same(a.parameters, v.parameters)],
+      ["Entity count adds up",
+        v.entities.length === (a.entities || []).length + d.added.length - ($("rm").checked ? d.removed.length : 0)],
+      ["Nothing stacked on itself",
+        new Set(v.entities.map(e => key(e, ZERO))).size === v.entities.length],
+      ["Every parameter still binds", paramsStillBind(v)]
+    ];
+    const bad = checks.filter(c => !c[1]).length;
+    $("verdict").innerHTML = bad
+      ? '<span style="color:var(--remove)">' + bad + " failed</span>"
+      : '<span style="color:var(--add)">all passed</span>';
+    $("checks").innerHTML = checks.map(c =>
+      "<li><span class=\"" + (c[1] ? "ok" : "no") + "\">" + (c[1] ? "✓" : "✗") + "</span>" + c[0] + "</li>").join("");
+
+    const notes = [];
+    if (!solid) {
+      notes.push("<div class=\"note\"><strong>The alignment looks wrong.</strong> Only " + matched +
+        " of " + d.eb.length + " entities line up, so these may not be two versions of the same blueprint — " +
+        "or the rebuilt one was captured with pieces missing. Don't use this result until that number is close to the total.</div>");
+    }
+    if (d.modified.length) {
+      const on = d.modified.filter(e => applyMods.has(key(e, ZERO))).length;
+      notes.push("<div class=\"note\"><strong>" + d.modified.length + " entit" +
+        (d.modified.length === 1 ? "y has" : "ies have") + " different settings in the rebuilt version" +
+        (on ? ", " + on + " of them applied" : ", none applied") + ".</strong> " +
+        "Tick <em>use rebuilt settings</em> on any you want brought across. It copies the rebuilt " +
+        "settings field by field but keeps every value a parameter is bound to — a station named " +
+        "<code>[item=parameter-0]</code> stays that way, and a condition holding a parameter's number " +
+        "keeps that number. The check below confirms nothing came unbound.</div>");
+    }
+    const risky = d.replaced.filter(r => paramBound(a, r.from));
+    if (risky.length) {
+      notes.push("<div class=\"note\"><strong>" + risky.length + " of the replaced entit" +
+        (risky.length === 1 ? "y was" : "ies were") + " carrying a parameter.</strong> " +
+        risky.map(r => r.from.name).join(", ") + " held a value the parameter list is bound to, " +
+        "and the replacement doesn't. Open the parametrisation dialog after importing and check " +
+        "every row still points at what you expect.</div>");
+    }
+    if (d.removed.length && !$("rm").checked) {
+      notes.push("<div class=\"note\"><strong>" + d.removed.length + " entit" + (d.removed.length === 1 ? "y is" : "ies are") +
+        " in the base but not the rebuilt version, and were left in place.</strong> If you deleted them on purpose, " +
+        "tick the delete box and merge again.</div>");
+    }
+    $("notes").innerHTML = notes.join("");
+
+    $("result").value = str;
+    // Colour the result by where each entity came from. Ghosts are drawn only
+    // when removals were applied, because that's the case where the entity is
+    // absent from the output and would otherwise vanish without trace. With
+    // removals off it is still there, and gets drawn as an ordinary entity.
+    showPreview("mrg", v, {
+      marks: diffMarks(d),
+      ghosts: $("rm").checked ? d.removed : [],
+    });
+    $("out").classList.add("on");
+
+    const bits = [];
+    if (d.added.length) bits.push(d.added.length + " added");
+    if (d.replaced.length) bits.push(d.replaced.length + " replaced");
+    if (d.removed.length) bits.push(d.removed.length + " removed");
+    if (!bits.length) bits.push("no entity changes");
+    const s = $("status");
+    s.className = "status " + (bad ? "bad" : "done");
+    s.textContent = (bad ? bad + " check" + (bad === 1 ? "" : "s") + " failed — " : "merged — ") +
+      bits.join(", ") + ", " + v.entities.length + " entities";
+
+    $("out").scrollIntoView({ behavior: motion(), block: "start" });
+  }
+
+  const applyMods = new Set();
+  const seen = { a: null, b: null };
+
+  // offer the types both blueprints have, commonest first — structural stuff like
+  // rail is what you want to line up on when the rest of the build changed
+  function fillAnchors() {
+    const sel = $("anchor");
+    const keep = sel.value;
+    let names = [];
+    if (seen.a && seen.b) {
+      try {
+        const ca = tally(bpOf(seen.a).entities || []), cb = tally(bpOf(seen.b).entities || []);
+        names = Object.keys(ca).filter(n => cb[n]).sort((x, y) => (cb[y] + ca[y]) - (cb[x] + ca[x]));
+      } catch (e) { names = []; }
+    }
+    sel.innerHTML = '<option value="">whatever fits best</option>' +
+      names.map(n => '<option value="' + n + '">' + n + " (" + tally(bpOf(seen.b).entities)[n] + ")</option>").join("");
+    if (names.indexOf(keep) >= 0) sel.value = keep;
+  }
+
+  async function look(which) {
+    const box = which === "a" ? $("a") : $("b");
+    seen[which] = await describe(box.value, $(which + "-info"));
+    fillAnchors();
+  }
+
+  if (typeof DecompressionStream === "undefined" || typeof CompressionStream === "undefined") {
+    $("go").disabled = true;
+    fail("This browser can't compress or decompress in the page, which is how blueprint " +
+         "strings are read. Try Chrome, Edge, or Firefox.");
+  }
+
+  $("go").addEventListener("click", run);
+  for (const which of ["a", "b"]) {
+    $(which).addEventListener("change", () => look(which));
+    $(which).addEventListener("paste", () => setTimeout(() => look(which), 0));
+  }
+
+  /* ---- preview ----
+
+     Draws a blueprint the way Factorio does: an entity is never rotated, its
+     `direction` picks a pre-drawn sprite. SPRITES holds, per entity and
+     direction, [ox, oy, w, h, src] — the frame's offset from the entity centre
+     and its size, both in tiles, then the direction that owns the PNG, since
+     directions drawing the same art share one file. "*" covers every direction
+     not listed, which for most entities is all of them.
+     Regenerate with: node tools/emit-manifest.js --write
+
+     It is inlined rather than fetched because the page is opened off disk, and
+     a file:// page can't fetch() a sibling .json. <img> is exempt from that,
+     so the PNGs stay as loose files in sprites/.
+
+     Anything with no sprite — an entity type never extracted, or the published
+     copy, which ships without the sprites folder — falls back to a box of the
+     right footprint. */
+
+  const SPRITES = {"steel-chest":{"*":[-0.5,-0.641,1,1.156,0]},"medium-electric-pole":{"4":[-0.547,-3.344,1.313,3.938,4],"5":[-0.547,-3.344,1.313,3.938,4],"6":[-0.547,-3.344,1.313,3.938,4],"7":[-0.547,-3.344,1.313,3.938,4],"8":[-0.547,-3.344,1.313,3.938,8],"9":[-0.547,-3.344,1.313,3.938,8],"10":[-0.547,-3.344,1.313,3.938,8],"11":[-0.547,-3.344,1.313,3.938,8],"12":[-0.547,-3.344,1.313,3.938,12],"13":[-0.547,-3.344,1.313,3.938,12],"14":[-0.547,-3.344,1.313,3.938,12],"15":[-0.547,-3.344,1.313,3.938,12],"*":[-0.547,-3.344,1.313,3.938,0]},"big-electric-pole":{"4":[-1.156,-4.031,2.313,4.875,4],"5":[-1.156,-4.031,2.313,4.875,4],"6":[-1.156,-4.031,2.313,4.875,4],"7":[-1.156,-4.031,2.313,4.875,4],"8":[-1.156,-4.031,2.313,4.875,8],"9":[-1.156,-4.031,2.313,4.875,8],"10":[-1.156,-4.031,2.313,4.875,8],"11":[-1.156,-4.031,2.313,4.875,8],"12":[-1.156,-4.031,2.313,4.875,12],"13":[-1.156,-4.031,2.313,4.875,12],"14":[-1.156,-4.031,2.313,4.875,12],"15":[-1.156,-4.031,2.313,4.875,12],"*":[-1.156,-4.031,2.313,4.875,0]},"bulk-inserter":{"4":[-0.773,-0.414,1.641,1.234,4],"5":[-0.773,-0.414,1.641,1.234,4],"6":[-0.773,-0.414,1.641,1.234,4],"7":[-0.773,-0.414,1.641,1.234,4],"8":[-0.773,-0.414,1.641,1.234,8],"9":[-0.773,-0.414,1.641,1.234,8],"10":[-0.773,-0.414,1.641,1.234,8],"11":[-0.773,-0.414,1.641,1.234,8],"12":[-0.773,-0.414,1.641,1.234,12],"13":[-0.773,-0.414,1.641,1.234,12],"14":[-0.773,-0.414,1.641,1.234,12],"15":[-0.773,-0.414,1.641,1.234,12],"*":[-0.773,-0.414,1.641,1.234,0]},"fast-transport-belt":{"2":[-1,-1,2,2,2],"3":[-1,-1,2,2,2],"4":[-1,-1,2,2,2],"5":[-1,-1,2,2,2],"6":[-1,-1,2,2,6],"7":[-1,-1,2,2,6],"8":[-1,-1,2,2,6],"9":[-1,-1,2,2,6],"10":[-1,-1,2,2,10],"11":[-1,-1,2,2,10],"12":[-1,-1,2,2,10],"13":[-1,-1,2,2,10],"*":[-1,-1,2,2,0],"0c4":[-1,-1,2,2,"0c4"],"4c0":[-1,-1,2,2,"4c0"],"0c12":[-1,-1,2,2,"0c12"],"12c0":[-1,-1,2,2,"12c0"],"4c8":[-1,-1,2,2,"4c8"],"8c4":[-1,-1,2,2,"8c4"],"12c8":[-1,-1,2,2,"12c8"],"8c12":[-1,-1,2,2,"8c12"]},"decider-combinator":{"4":[-1.203,-0.797,2.438,2.063,4],"5":[-1.203,-0.797,2.438,2.063,4],"6":[-1.203,-0.797,2.438,2.063,4],"7":[-1.203,-0.797,2.438,2.063,4],"8":[-1.203,-0.797,2.438,2.063,8],"9":[-1.203,-0.797,2.438,2.063,8],"10":[-1.203,-0.797,2.438,2.063,8],"11":[-1.203,-0.797,2.438,2.063,8],"12":[-1.203,-0.797,2.438,2.063,12],"13":[-1.203,-0.797,2.438,2.063,12],"14":[-1.203,-0.797,2.438,2.063,12],"15":[-1.203,-0.797,2.438,2.063,12],"*":[-1.203,-0.797,2.438,2.063,0]},"train-stop":{"4":[-3.016,-3.969,6.031,6.891,4],"5":[-3.016,-3.969,6.031,6.891,4],"6":[-3.016,-3.969,6.031,6.891,4],"7":[-3.016,-3.969,6.031,6.891,4],"8":[-3.016,-3.969,6.031,6.891,8],"9":[-3.016,-3.969,6.031,6.891,8],"10":[-3.016,-3.969,6.031,6.891,8],"11":[-3.016,-3.969,6.031,6.891,8],"12":[-3.016,-3.969,6.031,6.891,12],"13":[-3.016,-3.969,6.031,6.891,12],"14":[-3.016,-3.969,6.031,6.891,12],"15":[-3.016,-3.969,6.031,6.891,12],"*":[-3.016,-3.969,6.031,6.891,0]},"rail-signal":{"1":[-1,-1,2,2,1],"2":[-1,-1,2,2,2],"3":[-1,-1,2,2,3],"4":[-1,-1,2,2,4],"5":[-1,-1,2,2,5],"6":[-1,-1,2,2,6],"7":[-1,-1,2,2,7],"8":[-1,-1,2,2,8],"9":[-1,-1,2,2,9],"10":[-1,-1,2,2,10],"11":[-1,-1,2,2,11],"12":[-1,-1,2,2,12],"13":[-1,-1,2,2,13],"14":[-1,-1,2,2,14],"15":[-1,-1,2,2,15],"*":[-1,-1,2,2,0]},"rail-chain-signal":{"1":[-0.766,-0.766,1.563,1.531,1],"2":[-0.766,-0.766,1.563,1.531,2],"3":[-0.766,-0.766,1.563,1.531,3],"4":[-0.766,-0.766,1.563,1.531,4],"5":[-0.766,-0.766,1.563,1.531,5],"6":[-0.766,-0.766,1.563,1.531,6],"7":[-0.766,-0.766,1.563,1.531,7],"8":[-0.766,-0.766,1.563,1.531,8],"9":[-0.766,-0.766,1.563,1.531,9],"10":[-0.766,-0.766,1.563,1.531,10],"11":[-0.766,-0.766,1.563,1.531,11],"12":[-0.766,-0.766,1.563,1.531,12],"13":[-0.766,-0.766,1.563,1.531,13],"14":[-0.766,-0.766,1.563,1.531,14],"15":[-0.766,-0.766,1.563,1.531,15],"*":[-0.766,-0.766,1.563,1.531,0]},"straight-rail":{"2":[-3,-3,6,6,2],"3":[-3,-3,6,6,2],"4":[-2,-2,4,4,4],"5":[-2,-2,4,4,4],"6":[-3,-3,6,6,6],"7":[-3,-3,6,6,6],"10":[-3,-3,6,6,2],"11":[-3,-3,6,6,2],"12":[-2,-2,4,4,4],"13":[-2,-2,4,4,4],"14":[-3,-3,6,6,6],"15":[-3,-3,6,6,6],"*":[-2,-2,4,4,0]},"curved-rail-a":{"2":[-4,-4,8,8,2],"3":[-4,-4,8,8,2],"4":[-4,-4,8,8,4],"5":[-4,-4,8,8,4],"6":[-4,-4,8,8,6],"7":[-4,-4,8,8,6],"8":[-4,-4,8,8,8],"9":[-4,-4,8,8,8],"10":[-4,-4,8,8,10],"11":[-4,-4,8,8,10],"12":[-4,-4,8,8,12],"13":[-4,-4,8,8,12],"14":[-4,-4,8,8,14],"15":[-4,-4,8,8,14],"*":[-4,-4,8,8,0]},"curved-rail-b":{"2":[-4,-4,8,8,2],"3":[-4,-4,8,8,2],"4":[-4,-4,8,8,4],"5":[-4,-4,8,8,4],"6":[-4,-4,8,8,6],"7":[-4,-4,8,8,6],"8":[-4,-4,8,8,8],"9":[-4,-4,8,8,8],"10":[-4,-4,8,8,10],"11":[-4,-4,8,8,10],"12":[-4,-4,8,8,12],"13":[-4,-4,8,8,12],"14":[-4,-4,8,8,14],"15":[-4,-4,8,8,14],"*":[-4,-4,8,8,0]},"half-diagonal-rail":{"2":[-3,-3,6,6,2],"3":[-3,-3,6,6,2],"4":[-3,-3,6,6,4],"5":[-3,-3,6,6,4],"6":[-3,-3,6,6,6],"7":[-3,-3,6,6,6],"10":[-3,-3,6,6,2],"11":[-3,-3,6,6,2],"12":[-3,-3,6,6,4],"13":[-3,-3,6,6,4],"14":[-3,-3,6,6,6],"15":[-3,-3,6,6,6],"*":[-3,-3,6,6,0]}};
+
+  const FOOTPRINT = {"straight-rail":[2,2],"curved-rail-a":[2,6],"curved-rail-b":[2,5],"half-diagonal-rail":[2,2],"bulk-inserter":[1,1],"fast-transport-belt":[1,1],"steel-chest":[1,1],"rail-signal":[1,1],"rail-chain-signal":[1,1],"medium-electric-pole":[1,1],"big-electric-pole":[2,2],"decider-combinator":[1,2],"train-stop":[2,2]};
+
+  const CONNECT = {"steel-chest":{"*":{"1":[0.406,-0.438],"2":[0.406,-0.344],"3":[0.406,-0.438],"4":[0.406,-0.344]}},"medium-electric-pole":{"*":{"5":[0.234,-3.109]}},"big-electric-pole":{"4":{"5":[0.531,-3.672]},"5":{"5":[0.531,-3.672]},"6":{"5":[0.531,-3.672]},"7":{"5":[0.531,-3.672]},"8":{"5":[0.734,-3.313]},"9":{"5":[0.734,-3.313]},"10":{"5":[0.734,-3.313]},"11":{"5":[0.734,-3.313]},"12":{"5":[0.516,-2.938]},"13":{"5":[0.516,-2.938]},"14":{"5":[0.516,-2.938]},"15":{"5":[0.516,-2.938]},"*":{"5":[0,-3.844]}},"bulk-inserter":{"4":{"1":[-0.172,-0.328],"2":[-0.344,-0.281],"3":[-0.172,-0.328],"4":[-0.344,-0.281]},"5":{"1":[-0.172,-0.328],"2":[-0.344,-0.281],"3":[-0.172,-0.328],"4":[-0.344,-0.281]},"6":{"1":[-0.172,-0.328],"2":[-0.344,-0.281],"3":[-0.172,-0.328],"4":[-0.344,-0.281]},"7":{"1":[-0.172,-0.328],"2":[-0.344,-0.281],"3":[-0.172,-0.328],"4":[-0.344,-0.281]},"8":{"1":[0.406,-0.25],"2":[0.5,-0.078],"3":[0.406,-0.25],"4":[0.5,-0.078]},"9":{"1":[0.406,-0.25],"2":[0.5,-0.078],"3":[0.406,-0.25],"4":[0.5,-0.078]},"10":{"1":[0.406,-0.25],"2":[0.5,-0.078],"3":[0.406,-0.25],"4":[0.5,-0.078]},"11":{"1":[0.406,-0.25],"2":[0.5,-0.078],"3":[0.406,-0.25],"4":[0.5,-0.078]},"12":{"1":[0.234,-0.344],"2":[0.406,-0.25],"3":[0.234,-0.344],"4":[0.406,-0.25]},"13":{"1":[0.234,-0.344],"2":[0.406,-0.25],"3":[0.234,-0.344],"4":[0.406,-0.25]},"14":{"1":[0.234,-0.344],"2":[0.406,-0.25],"3":[0.234,-0.344],"4":[0.406,-0.25]},"15":{"1":[0.234,-0.344],"2":[0.406,-0.25],"3":[0.234,-0.344],"4":[0.406,-0.25]},"*":{"1":[0.516,0.109],"2":[0.391,0.25],"3":[0.516,0.109],"4":[0.391,0.25]}},"fast-transport-belt":{"1":{"1":[0.313,-0.813],"2":[0.563,-0.656],"3":[0.313,-0.813],"4":[0.563,-0.656]},"2":{"1":[0.406,-0.656],"2":[0.672,-0.5],"3":[0.406,-0.656],"4":[0.672,-0.5]},"3":{"1":[0.391,-0.844],"2":[0.641,-0.688],"3":[0.391,-0.844],"4":[0.641,-0.688]},"4":{"1":[0.344,-0.531],"2":[0.578,-0.359],"3":[0.344,-0.531],"4":[0.578,-0.359]},"5":{"1":[0.359,-0.641],"2":[0.625,-0.484],"3":[0.359,-0.641],"4":[0.625,-0.484]},"6":{"1":[0.406,-0.641],"2":[0.656,-0.484],"3":[0.406,-0.641],"4":[0.656,-0.484]},"8":{"1":[0.313,-0.813],"2":[0.563,-0.656],"3":[0.313,-0.813],"4":[0.563,-0.656]},"9":{"1":[0.406,-0.656],"2":[0.672,-0.5],"3":[0.406,-0.656],"4":[0.672,-0.5]},"10":{"1":[0.391,-0.844],"2":[0.641,-0.688],"3":[0.391,-0.844],"4":[0.641,-0.688]},"11":{"1":[0.344,-0.531],"2":[0.578,-0.359],"3":[0.344,-0.531],"4":[0.578,-0.359]},"12":{"1":[0.359,-0.641],"2":[0.625,-0.484],"3":[0.359,-0.641],"4":[0.625,-0.484]},"13":{"1":[0.406,-0.641],"2":[0.656,-0.484],"3":[0.406,-0.641],"4":[0.656,-0.484]},"15":{"1":[0.313,-0.813],"2":[0.563,-0.656],"3":[0.313,-0.813],"4":[0.563,-0.656]},"*":{"1":[0.422,-0.672],"2":[0.672,-0.531],"3":[0.422,-0.672],"4":[0.672,-0.531]}},"decider-combinator":{"4":{"1":[-0.703,-0.578],"2":[-0.781,-0.125],"3":[0.609,-0.531],"4":[0.719,-0.109]},"5":{"1":[-0.703,-0.578],"2":[-0.781,-0.125],"3":[0.609,-0.531],"4":[0.719,-0.109]},"6":{"1":[-0.703,-0.578],"2":[-0.781,-0.125],"3":[0.609,-0.531],"4":[0.719,-0.109]},"7":{"1":[-0.703,-0.578],"2":[-0.781,-0.125],"3":[0.609,-0.531],"4":[0.719,-0.109]},"8":{"1":[0.266,-0.609],"2":[-0.297,-0.609],"3":[0.297,0.531],"4":[-0.281,0.547]},"9":{"1":[0.266,-0.609],"2":[-0.297,-0.609],"3":[0.297,0.531],"4":[-0.281,0.547]},"10":{"1":[0.266,-0.609],"2":[-0.297,-0.609],"3":[0.297,0.531],"4":[-0.281,0.547]},"11":{"1":[0.266,-0.609],"2":[-0.297,-0.609],"3":[0.297,0.531],"4":[-0.281,0.547]},"12":{"1":[0.734,-0.125],"2":[0.813,-0.594],"3":[-0.594,-0.125],"4":[-0.703,-0.531]},"13":{"1":[0.734,-0.125],"2":[0.813,-0.594],"3":[-0.594,-0.125],"4":[-0.703,-0.531]},"14":{"1":[0.734,-0.125],"2":[0.813,-0.594],"3":[-0.594,-0.125],"4":[-0.703,-0.531]},"15":{"1":[0.734,-0.125],"2":[0.813,-0.594],"3":[-0.594,-0.125],"4":[-0.703,-0.531]},"*":{"1":[-0.266,0.484],"2":[0.281,0.469],"3":[-0.281,-0.672],"4":[0.313,-0.656]}},"train-stop":{"4":{"1":[-0.422,-1.734],"2":[-0.359,-1.516],"3":[-0.422,-1.734],"4":[-0.359,-1.516]},"5":{"1":[-0.422,-1.734],"2":[-0.359,-1.516],"3":[-0.422,-1.734],"4":[-0.359,-1.516]},"6":{"1":[-0.422,-1.734],"2":[-0.359,-1.516],"3":[-0.422,-1.734],"4":[-0.359,-1.516]},"7":{"1":[-0.422,-1.734],"2":[-0.359,-1.516],"3":[-0.422,-1.734],"4":[-0.359,-1.516]},"8":{"1":[-0.219,-2.594],"2":[-0.313,-2.438],"3":[-0.219,-2.594],"4":[-0.313,-2.438]},"9":{"1":[-0.219,-2.594],"2":[-0.313,-2.438],"3":[-0.219,-2.594],"4":[-0.313,-2.438]},"10":{"1":[-0.219,-2.594],"2":[-0.313,-2.438],"3":[-0.219,-2.594],"4":[-0.313,-2.438]},"11":{"1":[-0.219,-2.594],"2":[-0.313,-2.438],"3":[-0.219,-2.594],"4":[-0.313,-2.438]},"12":{"1":[0.234,-1.469],"2":[0.047,-1.375],"3":[0.234,-1.469],"4":[0.047,-1.375]},"13":{"1":[0.234,-1.469],"2":[0.047,-1.375],"3":[0.234,-1.469],"4":[0.047,-1.375]},"14":{"1":[0.234,-1.469],"2":[0.047,-1.375],"3":[0.234,-1.469],"4":[0.047,-1.375]},"15":{"1":[0.234,-1.469],"2":[0.047,-1.375],"3":[0.234,-1.469],"4":[0.047,-1.375]},"*":{"1":[0.234,-1.953],"2":[0.297,-1.734],"3":[0.234,-1.953],"4":[0.297,-1.734]}},"rail-signal":{"1":{"1":[0.063,0.625],"2":[-0.156,0.531],"3":[0.063,0.625],"4":[-0.156,0.531]},"2":{"1":[0.094,0.781],"2":[-0.094,0.719],"3":[0.094,0.781],"4":[-0.094,0.719]},"3":{"1":[-0.313,0.625],"2":[-0.438,0.5],"3":[-0.313,0.625],"4":[-0.438,0.5]},"4":{"1":[-0.75,0.75],"2":[-0.688,0.531],"3":[-0.75,0.75],"4":[-0.688,0.531]},"5":{"1":[-0.938,0.063],"2":[-0.813,-0.063],"3":[-0.938,0.063],"4":[-0.813,-0.063]},"6":{"1":[-0.906,0.031],"2":[-0.719,-0.063],"3":[-0.906,0.031],"4":[-0.719,-0.063]},"7":{"1":[-0.563,-0.469],"2":[-0.406,-0.531],"3":[-0.563,-0.469],"4":[-0.406,-0.531]},"8":{"1":[-0.563,-0.594],"2":[-0.344,-0.594],"3":[-0.563,-0.594],"4":[-0.344,-0.594]},"9":{"1":[-0.156,-0.656],"2":[0.063,-0.594],"3":[-0.156,-0.656],"4":[0.063,-0.594]},"10":{"1":[-0.219,-0.813],"2":[-0.031,-0.688],"3":[-0.219,-0.813],"4":[-0.031,-0.688]},"11":{"1":[0.063,-0.625],"2":[0.188,-0.5],"3":[0.063,-0.625],"4":[0.188,-0.5]},"12":{"1":[0.625,-0.75],"2":[0.688,-0.594],"3":[0.625,-0.75],"4":[0.688,-0.594]},"13":{"1":[1,-0.094],"2":[0.844,0.063],"3":[1,-0.094],"4":[0.844,0.063]},"14":{"1":[0.969,0.125],"2":[0.813,0.219],"3":[0.969,0.125],"4":[0.813,0.219]},"15":{"1":[0.656,0.344],"2":[0.469,0.406],"3":[0.656,0.344],"4":[0.469,0.406]},"*":{"1":[0.563,0.5],"2":[0.344,0.5],"3":[0.563,0.5],"4":[0.344,0.5]}},"rail-chain-signal":{"1":{"1":[-0.406,0.5],"2":[-0.625,0.406],"3":[-0.406,0.5],"4":[-0.625,0.406]},"2":{"1":[-0.344,0.531],"2":[-0.531,0.469],"3":[-0.344,0.531],"4":[-0.531,0.469]},"3":{"1":[-0.594,0.344],"2":[-0.719,0.219],"3":[-0.594,0.344],"4":[-0.719,0.219]},"4":{"1":[-0.75,0.25],"2":[-0.688,0.031],"3":[-0.75,0.25],"4":[-0.688,0.031]},"5":{"1":[0.75,0.094],"2":[0.594,0.25],"3":[0.75,0.094],"4":[0.594,0.25]},"6":{"1":[0.5,0.375],"2":[0.344,0.469],"3":[0.5,0.375],"4":[0.344,0.469]},"7":{"1":[0.594,0.344],"2":[0.406,0.406],"3":[0.594,0.344],"4":[0.406,0.406]},"8":{"1":[0.125,0.531],"2":[-0.094,0.531],"3":[0.125,0.531],"4":[-0.094,0.531]},"9":{"1":[0.125,0.531],"2":[-0.094,0.438],"3":[0.125,0.531],"4":[-0.094,0.438]},"10":{"1":[-0.25,0.406],"2":[-0.438,0.344],"3":[-0.25,0.406],"4":[-0.438,0.344]},"11":{"1":[-0.25,0.5],"2":[-0.375,0.375],"3":[-0.25,0.5],"4":[-0.375,0.375]},"12":{"1":[0.75,-0.281],"2":[0.813,-0.125],"3":[0.75,-0.281],"4":[0.813,-0.125]},"13":{"1":[0.5,0.313],"2":[0.344,0.469],"3":[0.5,0.313],"4":[0.344,0.469]},"14":{"1":[0.406,0.281],"2":[0.25,0.375],"3":[0.406,0.281],"4":[0.25,0.375]},"15":{"1":[0.156,0.563],"2":[-0.031,0.625],"3":[0.156,0.563],"4":[-0.031,0.625]},"*":{"1":[0.125,0.594],"2":[-0.094,0.594],"3":[0.125,0.594],"4":[-0.094,0.594]}}};
+
+  const PREVIEW_TILE = 16;                     // px per tile before zoom
+  const ZOOMS = [0.15, 0.2, 0.3, 0.45, 0.65, 0.9, 1.25, 1.75, 2.5];
+
+  const previews = {};   // prefix -> { w, h, zi, keep }
+  const shown = {};      // prefix -> the blueprint currently drawn, for redraws
+  const shownExtra = {}; // prefix -> its merge marks and ghosts, likewise
+
+  const esc = s => String(s).replace(/[&<>"]/g,
+    c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  /* Which belts draw curved.
+
+     A blueprint stores only each belt's `direction`; the curve is derived from
+     its neighbours, exactly as the game derives it:
+
+       a belt curves when exactly one belt feeds it from a perpendicular side
+       and nothing feeds it from directly behind
+
+     "Feeds" is defined by output tile — a belt at Q facing d outputs into
+     Q + unit(d) — so a neighbour feeds this belt when its output tile is this
+     belt's own tile. Returns entity_number -> the direction flow arrived from.
+
+     Undergrounds, splitters and loaders can feed a belt but never curve
+     themselves, which is why the two regexes differ. */
+  const BELT_UNIT = { 0: [0, -1], 4: [1, 0], 8: [0, 1], 12: [-1, 0] };
+  const FEEDS = /transport-belt$|underground-belt$|splitter$|loader/;
+  const CURVES = /(^|-)transport-belt$/;
+
+  function beltCurves(ents) {
+    const at = {}, curve = {};
+    let any = false;
+    for (const e of ents) {
+      if (FEEDS.test(e.name)) { at[e.position.x + "," + e.position.y] = e; any = true; }
+    }
+    if (!any) return curve;
+
+    for (const e of ents) {
+      if (!CURVES.test(e.name)) continue;
+      const d = e.direction === undefined ? 0 : e.direction;
+      if (!BELT_UNIT[d]) continue;
+
+      let behind = false, sides = 0, from = null;
+      for (const nd of [0, 4, 8, 12]) {
+        const u = BELT_UNIT[nd];
+        const n = at[(e.position.x - u[0]) + "," + (e.position.y - u[1])];
+        if (!n) continue;
+        if ((n.direction === undefined ? 0 : n.direction) !== nd) continue;
+        if (nd === d) behind = true;
+        else { sides++; from = nd; }
+      }
+      if (!behind && sides === 1) curve[e.entity_number] = from;
+    }
+    return curve;
+  }
+
+  // Where an entity's picture sits, in tiles relative to the blueprint origin.
+  // `from` is the direction a curved belt's flow arrived from, if it curves.
+  function entBox(e, from) {
+    const d = e.direction === undefined ? 0 : e.direction;
+    const set = SPRITES[e.name];
+    const s = set && ((from !== undefined && from !== null && set[d + "c" + from]) ||
+      set[d] || set["*"]);
+    if (s) return { ox: s[0], oy: s[1], w: s[2], h: s[3], file: e.name + "_" + s[4] + ".png" };
+    const f = FOOTPRINT[e.name] || [1, 1];
+    // No sprite: fall back to the footprint, whose axes swap on a quarter turn.
+    const turned = d === 4 || d === 12;
+    const w = turned ? f[1] : f[0], h = turned ? f[0] : f[1];
+    return { ox: -w / 2, oy: -h / 2, w: w, h: h, file: null };
+  }
+
+  // Ground first, then things standing on it, southern rows over northern so
+  // tall sprites overlap the way they do in game.
+  // Where a wire actually lands on an entity. CONNECT holds the offsets from the
+  // prototypes, per entity, direction and connector id — regenerate with
+  // `node tools/dump-connectors.js --write`. Combinators have separate input and
+  // output points, and a pole's copper attaches ~3.1 tiles up, at the top of the
+  // mast. Anything not in the table falls back to the entity centre.
+  function wireEnd(e, connector) {
+    const d = e.direction === undefined ? 0 : e.direction;
+    const set = CONNECT[e.name];
+    const row = set && (set[d] || set["*"]);
+    const off = row && row[connector];
+    return off
+      ? { x: e.position.x + off[0], y: e.position.y + off[1] }
+      : { x: e.position.x, y: e.position.y };
+  }
+
+  function drawRank(n) {
+    if (/rail/.test(n) && !/signal/.test(n)) return 0;
+    if (/train-stop/.test(n)) return 1;
+    if (/belt/.test(n)) return 2;
+    return 3;
+  }
+
+  /* Marks for the merge preview: which entities in the result came from where.
+     `compare()` already produces the four categories, so this just turns them
+     into position keys the drawing loop can look up. Added and replaced entities
+     live in the rebuilt copy's coordinates, so they need the alignment offset;
+     modified and removed are in the base's, which is what the output uses. */
+  function diffMarks(d) {
+    const marks = {};
+    for (const e of d.added) marks[key(e, d.al.off)] = "add";
+    for (const r of d.replaced) marks[key(r.to, d.al.off)] = "swap";
+    for (const e of d.modified) marks[key(e, ZERO)] = "mod";
+    return marks;
+  }
+
+  function buildPreview(b, opts) {
+    const ents = (b.entities || []).slice();
+    const tiles = b.tiles || [];
+    if (!ents.length && !tiles.length) return null;
+
+    const curves = beltCurves(ents);
+    const boxes = ents.map(e => entBox(e, curves[e.entity_number]));
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    // Bounds of entity *centres*, kept apart from the art bounds above: the grid
+    // cares where entities are, not how far their pictures overhang.
+    let cx0 = Infinity, cy0 = Infinity, cx1 = -Infinity, cy1 = -Infinity;
+    ents.forEach((e, i) => {
+      const q = boxes[i];
+      minX = Math.min(minX, e.position.x + q.ox);
+      minY = Math.min(minY, e.position.y + q.oy);
+      maxX = Math.max(maxX, e.position.x + q.ox + q.w);
+      maxY = Math.max(maxY, e.position.y + q.oy + q.h);
+      cx0 = Math.min(cx0, e.position.x); cy0 = Math.min(cy0, e.position.y);
+      cx1 = Math.max(cx1, e.position.x); cy1 = Math.max(cy1, e.position.y);
+    });
+    for (const t of tiles) {          // tile positions are corners, not centres
+      minX = Math.min(minX, t.position.x); minY = Math.min(minY, t.position.y);
+      maxX = Math.max(maxX, t.position.x + 1); maxY = Math.max(maxY, t.position.y + 1);
+    }
+    // Removed entities are drawn too, and can sit outside what's left.
+    for (const e of (opts && opts.ghosts) || []) {
+      const q = entBox(e);
+      minX = Math.min(minX, e.position.x + q.ox); minY = Math.min(minY, e.position.y + q.oy);
+      maxX = Math.max(maxX, e.position.x + q.ox + q.w); maxY = Math.max(maxY, e.position.y + q.oy + q.h);
+    }
+
+    // The green box in game is the grid cell anchored at the blueprint ORIGIN,
+    // 0,0 to (W,H) — not at the build. That is why a build sitting at x -93..-3
+    // shows the box off to one side and the same build at x 3..93 overlaps it.
+    // Showing it means growing the stage to reach the origin, which is the whole
+    // point: the distance between build and box is the thing worth seeing.
+    const grid = b["snap-to-grid"];
+    const wires = b.wires || [];
+    const overlay = !(opts && opts.overlay === false);
+    const drawWires = !(opts && opts.wires === false);
+    if (overlay && ents.length) {
+      minX = Math.min(minX, 0); minY = Math.min(minY, 0);
+      maxX = Math.max(maxX, 0); maxY = Math.max(maxY, 0);
+      if (grid) {
+        maxX = Math.max(maxX, grid.x); maxY = Math.max(maxY, grid.y);
+      }
+    }
+
+    const at = v => (v * PREVIEW_TILE).toFixed(1);
+    const rect = (x, y, w, h) => "left:" + at(x - minX) + "px;top:" + at(y - minY) +
+      "px;width:" + at(w) + "px;height:" + at(h) + "px";
+    let html = "";
+    for (const t of tiles) {
+      html += '<i style="left:' + at(t.position.x - minX) + "px;top:" + at(t.position.y - minY) +
+        "px;width:" + at(1) + "px;height:" + at(1) + 'px"></i>';
+    }
+
+    const idx = ents.map((e, i) => i).sort((p, q) =>
+      drawRank(ents[p].name) - drawRank(ents[q].name) ||
+      ents[p].position.y - ents[q].position.y ||
+      ents[p].position.x - ents[q].position.x);
+
+    // Entities that were dropped don't exist in the result, so they're drawn
+    // faded in the place they used to occupy — otherwise a removal is invisible.
+    const ghosts = (opts && opts.ghosts) || [];
+    for (const e of ghosts) {
+      const q = entBox(e);
+      html += '<img class="ghost" src="sprites/' + q.file + '" alt="" title="' +
+        esc("removed: " + e.name) + '" style="' +
+        rect(e.position.x + q.ox, e.position.y + q.oy, q.w, q.h) +
+        '" onerror="this.classList.add(\'miss\')">';
+    }
+
+    let drawn = 0, boxed = 0;
+    for (const i of idx) {
+      const e = ents[i], q = boxes[i];
+      const pos = "left:" + at(e.position.x + q.ox - minX) + "px;top:" + at(e.position.y + q.oy - minY) +
+        "px;width:" + at(q.w) + "px;height:" + at(q.h) + "px";
+      const title = esc(e.name + (e.direction ? " · dir " + e.direction : ""));
+      if (q.file) {
+        drawn++;
+        // A failed load means the sprites folder isn't there; show the box instead.
+        html += '<img src="sprites/' + q.file + '" alt="" title="' + title +
+          '" style="' + pos + '" onerror="this.classList.add(\'miss\')">';
+      } else {
+        boxed++;
+        html += '<i title="' + title + '" style="' + pos + '"></i>';
+      }
+    }
+
+    // Merge marks, over the entities. Sized to the entity's FOOTPRINT rather
+    // than its sprite frame — a frame is padded (a belt's is 2x2 for a 1x1
+    // belt), so a marker drawn to the frame would overlap its neighbours and
+    // make it impossible to see which tile actually changed.
+    const marks = (opts && opts.marks) || null;
+    let marked = { add: 0, swap: 0, mod: 0 };
+    if (marks) {
+      for (const e of ents) {
+        const cat = marks[key(e, ZERO)];
+        if (!cat) continue;
+        marked[cat]++;
+        const d = e.direction === undefined ? 0 : e.direction;
+        const f = FOOTPRINT[e.name] || [1, 1];
+        const turned = d === 4 || d === 12;
+        const fw = turned ? f[1] : f[0], fh = turned ? f[0] : f[1];
+        html += '<u class="mk mk-' + cat + '" title="' + esc(cat + ": " + e.name) +
+          '" style="' + rect(e.position.x - fw / 2, e.position.y - fh / 2, fw, fh) + '"></u>';
+      }
+      for (const e of ghosts) {
+        const f = FOOTPRINT[e.name] || [1, 1];
+        html += '<u class="mk mk-gone" title="' + esc("removed: " + e.name) +
+          '" style="' + rect(e.position.x - f[0] / 2, e.position.y - f[1] / 2, f[0], f[1]) + '"></u>';
+      }
+    }
+
+    // Wires above the entities, the way the game draws them, but below the grid
+    // overlay so the green cell stays readable.
+    //
+    // A wire is [entity_a, connector_a, entity_b, connector_b]. Connector ids:
+    // 1 red in, 2 green in, 3 red out, 4 green out, 5 copper (pole to pole).
+    // Read straight off the stored blueprints — [28,5,59,5] joins two poles,
+    // [92,2,92,4] is a decider feeding its own green input to its green output,
+    // and [92,3,96,1] is that decider's red output into the train stop.
+    let wired = 0, selfWired = 0;
+    if (drawWires && wires.length) {
+      const byNum = {};
+      for (const e of ents) byNum[e.entity_number] = e;
+      const f = v => v.toFixed(1);
+      let svg = "";
+      for (const w of wires) {
+        const a = byNum[w[0]], c = byNum[w[2]];
+        if (!a || !c) continue;
+        const kind = w[1] === 5 || w[3] === 5 ? "cu" : (w[1] % 2 ? "rd" : "gn");
+
+        const p = wireEnd(a, w[1]), q = wireEnd(c, w[3]);
+        const x1 = (p.x - minX) * PREVIEW_TILE, y1 = (p.y - minY) * PREVIEW_TILE;
+        const x2 = (q.x - minX) * PREVIEW_TILE, y2 = (q.y - minY) * PREVIEW_TILE;
+        if (w[0] === w[2]) selfWired++; else wired++;
+
+        const len = Math.hypot(x2 - x1, y2 - y1) / PREVIEW_TILE;   // tiles
+        if (len < 0.05) {
+          // Nothing known about where this one attaches, so both ends landed on
+          // the centre. Mark it rather than drawing a wire of no length.
+          svg += '<circle class="w-' + kind + ' w-self" cx="' + f(x1) + '" cy="' + f(y1) +
+            '" r="' + f(PREVIEW_TILE * 0.42) + '"/>';
+          continue;
+        }
+        // Wires hang. A quadratic curve passes through control/2 + ends/2 at its
+        // midpoint, so the control point goes twice the wanted sag below the
+        // chord. Longer spans droop further, which is what makes a run of poles
+        // read as a power line rather than a polyline.
+        const sag = Math.min(1.1, Math.max(0.09, len * 0.1)) * PREVIEW_TILE;
+        svg += '<path class="w-' + kind + '" d="M' + f(x1) + " " + f(y1) +
+          "Q" + f((x1 + x2) / 2) + " " + f((y1 + y2) / 2 + 2 * sag) + " " +
+          f(x2) + " " + f(y2) + '"/>';
+      }
+      if (svg) {
+        html += '<svg class="pv-wires" width="' + ((maxX - minX) * PREVIEW_TILE).toFixed(1) +
+          '" height="' + ((maxY - minY) * PREVIEW_TILE).toFixed(1) + '">' + svg + "</svg>";
+      }
+    }
+
+    // Overlay last so it sits above the build.
+    if (overlay && ents.length) {
+      if (grid) {
+        html += '<b class="pv-cell" title="' + esc("snap-to-grid cell, " + grid.x + " × " + grid.y +
+          " from the origin") + '" style="' + rect(0, 0, grid.x, grid.y) + '"></b>';
+      }
+      html += '<b class="pv-bbox" title="' + esc("build extent, entity centres " +
+        cx0 + "," + cy0 + " to " + cx1 + "," + cy1) + '" style="' +
+        rect(cx0, cy0, cx1 - cx0, cy1 - cy0) + '"></b>';
+      html += '<b class="pv-origin" title="blueprint origin 0,0" style="left:' +
+        at(-minX) + "px;top:" + at(-minY) + 'px"></b>';
+    }
+
+    return {
+      html: html, drawn: drawn, boxed: boxed,
+      wires: { total: wires.length, drawn: wired, self: selfWired },
+      marked: marks ? Object.assign({ gone: ghosts.length }, marked) : null,
+      grid: grid ? { x: grid.x, y: grid.y, absolute: !!b["absolute-snapping"] } : null,
+      centres: ents.length ? { x0: cx0, y0: cy0, x1: cx1, y1: cy1 } : null,
+      w: maxX - minX, h: maxY - minY,
+      tilesW: Math.round(maxX - minX), tilesH: Math.round(maxY - minY),
+    };
+  }
+
+  function applyZoom(prefix) {
+    const st = previews[prefix];
+    if (!st) return;
+    const stage = $(prefix + "-stage");
+    const z = ZOOMS[st.zi];
+    if (stage && stage.style) {
+      stage.style.transform = "scale(" + z + ")";
+      // The transform doesn't affect layout, so the scroll box is sized by hand.
+      stage.style.marginRight = (st.w * PREVIEW_TILE * (z - 1)) + "px";
+      stage.style.marginBottom = (st.h * PREVIEW_TILE * (z - 1)) + "px";
+    }
+    const lvl = $(prefix + "-zoom-lvl");
+    if (lvl) lvl.textContent = Math.round(z * 100) + "%";
+  }
+
+  function fitZoom(prefix) {
+    const st = previews[prefix];
+    if (!st) return;
+    const host = $(prefix + "-preview");
+    const avail = (host && host.clientWidth) || 0;
+    if (!avail) { st.zi = 3; applyZoom(prefix); return; }
+    const want = (avail - 4) / (st.w * PREVIEW_TILE);
+    let zi = 0;
+    for (let i = 0; i < ZOOMS.length; i++) if (ZOOMS[i] <= want) zi = i;
+    st.zi = zi;
+    applyZoom(prefix);
+  }
+
+  function showPreview(prefix, b, extra) {
+    const host = $(prefix + "-preview");
+    if (!host) return;
+    // Kept so the grid toggle can redraw without the caller having to re-decode.
+    const last = previews[prefix];
+    if (b) { shown[prefix] = b; shownExtra[prefix] = extra || null; }
+    b = shown[prefix];
+    extra = shownExtra[prefix] || {};
+
+    const box = $(prefix + "-overlay"), wbox = $(prefix + "-wires");
+    const built = buildPreview(b || {}, {
+      overlay: !box || box.checked !== false,
+      wires: !wbox || wbox.checked !== false,
+      marks: extra.marks,
+      ghosts: extra.ghosts,
+    });
+    const note = $(prefix + "-preview-note");
+    const nameEl = $(prefix + "-preview-name");
+    if (nameEl) nameEl.textContent = (b && b.label) || "";
+
+    if (!built) {
+      previews[prefix] = null;
+      host.innerHTML = '<div class="preview-foot">Nothing to draw — no entities or tiles.</div>';
+      if (note) note.textContent = "";
+      return;
+    }
+
+    // Keep the zoom level across a toggle; only a new blueprint refits.
+    previews[prefix] = { w: built.w, h: built.h, zi: last && last.keep ? last.zi : 3, keep: false };
+    host.innerHTML = '<div class="preview-stage" id="' + prefix + '-stage" style="width:' +
+      (built.w * PREVIEW_TILE).toFixed(1) + "px;height:" + (built.h * PREVIEW_TILE).toFixed(1) +
+      "px;background-size:" + PREVIEW_TILE + "px " + PREVIEW_TILE + 'px">' + built.html + "</div>";
+
+    if (note) {
+      const bits = [built.drawn + " drawn" + (built.boxed ? ", " + built.boxed + " as boxes" : "")];
+      if (built.wires.total) {
+        bits.push(built.wires.total + " wire" + (built.wires.total === 1 ? "" : "s") +
+          (built.wires.self ? " (" + built.wires.self + " self-linked)" : ""));
+      }
+      if (built.centres) {
+        bits.push("x " + built.centres.x0 + "…" + built.centres.x1 +
+          ", y " + built.centres.y0 + "…" + built.centres.y1);
+      }
+      bits.push(built.grid
+        ? "grid " + built.grid.x + "×" + built.grid.y + (built.grid.absolute ? " absolute" : " relative")
+        : "no grid");
+      const gp = gridPosition(b);
+      if (gp) {
+        bits.push("grid position (" + gp.x + ", " + gp.y + ")" + (gp.whole ? "" : " — not whole, unreliable"));
+      }
+      note.textContent = bits.join(" · ");
+
+      // On the merge page, say what the colours mean and how many of each.
+      const m = built.marked;
+      const legend = $(prefix + "-preview-legend");
+      if (legend) {
+        const parts = [
+          ["add", "added", m && m.add],
+          ["swap", "replaced", m && m.swap],
+          ["mod", "changed", m && m.mod],
+          ["gone", "removed", m && m.gone],
+        ].filter(p => p[2]);
+        legend.innerHTML = parts.length
+          ? '<span class="preview-legend">' + parts.map(p =>
+              '<span><i style="border-color:' +
+              { add: "#7fd45a", swap: "#e8a33d", mod: "#d9c22c", gone: "#cf6248" }[p[0]] +
+              '"></i><b>' + p[2] + "</b> " + p[1] + "</span>").join("") + "</span>"
+          : "";
+      }
+    }
+    fitZoom(prefix);
+  }
+
+  function wireZoom(prefix) {
+    const step = n => () => {
+      const st = previews[prefix];
+      if (!st) return;
+      st.zi = Math.max(0, Math.min(ZOOMS.length - 1, st.zi + n));
+      applyZoom(prefix);
+    };
+    const inB = $(prefix + "-zoom-in"), outB = $(prefix + "-zoom-out"), fitB = $(prefix + "-zoom-fit");
+    if (inB) inB.addEventListener("click", step(1));
+    if (outB) outB.addEventListener("click", step(-1));
+    if (fitB) fitB.addEventListener("click", () => fitZoom(prefix));
+
+    for (const id of ["-overlay", "-wires"]) {
+      const box = $(prefix + id);
+      if (!box) continue;
+      box.addEventListener("change", () => {
+        // Showing the origin can widen the stage a long way; refit rather than
+        // leave the build scrolled off the edge.
+        if (shown[prefix]) showPreview(prefix, null);
+      });
+    }
+  }
+
+  const PAGES = {
+    "#/merge": ["view-merge", "Merge"],
+    "#/rotate": ["view-rotate", "Rotate & flip"],
+    "#/normalise": ["view-normalise", "Normalise"],
+    "#/inspect": ["view-inspect", "Inspect"],
+  };
+
+  function route() {
+    const page = PAGES[location.hash] || ["view-home", ""];
+    for (const v of document.querySelectorAll(".view")) v.classList.remove("on");
+    const el = $(page[0]);
+    if (el) el.classList.add("on");
+    $("crumb").textContent = page[1];
+    if (window.scrollTo) window.scrollTo(0, 0);
+  }
+
+  async function inspect() {
+    const s = $("ins-status");
+    s.className = "status";
+    s.textContent = "reading…";
+    let b;
+    try {
+      b = bpOf(await decode($("ins-in").value));
+    } catch (e) {
+      $("ins-out").classList.remove("on");
+      s.className = "status bad";
+      s.textContent = (e && e.message ? e.message : String(e)).replace(/<[^>]+>/g, "");
+      return;
+    }
+
+    const ents = b.entities || [];
+    const grid = b["snap-to-grid"];
+    $("ins-stats").innerHTML =
+      stat("Entities", ents.length, "", Object.keys(tally(ents)).length + " kinds") +
+      stat("Tiles", (b.tiles || []).length, "", "floor") +
+      stat("Wires", (b.wires || []).length, "", "circuit links") +
+      stat("Grid", grid ? grid.x + "×" + grid.y : "none", "",
+           grid ? (b["absolute-snapping"] ? "absolute" : "relative") : "not snapped") +
+      stat("Offset", b["position-relative-to-grid"]
+             ? "(" + b["position-relative-to-grid"].x + ", " + b["position-relative-to-grid"].y + ")"
+             : "—", "", "relative to grid") +
+      (() => {
+        // Derived, not stored — see gridPosition().
+        const gp = gridPosition(b);
+        if (!gp) return "";
+        return stat("Grid position", "(" + gp.x + ", " + gp.y + ")",
+          gp.whole ? "" : "modify",
+          gp.whole ? "derived from the build" : "not whole — don't trust it");
+      })() +
+      stat("Parameters", (b.parameters || []).length, "",
+           (b.parameters || []).some(p => p.formula) ? "some derived" : "");
+
+    const params = b.parameters || [];
+    $("ins-pcount").textContent = b.label || "";
+    $("ins-params").innerHTML = params.length
+      ? '<ul class="rows">' + params.map(p => {
+          const bits = [];
+          if (p.number !== undefined) bits.push("= " + p.number);
+          if (p.variable) bits.push("variable " + p.variable);
+          if (p.formula) bits.push("formula " + p.formula);
+          if (p.id) bits.push(p.id);
+          if (p.dependent) bits.push("derived");
+          return '<li><span class="mark modify">§</span><span class="ent">' +
+            (p.name || "(unnamed)") + "</span> " + bits.join("  ·  ") + "</li>";
+        }).join("") + "</ul>"
+      : '<div class="empty">No parameters — a re-select in game would have dropped them.</div>';
+
+    const c = tally(ents);
+    const names = Object.keys(c).sort((x, y) => c[y] - c[x] || (x < y ? -1 : 1));
+    $("ins-ecount").textContent = names.length + " kinds";
+    $("ins-ents").innerHTML = '<ul class="rows">' + names.map(n =>
+      '<li><span class="mark">' + String(c[n]).padStart(3, " ").replace(/ /g, "&nbsp;") +
+      '</span> <span class="ent">' + n + "</span></li>").join("") + "</ul>";
+
+    $("ins-out").classList.add("on");
+    showPreview("ins", b);
+    s.className = "status done";
+    s.textContent = ents.length + " entities, " + params.length + " parameters" +
+      (grid ? ", grid " + grid.x + "×" + grid.y : ", no grid");
+  }
+
+  async function runNormalise() {
+    const s = $("nrm-status");
+    $("nrm-copied").textContent = "";
+    s.className = "status";
+    s.textContent = "moving…";
+    try {
+      const obj = await decode($("nrm-in").value);
+      const before = bpOf(obj);
+      const wasMin = (before.entities || []).reduce((m, e) => ({
+        x: Math.min(m.x, e.position.x), y: Math.min(m.y, e.position.y),
+      }), { x: Infinity, y: Infinity });
+
+      const r = normalise(obj, { x: parseFloat($("nrm-x").value), y: parseFloat($("nrm-y").value) });
+      if (!r.entities) throw new Error("that blueprint has no entities to move");
+
+      // Absolute X/Y pins the grid lattice to world coordinates. It is a
+      // placement choice, not something a move implies — but two blueprints
+      // can't land together unless it matches, so it's settable here.
+      let pinned = false;
+      if ($("nrm-pin").checked) {
+        const px = parseFloat($("nrm-px").value), py = parseFloat($("nrm-py").value);
+        if (!isFinite(px) || !isFinite(py)) throw new Error("Absolute X and Y both need a number");
+        bpOf(obj)["position-relative-to-grid"] = { x: px, y: py };
+        pinned = true;
+      }
+
+      const str = await encode(obj);
+      const after = bpOf(await decode(str));
+
+      if (!paramsStillBind(after)) {
+        throw new Error("a parameter stopped binding — the move was not applied");
+      }
+
+      $("nrm-result").value = str;
+
+      const off = r.residual.x || r.residual.y;
+      $("nrm-stats").innerHTML =
+        stat("Moved", "(" + r.moved.x + ", " + r.moved.y + ")", "", "whole tiles") +
+        stat("Corner was", "(" + wasMin.x + ", " + wasMin.y + ")", "", "min entity centre") +
+        stat("Corner now", "(" + r.to.x + ", " + r.to.y + ")", off ? "modify" : "", "min entity centre") +
+        stat("Entities", r.entities, "", "all moved together");
+
+      const m = normaliseReport(after);
+      $("nrm-match").innerHTML = '<ul class="rows">' +
+        '<li><span class="mark">·</span><span class="ent">grid size</span> ' + m.grid + "</li>" +
+        '<li><span class="mark">·</span><span class="ent">snapping</span> ' + m.snapping + "</li>" +
+        '<li><span class="mark">·</span><span class="ent">absolute X / Y</span> ' + m.offset + "</li>" +
+        "</ul>";
+
+      showPreview("nrm", after);
+      $("nrm-out").classList.add("on");
+
+      s.className = "status done";
+      s.textContent = "moved (" + r.moved.x + ", " + r.moved.y + ") — " + r.entities + " entities" +
+        (off ? ", " + r.residual.x + "," + r.residual.y + " short of the corner (whole tiles only)"
+             : ", corner exact") +
+        (pinned ? ", absolute set to " + m.offset : "");
+    } catch (e) {
+      $("nrm-result").value = "";
+      $("nrm-out").classList.remove("on");
+      s.className = "status bad";
+      s.textContent = e && e.message ? e.message.replace(/<[^>]+>/g, "") : String(e);
+    }
+  }
+
+  let turned = null;   // kept so the grid offset can be edited without turning again
+
+  async function reoffset() {
+    if (!turned) return;
+    const b = bpOf(turned);
+    const g = b["snap-to-grid"];
+    const x = parseFloat($("rot-ox").value), y = parseFloat($("rot-oy").value);
+    const st = $("rot-grid-status");
+    if (!isFinite(x) || !isFinite(y)) {
+      st.className = "status bad";
+      st.textContent = "both need a number";
+      return;
+    }
+    b["position-relative-to-grid"] = { x: x, y: y };
+    $("rot-out").value = await encode(turned);
+    $("rot-copied").textContent = "";
+    st.className = "status done";
+    st.textContent = "offset set to (" + x + ", " + y + ")" +
+      (g ? " on a " + g.x + "×" + g.y + " grid" : "");
+  }
+
+  // Every button on this page does the same thing to the same string; only the
+  // transform and the wording differ.
+  const MOVES = {
+    cw:   { verb: "turning", said: "turned right 90°", run: o => turnBlueprint(o, 1) },
+    half: { verb: "turning", said: "turned 180°", run: o => turnBlueprint(o, 2) },
+    ccw:  { verb: "turning", said: "turned left 90°", run: o => turnBlueprint(o, 3) },
+    fx:   { verb: "flipping", said: "flipped horizontally", run: o => flipBlueprint(o, "x") },
+    fy:   { verb: "flipping", said: "flipped vertically", run: o => flipBlueprint(o, "y") },
+  };
+
+  async function move(how) {
+    const m = MOVES[how];
+    const s = $("rot-status");
+    $("rot-copied").textContent = "";
+    $("rot-grid-status").textContent = "";
+    s.className = "status";
+    s.textContent = m.verb + "…";
+    try {
+      const obj = await decode($("rot-in").value);
+      const b = bpOf(obj);
+      const before = b["snap-to-grid"];
+      const out = m.run(obj);
+      const str = await encode(out);
+      const after = bpOf(await decode(str));
+
+      turned = out;
+      const g = after["snap-to-grid"], off = after["position-relative-to-grid"];
+      if (g || off) {
+        $("rot-grid").classList.add("on");
+        $("rot-ox").value = off ? off.x : 0;
+        $("rot-oy").value = off ? off.y : 0;
+        $("rot-grid-dims").textContent = g ? g.x + " × " + g.y : "not set";
+        $("rot-grid-note").textContent = after["absolute-snapping"]
+          ? "absolute snapping" : "relative snapping";
+      } else {
+        $("rot-grid").classList.remove("on");
+      }
+
+      $("rot-out").value = str;
+      // Preview what's about to be copied, decoded back from the actual output.
+      showPreview("rot", after);
+      const bits = [(after.entities || []).length + " entities"];
+      if (after["snap-to-grid"]) {
+        bits.push("grid " + after["snap-to-grid"].x + "×" + after["snap-to-grid"].y +
+          (before && before.x !== after["snap-to-grid"].x ? " (swapped)" : ""));
+      }
+      if ((after.parameters || []).length) bits.push(after.parameters.length + " params kept");
+      const curves = (after.entities || []).filter(e => CURVED.test(e.name)).length;
+      if (curves && (how === "fx" || how === "fy")) bits.push(curves + " curved rails re-handed");
+      s.className = "status done";
+      s.textContent = m.said + " — " + bits.join(", ");
+    } catch (e) {
+      $("rot-out").value = "";
+      turned = null;
+      $("rot-grid").classList.remove("on");
+      s.className = "status bad";
+      s.textContent = e && e.message ? e.message.replace(/<[^>]+>/g, "") : String(e);
+    }
+  }
+
+  if (typeof window !== "undefined" && typeof location !== "undefined") {
+    window.addEventListener("hashchange", route);
+    route();
+  }
+
+  wireZoom("ins");
+  wireZoom("rot");
+  wireZoom("mrg");
+  wireZoom("nrm");
+
+  $("nrm-go").addEventListener("click", runNormalise);
+  $("nrm-in").addEventListener("paste", () => setTimeout(() =>
+    describe($("nrm-in").value, $("nrm-info")), 0));
+
+  $("nrm-copy").addEventListener("click", async () => {
+    const t = $("nrm-result");
+    if (!t.value) return;
+    try {
+      await navigator.clipboard.writeText(t.value);
+    } catch (e) {
+      t.removeAttribute("readonly");
+      t.select();
+      document.execCommand("copy");
+      t.setAttribute("readonly", "");
+    }
+    $("nrm-copied").textContent = t.value.length + " chars copied";
+  });
+
+  $("ins-go").addEventListener("click", inspect);
+  $("ins-in").addEventListener("paste", () => setTimeout(() =>
+    describe($("ins-in").value, $("ins-info")), 0));
+  $("rot-in").addEventListener("paste", () => setTimeout(() =>
+    describe($("rot-in").value, $("rot-info")), 0));
+
+  $("rot-apply").addEventListener("click", reoffset);
+  $("rot-cw").addEventListener("click", () => move("cw"));
+  $("rot-180").addEventListener("click", () => move("half"));
+  $("rot-ccw").addEventListener("click", () => move("ccw"));
+  $("rot-fx").addEventListener("click", () => move("fx"));
+  $("rot-fy").addEventListener("click", () => move("fy"));
+
+  $("rot-copy").addEventListener("click", async () => {
+    const t = $("rot-out");
+    if (!t.value) return;
+    try {
+      await navigator.clipboard.writeText(t.value);
+    } catch (e) {
+      t.removeAttribute("readonly");
+      t.select();
+      document.execCommand("copy");
+      t.setAttribute("readonly", "");
+    }
+    $("rot-copied").textContent = t.value.length + " chars copied";
+  });
+
+  $("copy").addEventListener("click", async () => {
+    const t = $("result");
+    try {
+      await navigator.clipboard.writeText(t.value);
+    } catch (e) {
+      t.removeAttribute("readonly");
+      t.select();
+      document.execCommand("copy");
+      t.setAttribute("readonly", "");
+    }
+    $("copied").textContent = t.value.length + " chars copied";
+  });
+</script>

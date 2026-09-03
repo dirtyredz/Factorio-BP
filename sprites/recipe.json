@@ -1,0 +1,3402 @@
+[
+ {
+  "out": "steel-chest_0.png",
+  "px": 32,
+  "py": 37,
+  "originX": -0.5,
+  "originY": -0.640625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "zip": "C:\\Users\\dirty\\AppData\\Roaming\\Factorio\\mods\\aai-containers_0.4.0.zip",
+     "entry": "graphics/entity/container-1/base.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 64,
+    "sh": 74,
+    "dx": -0.5,
+    "dy": -0.640625,
+    "dw": 1,
+    "dh": 1.15625
+   }
+  ]
+ },
+ {
+  "out": "medium-electric-pole_0.png",
+  "px": 42,
+  "py": 126,
+  "originX": -0.546875,
+  "originY": -3.34375,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\medium-electric-pole\\medium-electric-pole.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 84,
+    "sh": 252,
+    "dx": -0.546875,
+    "dy": -3.34375,
+    "dw": 1.3125,
+    "dh": 3.9375
+   }
+  ]
+ },
+ {
+  "out": "medium-electric-pole_4.png",
+  "px": 42,
+  "py": 126,
+  "originX": -0.546875,
+  "originY": -3.34375,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\medium-electric-pole\\medium-electric-pole.png"
+    },
+    "sx": 84,
+    "sy": 0,
+    "sw": 84,
+    "sh": 252,
+    "dx": -0.546875,
+    "dy": -3.34375,
+    "dw": 1.3125,
+    "dh": 3.9375
+   }
+  ]
+ },
+ {
+  "out": "medium-electric-pole_8.png",
+  "px": 42,
+  "py": 126,
+  "originX": -0.546875,
+  "originY": -3.34375,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\medium-electric-pole\\medium-electric-pole.png"
+    },
+    "sx": 168,
+    "sy": 0,
+    "sw": 84,
+    "sh": 252,
+    "dx": -0.546875,
+    "dy": -3.34375,
+    "dw": 1.3125,
+    "dh": 3.9375
+   }
+  ]
+ },
+ {
+  "out": "medium-electric-pole_12.png",
+  "px": 42,
+  "py": 126,
+  "originX": -0.546875,
+  "originY": -3.34375,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\medium-electric-pole\\medium-electric-pole.png"
+    },
+    "sx": 252,
+    "sy": 0,
+    "sw": 84,
+    "sh": 252,
+    "dx": -0.546875,
+    "dy": -3.34375,
+    "dw": 1.3125,
+    "dh": 3.9375
+   }
+  ]
+ },
+ {
+  "out": "big-electric-pole_0.png",
+  "px": 74,
+  "py": 156,
+  "originX": -1.15625,
+  "originY": -4.03125,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\big-electric-pole\\big-electric-pole.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 148,
+    "sh": 312,
+    "dx": -1.15625,
+    "dy": -4.03125,
+    "dw": 2.3125,
+    "dh": 4.875
+   }
+  ]
+ },
+ {
+  "out": "big-electric-pole_4.png",
+  "px": 74,
+  "py": 156,
+  "originX": -1.15625,
+  "originY": -4.03125,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\big-electric-pole\\big-electric-pole.png"
+    },
+    "sx": 148,
+    "sy": 0,
+    "sw": 148,
+    "sh": 312,
+    "dx": -1.15625,
+    "dy": -4.03125,
+    "dw": 2.3125,
+    "dh": 4.875
+   }
+  ]
+ },
+ {
+  "out": "big-electric-pole_8.png",
+  "px": 74,
+  "py": 156,
+  "originX": -1.15625,
+  "originY": -4.03125,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\big-electric-pole\\big-electric-pole.png"
+    },
+    "sx": 296,
+    "sy": 0,
+    "sw": 148,
+    "sh": 312,
+    "dx": -1.15625,
+    "dy": -4.03125,
+    "dw": 2.3125,
+    "dh": 4.875
+   }
+  ]
+ },
+ {
+  "out": "big-electric-pole_12.png",
+  "px": 74,
+  "py": 156,
+  "originX": -1.15625,
+  "originY": -4.03125,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\big-electric-pole\\big-electric-pole.png"
+    },
+    "sx": 444,
+    "sy": 0,
+    "sw": 148,
+    "sh": 312,
+    "dx": -1.15625,
+    "dy": -4.03125,
+    "dw": 2.3125,
+    "dh": 4.875
+   }
+  ]
+ },
+ {
+  "out": "bulk-inserter_0.png",
+  "px": 53,
+  "py": 40,
+  "originX": -0.7734375,
+  "originY": -0.4140625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\bulk-inserter\\bulk-inserter-platform.png"
+    },
+    "sx": 210,
+    "sy": 0,
+    "sw": 105,
+    "sh": 79,
+    "dx": -0.7734375,
+    "dy": -0.4140625,
+    "dw": 1.640625,
+    "dh": 1.234375
+   }
+  ]
+ },
+ {
+  "out": "bulk-inserter_4.png",
+  "px": 53,
+  "py": 40,
+  "originX": -0.7734375,
+  "originY": -0.4140625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\bulk-inserter\\bulk-inserter-platform.png"
+    },
+    "sx": 315,
+    "sy": 0,
+    "sw": 105,
+    "sh": 79,
+    "dx": -0.7734375,
+    "dy": -0.4140625,
+    "dw": 1.640625,
+    "dh": 1.234375
+   }
+  ]
+ },
+ {
+  "out": "bulk-inserter_8.png",
+  "px": 53,
+  "py": 40,
+  "originX": -0.7734375,
+  "originY": -0.4140625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\bulk-inserter\\bulk-inserter-platform.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 105,
+    "sh": 79,
+    "dx": -0.7734375,
+    "dy": -0.4140625,
+    "dw": 1.640625,
+    "dh": 1.234375
+   }
+  ]
+ },
+ {
+  "out": "bulk-inserter_12.png",
+  "px": 53,
+  "py": 40,
+  "originX": -0.7734375,
+  "originY": -0.4140625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\bulk-inserter\\bulk-inserter-platform.png"
+    },
+    "sx": 105,
+    "sy": 0,
+    "sw": 105,
+    "sh": 79,
+    "dx": -0.7734375,
+    "dy": -0.4140625,
+    "dw": 1.640625,
+    "dh": 1.234375
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_0.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 256,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_2.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_6.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 384,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_10.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 128,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_0c4.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 768,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_4c0.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 1024,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_0c12.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 512,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_12c0.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 1280,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_4c8.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 640,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_8c4.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 1408,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_12c8.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 896,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "fast-transport-belt_8c12.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\fast-transport-belt\\fast-transport-belt.png"
+    },
+    "sx": 0,
+    "sy": 1152,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "decider-combinator_0.png",
+  "px": 78,
+  "py": 66,
+  "originX": -1.203125,
+  "originY": -0.796875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\combinator\\decider-combinator.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 156,
+    "sh": 132,
+    "dx": -1.203125,
+    "dy": -0.796875,
+    "dw": 2.4375,
+    "dh": 2.0625
+   }
+  ]
+ },
+ {
+  "out": "decider-combinator_4.png",
+  "px": 78,
+  "py": 66,
+  "originX": -1.203125,
+  "originY": -0.796875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\combinator\\decider-combinator.png"
+    },
+    "sx": 156,
+    "sy": 0,
+    "sw": 156,
+    "sh": 132,
+    "dx": -1.203125,
+    "dy": -0.796875,
+    "dw": 2.4375,
+    "dh": 2.0625
+   }
+  ]
+ },
+ {
+  "out": "decider-combinator_8.png",
+  "px": 78,
+  "py": 66,
+  "originX": -1.203125,
+  "originY": -0.796875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\combinator\\decider-combinator.png"
+    },
+    "sx": 312,
+    "sy": 0,
+    "sw": 156,
+    "sh": 132,
+    "dx": -1.203125,
+    "dy": -0.796875,
+    "dw": 2.4375,
+    "dh": 2.0625
+   }
+  ]
+ },
+ {
+  "out": "decider-combinator_12.png",
+  "px": 78,
+  "py": 66,
+  "originX": -1.203125,
+  "originY": -0.796875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\combinator\\decider-combinator.png"
+    },
+    "sx": 468,
+    "sy": 0,
+    "sw": 156,
+    "sh": 132,
+    "dx": -1.203125,
+    "dy": -0.796875,
+    "dw": 2.4375,
+    "dh": 2.0625
+   }
+  ]
+ },
+ {
+  "out": "train-stop_0.png",
+  "px": 193,
+  "py": 221,
+  "originX": -3.015625,
+  "originY": -3.96875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-ground.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 386,
+    "sh": 377,
+    "dx": -3.015625,
+    "dy": -2.96875,
+    "dw": 6.03125,
+    "dh": 5.890625
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-bottom.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 140,
+    "sh": 291,
+    "dx": -1.109375,
+    "dy": -3.109375,
+    "dw": 2.1875,
+    "dh": 4.546875
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-top.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 312,
+    "sh": 306,
+    "dx": -2.421875,
+    "dy": -3.96875,
+    "dw": 4.875,
+    "dh": 4.78125
+   }
+  ]
+ },
+ {
+  "out": "train-stop_4.png",
+  "px": 193,
+  "py": 221,
+  "originX": -3.015625,
+  "originY": -3.96875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-ground.png"
+    },
+    "sx": 386,
+    "sy": 0,
+    "sw": 386,
+    "sh": 377,
+    "dx": -3.015625,
+    "dy": -2.96875,
+    "dw": 6.03125,
+    "dh": 5.890625
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-bottom.png"
+    },
+    "sx": 140,
+    "sy": 0,
+    "sw": 140,
+    "sh": 291,
+    "dx": -1.109375,
+    "dy": -3.109375,
+    "dw": 2.1875,
+    "dh": 4.546875
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-top.png"
+    },
+    "sx": 312,
+    "sy": 0,
+    "sw": 312,
+    "sh": 306,
+    "dx": -2.421875,
+    "dy": -3.96875,
+    "dw": 4.875,
+    "dh": 4.78125
+   }
+  ]
+ },
+ {
+  "out": "train-stop_8.png",
+  "px": 193,
+  "py": 221,
+  "originX": -3.015625,
+  "originY": -3.96875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-ground.png"
+    },
+    "sx": 772,
+    "sy": 0,
+    "sw": 386,
+    "sh": 377,
+    "dx": -3.015625,
+    "dy": -2.96875,
+    "dw": 6.03125,
+    "dh": 5.890625
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-bottom.png"
+    },
+    "sx": 280,
+    "sy": 0,
+    "sw": 140,
+    "sh": 291,
+    "dx": -1.109375,
+    "dy": -3.109375,
+    "dw": 2.1875,
+    "dh": 4.546875
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-top.png"
+    },
+    "sx": 624,
+    "sy": 0,
+    "sw": 312,
+    "sh": 306,
+    "dx": -2.421875,
+    "dy": -3.96875,
+    "dw": 4.875,
+    "dh": 4.78125
+   }
+  ]
+ },
+ {
+  "out": "train-stop_12.png",
+  "px": 193,
+  "py": 221,
+  "originX": -3.015625,
+  "originY": -3.96875,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-ground.png"
+    },
+    "sx": 1158,
+    "sy": 0,
+    "sw": 386,
+    "sh": 377,
+    "dx": -3.015625,
+    "dy": -2.96875,
+    "dw": 6.03125,
+    "dh": 5.890625
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-bottom.png"
+    },
+    "sx": 420,
+    "sy": 0,
+    "sw": 140,
+    "sh": 291,
+    "dx": -1.109375,
+    "dy": -3.109375,
+    "dw": 2.1875,
+    "dh": 4.546875
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\train-stop\\train-stop-top.png"
+    },
+    "sx": 936,
+    "sy": 0,
+    "sw": 312,
+    "sh": 306,
+    "dx": -2.421875,
+    "dy": -3.96875,
+    "dw": 4.875,
+    "dh": 4.78125
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_0.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_1.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 128,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_2.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 256,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_3.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 384,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_4.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 512,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_5.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 640,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_6.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 768,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_7.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 896,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_8.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1024,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_9.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1152,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_10.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1280,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_11.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1408,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_12.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1536,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_13.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1664,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_14.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1792,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-signal_15.png",
+  "px": 64,
+  "py": 64,
+  "originX": -1,
+  "originY": -1,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-signal\\rail-signal.png"
+    },
+    "sx": 0,
+    "sy": 1920,
+    "sw": 128,
+    "sh": 128,
+    "dx": -1,
+    "dy": -1,
+    "dw": 2,
+    "dh": 2
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_0.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_1.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 98,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_2.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 196,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_3.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 294,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_4.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 392,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_5.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 490,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_6.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 588,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_7.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 686,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_8.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 784,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_9.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 882,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_10.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 980,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_11.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 1078,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_12.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 1176,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_13.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 1274,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_14.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 1372,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "rail-chain-signal_15.png",
+  "px": 50,
+  "py": 49,
+  "originX": -0.765625,
+  "originY": -0.765625,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rail-chain-signal\\rail-chain-signal.png"
+    },
+    "sx": 0,
+    "sy": 1470,
+    "sw": 100,
+    "sh": 98,
+    "dx": -0.765625,
+    "dy": -0.765625,
+    "dw": 1.5625,
+    "dh": 1.53125
+   }
+  ]
+ },
+ {
+  "out": "straight-rail_0.png",
+  "px": 128,
+  "py": 128,
+  "originX": -2,
+  "originY": -2,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 256,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 256,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 256,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 256,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 256,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   }
+  ]
+ },
+ {
+  "out": "straight-rail_2.png",
+  "px": 192,
+  "py": 192,
+  "originX": -3,
+  "originY": -3,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 2048,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 2048,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 2048,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 2048,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 2048,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   }
+  ]
+ },
+ {
+  "out": "straight-rail_4.png",
+  "px": 128,
+  "py": 128,
+  "originX": -2,
+  "originY": -2,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 0,
+    "sw": 256,
+    "sh": 256,
+    "dx": -2,
+    "dy": -2,
+    "dw": 4,
+    "dh": 4
+   }
+  ]
+ },
+ {
+  "out": "straight-rail_6.png",
+  "px": 192,
+  "py": 192,
+  "originX": -3,
+  "originY": -3,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 896,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 896,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 896,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 896,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 896,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_0.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 1536,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 1536,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 1536,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 1536,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 1536,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_2.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 6144,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 6144,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 6144,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 6144,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 6144,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_4.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 3584,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 3584,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 3584,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 3584,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 3584,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_6.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 0,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 0,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 0,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 0,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 0,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_8.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 5632,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 5632,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 5632,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 5632,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 5632,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_10.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 2048,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 2048,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 2048,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 2048,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 2048,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_12.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 7680,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 7680,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 7680,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 7680,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 7680,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-a_14.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 4096,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 4096,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 4096,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 4096,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 4096,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_0.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 1024,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 1024,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 1024,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 1024,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 1024,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_2.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 6656,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 6656,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 6656,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 6656,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 6656,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_4.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 3072,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 3072,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 3072,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 3072,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 3072,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_6.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 512,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 512,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 512,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 512,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 512,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_8.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 5120,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 5120,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 5120,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 5120,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 5120,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_10.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 2560,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 2560,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 2560,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 2560,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 2560,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_12.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 7168,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 7168,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 7168,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 7168,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 7168,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "curved-rail-b_14.png",
+  "px": 256,
+  "py": 256,
+  "originX": -4,
+  "originY": -4,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 2048,
+    "sy": 4608,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 2048,
+    "sy": 4608,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 2048,
+    "sy": 4608,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 2048,
+    "sy": 4608,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 2048,
+    "sy": 4608,
+    "sw": 512,
+    "sh": 512,
+    "dx": -4,
+    "dy": -4,
+    "dw": 8,
+    "dh": 8
+   }
+  ]
+ },
+ {
+  "out": "half-diagonal-rail_0.png",
+  "px": 192,
+  "py": 192,
+  "originX": -3,
+  "originY": -3,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 1280,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 1280,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 1280,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 1280,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 1280,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   }
+  ]
+ },
+ {
+  "out": "half-diagonal-rail_2.png",
+  "px": 192,
+  "py": 192,
+  "originX": -3,
+  "originY": -3,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 1664,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 1664,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 1664,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 1664,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 1664,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   }
+  ]
+ },
+ {
+  "out": "half-diagonal-rail_4.png",
+  "px": 192,
+  "py": 192,
+  "originX": -3,
+  "originY": -3,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 2432,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 2432,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 2432,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 2432,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 2432,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   }
+  ]
+ },
+ {
+  "out": "half-diagonal-rail_6.png",
+  "px": 192,
+  "py": 192,
+  "originX": -3,
+  "originY": -3,
+  "ppt": 32,
+  "layers": [
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path.png"
+    },
+    "sx": 0,
+    "sy": 512,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-stone-path-inside.png"
+    },
+    "sx": 0,
+    "sy": 512,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-ties.png"
+    },
+    "sx": 0,
+    "sy": 512,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-backplates.png"
+    },
+    "sx": 0,
+    "sy": 512,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   },
+   {
+    "src": {
+     "file": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\data\\base\\graphics\\entity\\rails\\rail\\rail-metals.png"
+    },
+    "sx": 0,
+    "sy": 512,
+    "sw": 384,
+    "sh": 384,
+    "dx": -3,
+    "dy": -3,
+    "dw": 6,
+    "dh": 6
+   }
+  ]
+ }
+]

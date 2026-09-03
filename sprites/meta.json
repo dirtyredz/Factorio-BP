@@ -1,0 +1,158 @@
+{
+  "straight-rail": {
+    "type": "straight-rail",
+    "icon": "__base__/graphics/icons/rail.png",
+    "tile_width": 2,
+    "tile_height": 2,
+    "collision_box": {
+      "x1": -1,
+      "y1": -1,
+      "x2": 1,
+      "y2": 1
+    }
+  },
+  "curved-rail-a": {
+    "type": "curved-rail-a",
+    "icon": "__base__/graphics/icons/curved-rail.png",
+    "tile_width": 2,
+    "tile_height": 6,
+    "collision_box": {
+      "x1": -0.75,
+      "y1": -2.516,
+      "x2": 0.75,
+      "y2": 2.516
+    }
+  },
+  "curved-rail-b": {
+    "type": "curved-rail-b",
+    "icon": "__base__/graphics/icons/curved-rail-b.png",
+    "tile_width": 2,
+    "tile_height": 5,
+    "collision_box": {
+      "x1": -0.75,
+      "y1": -2.441,
+      "x2": 0.75,
+      "y2": 2.441
+    }
+  },
+  "half-diagonal-rail": {
+    "type": "half-diagonal-rail",
+    "icon": "__base__/graphics/icons/half-diagonal-rail.png",
+    "tile_width": 2,
+    "tile_height": 2,
+    "collision_box": {
+      "x1": -0.75,
+      "y1": -2.236,
+      "x2": 0.75,
+      "y2": 2.236
+    }
+  },
+  "bulk-inserter": {
+    "type": "inserter",
+    "icon": "__base__/graphics/icons/bulk-inserter.png",
+    "tile_width": 1,
+    "tile_height": 1,
+    "collision_box": {
+      "x1": -0.15,
+      "y1": -0.15,
+      "x2": 0.15,
+      "y2": 0.15
+    }
+  },
+  "fast-transport-belt": {
+    "type": "transport-belt",
+    "icon": "__base__/graphics/icons/fast-transport-belt.png",
+    "tile_width": 1,
+    "tile_height": 1,
+    "collision_box": {
+      "x1": -0.4,
+      "y1": -0.4,
+      "x2": 0.4,
+      "y2": 0.4
+    }
+  },
+  "steel-chest": {
+    "type": "container",
+    "icon": "__aai-containers__/graphics/icons/container-1-base.png",
+    "tile_width": 1,
+    "tile_height": 1,
+    "collision_box": {
+      "x1": -0.3,
+      "y1": -0.3,
+      "x2": 0.3,
+      "y2": 0.3
+    }
+  },
+  "rail-signal": {
+    "type": "rail-signal",
+    "icon": "__base__/graphics/icons/rail-signal.png",
+    "tile_width": 1,
+    "tile_height": 1,
+    "collision_box": {
+      "x1": -0.2,
+      "y1": -0.2,
+      "x2": 0.2,
+      "y2": 0.2
+    }
+  },
+  "rail-chain-signal": {
+    "type": "rail-chain-signal",
+    "icon": "__base__/graphics/icons/rail-chain-signal.png",
+    "tile_width": 1,
+    "tile_height": 1,
+    "collision_box": {
+      "x1": -0.2,
+      "y1": -0.2,
+      "x2": 0.2,
+      "y2": 0.2
+    }
+  },
+  "medium-electric-pole": {
+    "type": "electric-pole",
+    "icon": "__base__/graphics/icons/medium-electric-pole.png",
+    "tile_width": 1,
+    "tile_height": 1,
+    "collision_box": {
+      "x1": -0.15,
+      "y1": -0.15,
+      "x2": 0.15,
+      "y2": 0.15
+    }
+  },
+  "big-electric-pole": {
+    "type": "electric-pole",
+    "icon": "__base__/graphics/icons/big-electric-pole.png",
+    "tile_width": 2,
+    "tile_height": 2,
+    "collision_box": {
+      "x1": -0.65,
+      "y1": -0.65,
+      "x2": 0.65,
+      "y2": 0.65
+    }
+  },
+  "decider-combinator": {
+    "type": "decider-combinator",
+    "icon": "__base__/graphics/icons/decider-combinator.png",
+    "tile_width": 1,
+    "tile_height": 2,
+    "collision_box": {
+      "x1": -0.3,
+      "y1": -0.65,
+      "x2": 0.3,
+      "y2": 0.65
+    }
+  },
+  "train-stop": {
+    "type": "train-stop",
+    "icon": "__base__/graphics/icons/train-stop.png",
+    "tile_width": 2,
+    "tile_height": 2,
+    "collision_box": {
+      "x1": -0.5,
+      "y1": -0.5,
+      "x2": 0.5,
+      "y2": 0.5
+    }
+  }
+}
