@@ -13,6 +13,28 @@ There is also a Claude Artifact copy at
 `Artifact` tool, same file path, to update it in place. It is for sharing, and it goes stale the
 moment you edit `index.html` without republishing. **Only publish when asked.**
 
+## Deployment — the public site
+
+**The tool is also a live public website: https://factorio-bp-tools.dirtyredz.com** — a Cloudflare
+Pages project named `factorio-bp-tools` (default subdomain `factorio-bp-tools.pages.dev`). This is a
+third, separate copy — distinct from the local `open-tools.url` file and the Artifact.
+
+**A `git push` does NOT update it.** GitHub only stores the code; the live site is a separate
+Cloudflare Pages copy that changes ONLY when the deploy is run. This has bitten a session already:
+the code was pushed to GitHub, everyone assumed the site was live, and it kept serving the old
+version until the deploy was run by hand. If you change `index.html` and the owner wants it live,
+**deploy it — pushing is not deploying.**
+
+**Deploy:** `./deploy.ps1`. It stages `index.html` + `sprites/*.png` into `dist/` and runs
+`npx wrangler pages deploy dist --project-name factorio-bp-tools`. One-time prereq: `npx wrangler
+login` (auth is then stored under `%APPDATA%\xdg.config\.wrangler`). Deploying is an outward
+publish — confirm with the owner first, then verify the result at the URL above.
+
+**It publishes ONLY `index.html` + `sprites/*.png` — never the blueprints, the docs, or the
+source.** The site once served the whole repo root, exposing `blueprints/*.txt` (the owner's real
+strings), this file, and `bp.js`/`test.js` publicly; `deploy.ps1` stages a clean `dist/` precisely
+so that can't recur. Don't `wrangler pages deploy .` from the repo root.
+
 ## Layout
 
 | File | What it is |
@@ -21,8 +43,9 @@ moment you edit `index.html` without republishing. **Only publish when asked.**
 | `bp.js` | CLI front end. **Loads its logic out of `index.html`** so the two can't drift. |
 | `test.js` | 202 checks, same trick — pulls the page's functions and runs them against real blueprints. |
 | `debug.js` | Drives the page's `run()` against a fake DOM, so UI-path errors surface in the terminal. |
+| `deploy.ps1` | Deploys the public site — stages `index.html` + `sprites/*.png` and runs `wrangler pages deploy`. See [Deployment](#deployment--the-public-site). |
 | `blueprints/*.txt` | Real blueprints from the owner. One string per file, no trailing newline. |
-| `sprites/*.png` | Entity art cut out of the owner's own Factorio install, one file per entity *and direction*. **Game assets — local use only, never publish them.** |
+| `sprites/*.png` | Entity art cut out of the owner's own Factorio install, one file per entity *and direction*. **Game assets** — kept out of the shared Artifact; they DO ship to the owner's own Pages site (via `deploy.ps1`), never to anywhere else. |
 | `tools/*` | One-off scripts that produce `sprites/`. Not needed to run the tools; needed to regenerate the art. See [Sprites](#sprites). |
 | `VERIFY-IN-GAME.md` | Checks that pass their tests but have never been confirmed against Factorio. Raise these when the owner says they are in game. |
 | `IDEAS.md` | Agreed but unbuilt work, ranked, with what's known vs assumed for each. Move an item into this file and the README when it ships. |
