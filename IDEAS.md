@@ -127,3 +127,25 @@ the floor for free since `buildPreview` already handled `tiles`.
 - **Self-maintaining sprite extraction.** `ENTITIES` in `tools/build-recipe.js` is hardcoded,
   while `tools/used-dirs.js` already computes what the stored blueprints need. Wiring them
   together means a new blueprint pulls its own art instead of silently falling back to boxes.
+
+### Tile-overlay refinements (deferred from the merge review)
+
+These came out of the structure review of the floor-tile merge. None block it — the manual
+**Tile offset** box covers the cases where auto-align is weak — so they're logged rather than built.
+
+- **Footprint-accurate `occupiedCells`.** It approximates an entity's cells from coordinate parity
+  (1×1 fills its cell, an even-sized entity the three back toward the origin). There is a real
+  `FOOTPRINT` table and a direction-aware `entityCells(e)` could use it. Deferred deliberately:
+  `occupiedCells` only *scores* alignment, `FOOTPRINT` covers just the 13 extracted types, and a
+  direction-aware version would have to rotate the footprint too — more machinery than a scorer
+  needs. Revisit only if a real overlay lines up wrong *because* of the approximation.
+- **Order-independent alignment sampling.** `findTileOffset` (like the entity `findOffset` it
+  mirrors) samples the first 40 cells/tiles for candidate offsets, so on a floor with hundreds of
+  tiles the result depends on serialization order. Sampling spread across the bounding box would be
+  sturdier. Low priority — it matches `findOffset`'s existing behaviour and the manual offset is the
+  escape hatch.
+- **One `mergeChecks()` for page and CLI.** The verification list is duplicated between `build()`
+  in `index.html` and `verify()` in `bp.js` — and was already, before tiles; the tile checks just
+  followed suit. Extracting a shared `mergeChecks()` (exported through the `new Function` list) would
+  fix the whole duplication, tiles and entities together. A tidy refactor of pre-existing debt, out
+  of scope for the tile change itself.

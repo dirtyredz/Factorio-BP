@@ -19,7 +19,7 @@ moment you edit `index.html` without republishing. **Only publish when asked.**
 |---|---|
 | `index.html` | The whole product. Markup, styles, and **all the logic**. Hash-routed: `#/merge`, `#/rotate` (turns *and* flips), `#/normalise`, `#/inspect`. |
 | `bp.js` | CLI front end. **Loads its logic out of `index.html`** so the two can't drift. |
-| `test.js` | 179 checks, same trick — pulls the page's functions and runs them against real blueprints. |
+| `test.js` | 202 checks, same trick — pulls the page's functions and runs them against real blueprints. |
 | `debug.js` | Drives the page's `run()` against a fake DOM, so UI-path errors surface in the terminal. |
 | `blueprints/*.txt` | Real blueprints from the owner. One string per file, no trailing newline. |
 | `sprites/*.png` | Entity art cut out of the owner's own Factorio install, one file per entity *and direction*. **Game assets — local use only, never publish them.** |

@@ -26,7 +26,7 @@ function loadApi() {
   });
 
   return new Function('document', 'navigator',
-    src + '\n;return { decode, encode, compare, merge, bpOf, tally, paramBound, key, ZERO, paramsStillBind, turnBlueprint, flipBlueprint, normalise, normaliseReport };'
+    src + '\n;return { decode, encode, compare, merge, bpOf, tally, paramBound, key, ZERO, paramsStillBind, parseOffset, turnBlueprint, flipBlueprint, normalise, normaliseReport };'
   )({ getElementById: stub, querySelectorAll: () => [] },
     { clipboard: { writeText: async () => {} } });
 }
@@ -108,10 +108,10 @@ function report(d) {
            (d.al.q ? ` turned ${d.al.q * 90}°` : '') +
            ` — ${d.al.score} tile${d.al.score === 1 ? '' : 's'} land on the build, anchored on ${d.al.anchor}` +
            ` (${d.al.tried} offset${d.al.tried === 1 ? '' : 's'} tested)`);
-    if (d.al.score === 0 && d.al.anchor !== 'a set offset')
-      L.push('WARNING: the floor overlapped nothing — matched corners instead; set --tile-offset=x,y');
+    if (!d.al.confident)
+      L.push('WARNING: the floor did not line up on the build — matched corners instead; set --tile-offset=x,y');
     L.push('');
-    L.push(`floor tiles overlaid: ${d.tilesAdded.length}`);
+    L.push(`floor tiles overlaid: ${d.overlayTiles.length}`);
     return L.join('\n');
   }
   L.push(`alignment: offset (${d.al.off.x}, ${d.al.off.y}) anchored on "${d.al.anchor}" — ` +
@@ -119,7 +119,7 @@ function report(d) {
          `(${d.al.ident} of them identical, ${d.al.tried} offsets tested)`);
   if (d.al.score < d.eb.length - d.added.length) L.push('WARNING: alignment looks weak; check the offset above');
   L.push('');
-  if ((d.tilesAdded || []).length) L.push(`floor tiles carried: ${d.tilesAdded.length}`);
+  if ((d.overlayTiles || []).length) L.push(`floor tiles carried: ${d.overlayTiles.length}`);
   L.push(`added:     ${d.added.length}`);
   for (const e of d.added) L.push(`  + ${e.name} ${where(e, d.al.off)}`);
   L.push(`replaced:  ${d.replaced.length}`);
@@ -146,24 +146,24 @@ function verify(base, out, d, dropped) {
     ['nothing stacked on itself', new Set(tiles).size === tiles.length],
     ['every parameter still binds', api.paramsStillBind(v)],
   ];
-  if ((d.tilesAdded || []).length) {
+  if ((d.overlayTiles || []).length) {
     const vPos = new Set((v.tiles || []).map(t => `${t.position.x},${t.position.y}`));
     rows.push(['every overlaid tile landed',
-      d.tilesAdded.every(t => vPos.has(`${t.position.x},${t.position.y}`))]);
+      d.overlayTiles.every(t => vPos.has(`${t.position.x},${t.position.y}`))]);
     rows.push(['no two tiles on one cell', vPos.size === (v.tiles || []).length]);
     rows.push(['tile positions are whole',
       (v.tiles || []).every(t => Number.isInteger(t.position.x) && Number.isInteger(t.position.y))]);
   }
   return rows.map(([n, ok]) => `  ${ok ? 'OK  ' : 'FAIL'}  ${n}`).join('\n') +
     `\n  entities: ${(a.entities || []).length} -> ${v.entities.length}` +
-    ((d.tilesAdded || []).length ? `\n  tiles: ${(a.tiles || []).length} -> ${(v.tiles || []).length}` : '');
+    ((d.overlayTiles || []).length ? `\n  tiles: ${(a.tiles || []).length} -> ${(v.tiles || []).length}` : '');
 }
 
 // A hand-set tile offset "x,y" from --tile-offset, whole tiles only, or null.
+// Parsing is the page's own parseOffset, pulled out of index.html like the rest of
+// the shared logic, so the CLI and the page can't drift on what a valid offset is.
 function tileOffsetOpt() {
-  const s = opt('tile-offset');
-  const m = s && s.match(/^(-?\d+)\s*[, ]\s*(-?\d+)$/);
-  return m ? { x: +m[1], y: +m[2] } : null;
+  return api.parseOffset(opt('tile-offset'));
 }
 
 // ---------- cli ----------
@@ -243,7 +243,7 @@ async function main() {
         console.log('\nNOTE: removals not applied. Re-run with --apply-removals if you meant to delete them.');
       }
       console.log(`\nwires carried over: ${wires}`);
-      if (tiles || (d.tilesAdded || []).length) console.log(`floor tiles stamped on: ${tiles} new cell${tiles === 1 ? '' : 's'}`);
+      if (tiles || (d.overlayTiles || []).length) console.log(`floor tiles stamped on: ${tiles} new cell${tiles === 1 ? '' : 's'}`);
       console.log(`\nverification:\n${verify(A, await api.decode(str), d, dropped)}`);
       console.log(`\nwrote ${str.length} chars to ${p}`);
       if (!flag('no-clip')) console.log(`clipboard: ${clipSetFromFile(p)} chars — paste into Factorio`);

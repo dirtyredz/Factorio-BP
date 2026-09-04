@@ -1076,15 +1076,22 @@
   // rather than at the mirrored angle.
   const CURVED = /^(elevated-)?curved-rail-[ab]$/;
 
-  // q quarter-turns clockwise. Screen y grows downward, so clockwise is (x,y) -> (-y,x),
-  // and Factorio's directions also run clockwise, so each turn is +4.
+  // q quarter-turns clockwise. Screen y grows downward, so clockwise is (x,y) -> (-y,x).
+  // Shared by entity spinning and tile transforms so the rotation lives in one place;
+  // q is normalised so a negative turn is never a silent no-op.
+  function rotatePoint(p, q) {
+    let x = p.x, y = p.y;
+    for (let i = 0, n = ((q % 4) + 4) % 4; i < n; i++) { const nx = -y; y = x; x = nx; }
+    return { x: x, y: y };
+  }
+
+  // Factorio's directions also run clockwise, so each turn is +4. Normalise q up
+  // front so a negative or >3 turn is consistent across position AND direction — the
+  // rotatePoint call alone would fix the position but leave the direction math raw.
   function spin(e, q) {
+    q = ((q % 4) + 4) % 4;
     if (!q) return e;
-    const pt = p => {
-      let x = p.x, y = p.y;
-      for (let i = 0; i < q; i++) { const nx = -y; y = x; x = nx; }
-      return { x: x, y: y };
-    };
+    const pt = p => rotatePoint(p, q);
     const n = JSON.parse(JSON.stringify(e));
     n.position = pt(e.position);
 
@@ -1193,11 +1200,9 @@
      turnBlueprint uses: rotating the corner alone lands one cell off. */
 
   function transformTiles(tiles, q, off) {
-    const n = ((q % 4) + 4) % 4;
-    const pt = p => { let x = p.x, y = p.y; for (let i = 0; i < n; i++) { const nx = -y; y = x; x = nx; } return { x: x, y: y }; };
-    const nudge = [[0, 0], [-1, 0], [-1, -1], [0, -1]][n];
+    const nudge = [[0, 0], [-1, 0], [-1, -1], [0, -1]][((q % 4) + 4) % 4];
     return tiles.map(t => {
-      const p = pt(t.position);
+      const p = rotatePoint(t.position, q);
       return Object.assign({}, t, { position: { x: p.x + nudge[0] + off.x, y: p.y + nudge[1] + off.y } });
     });
   }
@@ -1232,14 +1237,21 @@
   // candidate offsets come from landing each of the overlay's tiles on each occupied
   // cell of the base, scored by how many other tiles then also land on the build —
   // the same "most tiles line up" rule the entity aligner uses, and all four
-  // rotations are tried the same way. If nothing lands anywhere (a floor with no
-  // counterpart in the base) the two bounding boxes are matched at their corners, so
-  // it still merges somewhere sensible and the offset can be corrected by hand.
+  // rotations are tried the same way.
+  //
+  // Every candidate is *built* by dropping one overlay tile onto one occupied cell, so
+  // every candidate scores at least that one tile. A win of just that single forced
+  // tile is no signal at all — it's the floor-beside-the-build case, where nothing
+  // really lines up — so only a score above one is trusted. Below that (and when the
+  // base has no occupied cells) the two bounding boxes are matched at their corners
+  // instead, so it still merges somewhere sensible and the offset can be set by hand.
+  const TILE_ALIGN_MIN = 2;   // more than the one tile every candidate forces to land
   function findTileOffset(A, B, manual) {
     const cells = occupiedCells(A);
     const bt0 = B.tiles || [];
+    // A hand-set offset is trusted whatever it overlaps — the user chose it.
     if (manual) return { off: manual, q: 0, score: tileScore(bt0, cells, manual),
-                         anchor: "a set offset", tried: 0, whole: true };
+                         anchor: "a set offset", tried: 0, whole: true, confident: true };
 
     const aAnchors = Array.from(cells).slice(0, 40).map(s => {
       const p = s.split(","); return { x: +p[0], y: +p[1] };
@@ -1260,19 +1272,21 @@
         }
       }
     }
-    if (best && best.score > 0) {
+    if (best && best.score >= TILE_ALIGN_MIN) {
       return { off: best.off, q: best.q, score: best.score,
-               anchor: "the floor under the build", tried: tried, whole: true };
+               anchor: "the floor under the build", tried: tried, whole: true, confident: true };
     }
-    // Nothing overlapped at any offset — match the two bounding boxes instead.
+    // No offset lands more than the one forced tile — match the bounding boxes instead.
+    // `confident: false` is the signal to warn; `score` still reports the real overlap
+    // (a corner match may coincidentally cover a cell) rather than pretending it's zero.
     const least = pts => pts.reduce((m, p) => ({ x: Math.min(m.x, p.x), y: Math.min(m.y, p.y) }),
                                      { x: Infinity, y: Infinity });
     const aMin = least(aAnchors.length ? aAnchors : [ZERO]);
     const bMin = least(bt0.map(t => t.position));
     const off = { x: (isFinite(aMin.x) ? aMin.x : 0) - (isFinite(bMin.x) ? bMin.x : 0),
                   y: (isFinite(aMin.y) ? aMin.y : 0) - (isFinite(bMin.y) ? bMin.y : 0) };
-    return { off: off, q: 0, score: 0, anchor: "matched corners — no overlap found",
-             tried: tried, whole: true };
+    return { off: off, q: 0, score: tileScore(bt0, cells, off),
+             anchor: "matched corners — no strong overlap", tried: tried, whole: true, confident: false };
   }
 
   function compare(A, B, forced, manual) {
@@ -1287,7 +1301,7 @@
       const al = findTileOffset(bpOf(A), bpOf(B), manual);
       return { al: al, added: [], replaced: [], removed: [], modified: [],
                ea: ea, eb: [], mapA: new Map(ea.map(e => [key(e, ZERO), e])),
-               tilesOnly: true, tilesAdded: transformTiles(bTiles, al.q, al.off) };
+               tilesOnly: true, overlayTiles: transformTiles(bTiles, al.q, al.off) };
     }
     if (!ea.length) throw new Error("The base blueprint has no entities in it.");
 
@@ -1352,7 +1366,7 @@
              modified: modified, ea: ea, eb: eb, mapA: mapA,
              // A rebuild can bring floor tiles across too. Rotate and shift them the
              // same way its entities were, so they land where the build did.
-             tilesOnly: false, tilesAdded: transformTiles(bpOf(B).tiles || [], al.q, al.off) };
+             tilesOnly: false, overlayTiles: transformTiles(bpOf(B).tiles || [], al.q, al.off) };
   }
 
   // Does this entity carry something the parameter list is bound to? Factorio ties
@@ -1432,30 +1446,16 @@
     const out = JSON.parse(JSON.stringify(obj));
     const b = bpOf(out);
     const ents = b.entities || [];
-    const pt = p => {
-      let x = p.x, y = p.y;
-      for (let i = 0; i < q; i++) { const nx = -y; y = x; x = nx; }
-      return { x: x, y: y };
-    };
 
     b.entities = ents.map(e => {
       const n = spin(e, q);
       if (n.orientation !== undefined) n.orientation = (((n.orientation + q * 0.25) % 1) + 1) % 1;
       return n;
     });
-    if (b.tiles) {
-      // A tile's stored position is its top-left CORNER, not its centre, so
-      // rotating the corner is not the same as rotating the tile. Rotate the
-      // square [x,x+1]x[y,y+1] and its new minimum corner sits one along:
-      // a quarter turn clockwise sends corner (x,y) to (-y-1, x), while pt()
-      // alone gives (-y, x). Entities need no such fix — their position is a
-      // centre, and a centre rotates to a centre.
-      const nudge = [[0, 0], [-1, 0], [-1, -1], [0, -1]][q % 4];
-      b.tiles = b.tiles.map(t => {
-        const p = pt(t.position);
-        return Object.assign({}, t, { position: { x: p.x + nudge[0], y: p.y + nudge[1] } });
-      });
-    }
+    // Tiles rotate about the origin with no shift — exactly what the overlay merge
+    // does with a zero offset — so the corner-nudge geometry lives once, in
+    // transformTiles, rather than being spelled out again here.
+    if (b.tiles) b.tiles = transformTiles(b.tiles, q, ZERO);
     if (b["snap-to-grid"] && q % 2 === 1) {
       b["snap-to-grid"] = { x: b["snap-to-grid"].y, y: b["snap-to-grid"].x };
     }
@@ -1633,6 +1633,9 @@
   function merge(A, B, d, dropMissing, applySet) {
     const out = JSON.parse(JSON.stringify(A));
     const ob = bpOf(out);
+    // A base can be floor-only (two floors merged together), so the entity list may
+    // not exist — normalise it once here rather than guarding every use below.
+    if (!ob.entities) ob.entities = [];
     const params = ob.parameters || [];
     let next = 1;
     for (const e of ob.entities) next = Math.max(next, e.entity_number + 1);
@@ -1697,10 +1700,10 @@
     // lands once; where both name a tile for the same cell the overlay wins, since
     // it is the thing being stamped down.
     let tiles = 0;
-    if (d.tilesAdded && d.tilesAdded.length) {
+    if (d.overlayTiles && d.overlayTiles.length) {
       const byPos = new Map((ob.tiles || []).map(t => [t.position.x + "," + t.position.y, t]));
       const before = byPos.size;
-      for (const t of d.tilesAdded) byPos.set(t.position.x + "," + t.position.y, t);
+      for (const t of d.overlayTiles) byPos.set(t.position.x + "," + t.position.y, t);
       ob.tiles = Array.from(byPos.values());
       tiles = byPos.size - before;   // net new cells, overwrites don't count
     }
@@ -1826,12 +1829,12 @@
     // one case worth flagging, unless you pinned it yourself.
     const expected = d.eb.length - d.added.length;
     const solid = d.tilesOnly
-      ? (matched > 0 || parseOffset($("toff").value) !== null)
+      ? d.al.confident
       : (matched >= expected && matched > 0);
 
     if (d.tilesOnly) {
       $("align").innerHTML =
-        stat("Floor tiles overlaid", d.tilesAdded.length, "add",
+        stat("Floor tiles overlaid", d.overlayTiles.length, "add",
              res.tiles + " new cell" + (res.tiles === 1 ? "" : "s")) +
         stat("Landed on build", matched + " cell" + (matched === 1 ? "" : "s"),
              solid ? "" : "remove", "on " + d.al.anchor) +
@@ -1893,10 +1896,10 @@
         new Set(v.entities.map(e => key(e, ZERO))).size === v.entities.length],
       ["Every parameter still binds", paramsStillBind(v)]
     ];
-    if (d.tilesAdded && d.tilesAdded.length) {
+    if (d.overlayTiles && d.overlayTiles.length) {
       const vPos = new Set((v.tiles || []).map(t => t.position.x + "," + t.position.y));
       checks.push(["Every overlaid tile landed",
-        d.tilesAdded.every(t => vPos.has(t.position.x + "," + t.position.y))]);
+        d.overlayTiles.every(t => vPos.has(t.position.x + "," + t.position.y))]);
       checks.push(["No two tiles on one cell",
         vPos.size === (v.tiles || []).length]);
       checks.push(["Tile positions are whole",

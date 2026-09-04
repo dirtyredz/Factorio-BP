@@ -1015,7 +1015,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
     ['tiles: a floor-only rebuild is merged as tiles, not entities',
       td.tilesOnly === true && td.added.length === 0 && td.removed.length === 0],
     ['tiles: it is auto-aligned by where the floor lands on the build',
-      td.al.off.x === -100 && td.al.off.y === -100 && td.al.score === 3],
+      td.al.off.x === -100 && td.al.off.y === -100 && td.al.score === 3 && td.al.confident === true],
     ['tiles: the base entities are left untouched', tv.entities.length === 3],
     ['tiles: the floor is stamped onto the build\'s cells',
       same(posSet(tv.tiles), new Set(['0,0', '2,0', '0,2'])) && tm.tiles === 3],
@@ -1044,7 +1044,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
     ['tiles: an overlay that overlaps nothing falls back to matching corners',
       (() => {
         const r = api.findTileOffset({ entities: [] }, { tiles: [{ name: 'concrete', position: { x: 4, y: 6 } }] });
-        return r.score === 0 && r.off.x === -4 && r.off.y === -6 && /corners/.test(r.anchor);
+        return r.confident === false && r.score === 0 && r.off.x === -4 && r.off.y === -6 && /corners/.test(r.anchor);
       })()],
     ['tiles: a rebuild with neither entities nor tiles is rejected clearly',
       (() => {
@@ -1069,6 +1069,36 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
         const rv = api.bpOf(api.merge(L, { blueprint: { item: 'blueprint', tiles: turnedFloor } }, rd, false).out);
         return rd.al.q === 3 && rd.al.score === 4 &&
           same(posSet(rv.tiles), new Set(['0,0', '1,0', '2,0', '0,1']));
+      })()],
+    // A floor-only base is legal too (two floors combined). merge() used to walk an
+    // undefined entity list and throw; now it normalises to an empty one.
+    ['tiles: two floor-only blueprints merge into one floor, no entities',
+      (() => {
+        const baseFloor = { blueprint: { item: 'blueprint', tiles: [
+          { name: 'stone-path', position: { x: 0, y: 0 } },
+          { name: 'stone-path', position: { x: 1, y: 0 } }] } };
+        const addFloor = { blueprint: { item: 'blueprint', tiles: [
+          { name: 'concrete', position: { x: 1, y: 0 } },
+          { name: 'concrete', position: { x: 2, y: 0 } }] } };
+        const dd = api.compare(baseFloor, addFloor, '', { x: 0, y: 0 });
+        const mv = api.bpOf(api.merge(baseFloor, addFloor, dd, false).out);
+        return dd.tilesOnly === true && (mv.entities || []).length === 0 &&
+          same(posSet(mv.tiles), new Set(['0,0', '1,0', '2,0']));
+      })()],
+    // A floor drawn BESIDE a build, not under it, can be forced to land exactly one
+    // tile on the build at some offset — but that single forced tile is no signal, so
+    // it must fall back to matching corners rather than claim a confident alignment.
+    ['tiles: a floor beside the build falls back instead of a false alignment',
+      (() => {
+        const base = { blueprint: { item: 'blueprint',
+          entities: [{ entity_number: 1, name: 'steel-chest', position: { x: 0.5, y: 0.5 } }] } };
+        const border = { blueprint: { item: 'blueprint', tiles: [
+          { name: 'concrete', position: { x: 50, y: 50 } },
+          { name: 'concrete', position: { x: 51, y: 50 } }] } };
+        const bd = api.compare(base, border);
+        // It may coincidentally force one tile onto the build, so the score isn't the
+        // tell — confidence is: a single forced tile is not a real alignment.
+        return bd.al.confident === false && /corners/.test(bd.al.anchor);
       })()]
   );
 
