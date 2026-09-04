@@ -67,7 +67,7 @@ the base for next time.
 | `list` | List stored blueprints with entity/parameter counts |
 | `info <name>` | Decode and summarise one |
 | `diff <base> <new>` | Align the two and list added / removed / modified |
-| `merge <base> <new> [out]` | Merge additions into base, verify, copy to clipboard |
+| `merge <base> <new> [out]` | Merge additions (and floor tiles) into base, verify, copy to clipboard. `--tile-offset=x,y` places a floor-only `<new>` by hand |
 | `turn <name> cw\|ccw\|180` | Rotate a blueprint, keeping grid and parameters |
 | `flip <name> h\|v` | Mirror a blueprint left-right or top-bottom |
 | `normalise <name> [x] [y] [out]` | Move the build to a fixed corner, so blueprints sharing a grid size land on the same spot. `--absolute=x,y` also sets Absolute X/Y |
@@ -202,6 +202,19 @@ the merge will place things badly — stop and check.
 If auto-alignment picks badly, name the anchor yourself: `--anchor=straight-rail` on the CLI, or
 the **Line up on** dropdown in the page. Rail is usually the best choice — there's a lot of it, it
 rarely changes between versions, and it spans the whole build.
+
+## Floor tiles
+
+If the rebuilt blueprint carries floor — concrete, landfill, stone path — those tiles are stamped
+onto the base as well, moved and turned to match the entities. And a blueprint that is **only
+floor**, with no entities, is a merge in its own right: paste your build in **Base**, the floor in
+**Rebuilt**, and merge to lay the floor under it.
+
+A tiles-only overlay has no entities to line up on, so it's placed by where its tiles fall on the
+build instead — the same "most tiles line up" scoring, over all four rotations. If it lands wrong,
+type a correction into the **Tile offset** box (x, y in whole tiles) and merge again; the preview
+shows where the floor lands. Where the overlay and the base name a tile for the same cell, the
+overlay wins.
 
 ## What it will not do for you
 

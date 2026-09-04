@@ -487,6 +487,39 @@ direction 4 however you spin it, and spinning it invents a difference that isn't
 keyArray)` filters *nested* objects too, so the original comparison never looked inside
 `control_behavior` and missed a real difference.
 
+### Floor tiles
+
+A blueprint can carry `blueprint.tiles` (concrete, landfill, stone path) as well as entities, and
+the merge brings the rebuilt side's floor across. Two shapes:
+
+- **A rebuild that also has floor.** Its tiles ride the *same* alignment the entities got —
+  rotated `al.q` quarter turns, shifted by `al.off` — so they land where the build did.
+- **A tiles-only overlay.** A floor with no entities can't be lined up by them, so it was the
+  thing that threw the old `"One of these has no entities in it."` error. It is now lined up by
+  where its tiles land on the base: `occupiedCells()` is the set of integer cells the base fills
+  (floor tiles by their corner, plus each entity's footprint — a 1×1 fills its own cell, a 2×2 the
+  three back toward the origin too), and `findTileOffset()` scores each candidate offset by how
+  many overlay tiles land on one, across all four rotations — the same "most tiles line up" rule
+  `findOffset()` uses for entities. If nothing overlaps anywhere (a floor with no counterpart in
+  the base) the two bounding boxes are matched at their corners instead, and the UI says so.
+
+`transformTiles(tiles, q, off)` does the geometry, and it must use the **corner nudge**
+`[[0,0],[-1,0],[-1,-1],[0,-1]][q%4]` that `turnBlueprint` established — a tile position is the
+cell's top-left corner, not a centre, so rotating the corner alone lands one cell off. `merge()`
+unions the transformed tiles onto the base keyed by cell, and **the overlay wins** where both name
+a tile for the same cell, since it is the thing being stamped down. The offsets stay whole: a
+same-type entity pair differs by a whole number of tiles, and tile candidates are integer by
+construction, so no floor ever lands on a half tile.
+
+The **Tile offset** box (`#toff`, `parseOffset()`) sets the placement by hand — whole tiles only —
+when the auto-align gets it wrong; it only bites the tiles-only path. The preview needs no new
+code: `buildPreview` already drew `tiles`.
+
+**Inferred, not yet game-verified:** that a merged floor lands on the right cells *in game*. The
+arithmetic is tested (tiles-only align, rotation, manual offset, overwrite, whole-cell, round
+trip — 14 checks) and the preview agrees, but no merged floor has been pasted down. One screenshot
+would settle it — see VERIFY-IN-GAME.md.
+
 ## Appending to this file
 
 Keep the split between **verified** (checked against Factorio's own output or a screenshot) and

@@ -699,7 +699,7 @@
     <div class="slot">
       <div class="slot-head">
         <span class="slot-name">Rebuilt</span>
-        <span class="slot-role">only its entities are read</span>
+        <span class="slot-role">its entities and floor are read</span>
       </div>
       <textarea id="b" spellcheck="false" placeholder="0eNq..."></textarea>
       <div class="slot-foot" id="b-info"></div>
@@ -711,6 +711,10 @@
     <label class="toggle" for="anchor">
       Line up on
       <select id="anchor"><option value="">whatever fits best</option></select>
+    </label>
+    <label class="toggle" for="toff" title="Only used when the rebuilt blueprint is floor tiles with no entities. Leave blank to line the floor up automatically; type x,y to place it by hand.">
+      Tile offset
+      <input id="toff" placeholder="auto" style="width:5em" spellcheck="false" />
     </label>
     <label class="toggle">
       <input type="checkbox" id="rm" />
@@ -771,6 +775,7 @@
     <div><b>Origins don't have to match, and neither does the facing.</b> The alignment step tries all four rotations and every sensible offset, keeping whichever lands the most entities on the same tiles — tiles, not matching names, so an upgraded build still lines up. If it picks badly, name the anchor yourself; rail is usually the best choice, since there's a lot of it and it rarely changes.</div>
     <div><b>Swaps are handled as swaps.</b> An upgraded belt is one replacement, not a delete plus an add — otherwise both belts would end up stacked on the same tile. Replacements are applied; plain removals aren't unless you ask.</div>
     <div><b>Changed settings are opt-in, per entity.</b> Tick <b>use rebuilt settings</b> on the ones you want updated. The copy goes field by field and leaves <code>parameter-0</code>-style references alone, so a stop named <code>[item=parameter-0]</code> stays parametrised while its logic updates. <b>Every parameter still binds</b> in the verification list is the proof it worked.</div>
+    <div><b>Floor tiles come across too.</b> If the rebuilt blueprint carries concrete or landfill, its tiles are stamped onto the base — and a blueprint that is <em>only</em> floor is lined up by where its tiles land on the build, since it has no entities to match. If the floor lands wrong, put an offset (x,y in tiles) in the <b>Tile offset</b> box and merge again.</div>
   </footer>
   </section>
 
@@ -1174,9 +1179,117 @@
     return { off: best.off, score: best.tiles, ident: best.ident, anchor: best.anchor, tried: tried };
   }
 
-  function compare(A, B, forced) {
+  /* ---- floor-tile overlay ----
+
+     A blueprint can carry floor tiles (concrete, landfill, stone path…) as well
+     as entities, and merging brings the rebuilt side's tiles onto the base. A
+     blueprint that is *only* tiles is a floor cut to stamp over an existing build
+     — it has no entities, so the entity aligner above can't line it up. These
+     helpers line it up by where its tiles land on the base, and carry the tiles
+     across afterwards.
+
+     A tile's stored position is the top-left CORNER of its cell, an integer — never
+     a centre — so it translates like an entity but rotates with the one-cell nudge
+     turnBlueprint uses: rotating the corner alone lands one cell off. */
+
+  function transformTiles(tiles, q, off) {
+    const n = ((q % 4) + 4) % 4;
+    const pt = p => { let x = p.x, y = p.y; for (let i = 0; i < n; i++) { const nx = -y; y = x; x = nx; } return { x: x, y: y }; };
+    const nudge = [[0, 0], [-1, 0], [-1, -1], [0, -1]][n];
+    return tiles.map(t => {
+      const p = pt(t.position);
+      return Object.assign({}, t, { position: { x: p.x + nudge[0] + off.x, y: p.y + nudge[1] + off.y } });
+    });
+  }
+
+  // The integer cells the base already occupies — every floor tile by its corner,
+  // and every entity's footprint. A 1×1 entity centre sits on a half tile and fills
+  // its own cell; an even-sized entity sits on integer coordinates and fills the
+  // three cells back toward the origin too, so a 2×2 covers its four. It is a rough
+  // footprint, but it is only ever used to score how well an overlay's tiles land on
+  // the build, so exact collision boxes would be more than the job needs.
+  function occupiedCells(bp) {
+    const cells = new Set();
+    for (const t of bp.tiles || []) cells.add(t.position.x + "," + t.position.y);
+    for (const e of bp.entities || []) {
+      const cx = Math.floor(e.position.x), cy = Math.floor(e.position.y);
+      const ix = Number.isInteger(e.position.x), iy = Number.isInteger(e.position.y);
+      cells.add(cx + "," + cy);
+      if (ix) cells.add((cx - 1) + "," + cy);
+      if (iy) cells.add(cx + "," + (cy - 1));
+      if (ix && iy) cells.add((cx - 1) + "," + (cy - 1));
+    }
+    return cells;
+  }
+
+  const tileScore = (tiles, cells, off) => {
+    let n = 0;
+    for (const t of tiles) if (cells.has((t.position.x + off.x) + "," + (t.position.y + off.y))) n++;
+    return n;
+  };
+
+  // Line up a tiles-only overlay on the base. There are no entities to pair, so the
+  // candidate offsets come from landing each of the overlay's tiles on each occupied
+  // cell of the base, scored by how many other tiles then also land on the build —
+  // the same "most tiles line up" rule the entity aligner uses, and all four
+  // rotations are tried the same way. If nothing lands anywhere (a floor with no
+  // counterpart in the base) the two bounding boxes are matched at their corners, so
+  // it still merges somewhere sensible and the offset can be corrected by hand.
+  function findTileOffset(A, B, manual) {
+    const cells = occupiedCells(A);
+    const bt0 = B.tiles || [];
+    if (manual) return { off: manual, q: 0, score: tileScore(bt0, cells, manual),
+                         anchor: "a set offset", tried: 0, whole: true };
+
+    const aAnchors = Array.from(cells).slice(0, 40).map(s => {
+      const p = s.split(","); return { x: +p[0], y: +p[1] };
+    });
+    let best = null, tried = 0;
+    for (const q of [0, 1, 2, 3]) {
+      const bt = transformTiles(bt0, q, ZERO);
+      const bAnchors = bt.slice(0, 40);
+      const seen = new Set();
+      for (const a of aAnchors) {
+        for (const b of bAnchors) {
+          const off = { x: a.x - b.position.x, y: a.y - b.position.y };
+          const sig = q + ":" + off.x + ":" + off.y;
+          if (seen.has(sig)) continue;
+          seen.add(sig); tried++;
+          const score = tileScore(bt, cells, off);
+          if (!best || score > best.score) best = { off: off, q: q, score: score };
+        }
+      }
+    }
+    if (best && best.score > 0) {
+      return { off: best.off, q: best.q, score: best.score,
+               anchor: "the floor under the build", tried: tried, whole: true };
+    }
+    // Nothing overlapped at any offset — match the two bounding boxes instead.
+    const least = pts => pts.reduce((m, p) => ({ x: Math.min(m.x, p.x), y: Math.min(m.y, p.y) }),
+                                     { x: Infinity, y: Infinity });
+    const aMin = least(aAnchors.length ? aAnchors : [ZERO]);
+    const bMin = least(bt0.map(t => t.position));
+    const off = { x: (isFinite(aMin.x) ? aMin.x : 0) - (isFinite(bMin.x) ? bMin.x : 0),
+                  y: (isFinite(aMin.y) ? aMin.y : 0) - (isFinite(bMin.y) ? bMin.y : 0) };
+    return { off: off, q: 0, score: 0, anchor: "matched corners — no overlap found",
+             tried: tried, whole: true };
+  }
+
+  function compare(A, B, forced, manual) {
     const ea = bpOf(A).entities || [], raw = bpOf(B).entities || [];
-    if (!ea.length || !raw.length) throw new Error("One of these has no entities in it.");
+    const bTiles = bpOf(B).tiles || [];
+
+    // A rebuilt blueprint carrying only floor tiles can't be lined up by entities —
+    // it has none. Line it up by where its tiles land on the base instead, and hand
+    // back an empty entity diff: nothing but floor is being merged in.
+    if (!raw.length) {
+      if (!bTiles.length) throw new Error("The rebuilt blueprint has no entities and no tiles — there's nothing in it to merge in.");
+      const al = findTileOffset(bpOf(A), bpOf(B), manual);
+      return { al: al, added: [], replaced: [], removed: [], modified: [],
+               ea: ea, eb: [], mapA: new Map(ea.map(e => [key(e, ZERO), e])),
+               tilesOnly: true, tilesAdded: transformTiles(bTiles, al.q, al.off) };
+    }
+    if (!ea.length) throw new Error("The base blueprint has no entities in it.");
 
     // A rebuild can come back turned. Try all four and keep whichever lands best.
     let al = null, eb = raw;
@@ -1236,7 +1349,10 @@
       if (a && shape(a) !== shape(e)) modified.push(a);
     }
     return { al: al, added: added, replaced: replaced, removed: removed,
-             modified: modified, ea: ea, eb: eb, mapA: mapA };
+             modified: modified, ea: ea, eb: eb, mapA: mapA,
+             // A rebuild can bring floor tiles across too. Rotate and shift them the
+             // same way its entities were, so they land where the build did.
+             tilesOnly: false, tilesAdded: transformTiles(bpOf(B).tiles || [], al.q, al.off) };
   }
 
   // Does this entity carry something the parameter list is bound to? Factorio ties
@@ -1575,7 +1691,20 @@
       have.add(m.join(","));
       wires++;
     }
-    return { out: out, wires: wires };
+
+    // Stamp the rebuilt side's floor tiles onto the base, already rotated and
+    // shifted into the base's frame by compare(). Keyed by cell so a tile only ever
+    // lands once; where both name a tile for the same cell the overlay wins, since
+    // it is the thing being stamped down.
+    let tiles = 0;
+    if (d.tilesAdded && d.tilesAdded.length) {
+      const byPos = new Map((ob.tiles || []).map(t => [t.position.x + "," + t.position.y, t]));
+      const before = byPos.size;
+      for (const t of d.tilesAdded) byPos.set(t.position.x + "," + t.position.y, t);
+      ob.tiles = Array.from(byPos.values());
+      tiles = byPos.size - before;   // net new cells, overwrites don't count
+    }
+    return { out: out, wires: wires, tiles: tiles };
   }
 
   /* ---- rendering ---- */
@@ -1610,6 +1739,7 @@
       const obj = await decode(txt);
       const b = bpOf(obj);
       const bits = [(b.entities || []).length + " entities"];
+      if ((b.tiles || []).length) bits.push((b.tiles || []).length + " tiles");
       if (b["snap-to-grid"]) bits.push("grid " + b["snap-to-grid"].x + "×" + b["snap-to-grid"].y);
       if ((b.parameters || []).length) bits.push(b.parameters.length + " params");
       if (b.label) bits.push(b.label);
@@ -1638,6 +1768,15 @@
 
   // The work is fast enough to look like nothing happened, and the results sit
   // below the fold — so say what's happening and take the eye there.
+  // A hand-set tile offset, "x,y" (or "x y"). Whole tiles only — a floor tile sits
+  // on integer coordinates and a half-tile shift would put it off-cell. Blank, or
+  // anything that isn't two integers, means "line it up automatically".
+  function parseOffset(s) {
+    if (!s || !s.trim()) return null;
+    const m = s.trim().match(/^(-?\d+)\s*[, ]\s*(-?\d+)$/);
+    return m ? { x: +m[1], y: +m[2] } : null;
+  }
+
   async function run() {
     const go = $("go");
     if (go.classList.contains("busy")) return;
@@ -1674,28 +1813,50 @@
     let d, res, str;
     try {
       bpOf(A); bpOf(B);
-      d = compare(A, B, $("anchor").value);
+      d = compare(A, B, $("anchor").value, parseOffset($("toff").value));
       res = merge(A, B, d, $("rm").checked, applyMods);
       str = await encode(res.out);
     } catch (e) { return fail(e.message); }
 
     const a = bpOf(A), v = bpOf(await decode(str));
     const matched = d.al.score;
+    // A tiles-only overlay has no entities to line up, so "solid" means its floor
+    // landed somewhere on the build — either a real overlap, or an offset you set by
+    // hand. An offset that overlapped nothing (matched === 0, corners matched) is the
+    // one case worth flagging, unless you pinned it yourself.
     const expected = d.eb.length - d.added.length;
-    const solid = matched >= expected && matched > 0;
+    const solid = d.tilesOnly
+      ? (matched > 0 || parseOffset($("toff").value) !== null)
+      : (matched >= expected && matched > 0);
 
-    $("align").innerHTML =
-      stat("Tiles lined up", matched + " / " + d.eb.length, solid ? "" : "remove",
-           "on " + d.al.anchor) +
-      stat("Offset", "(" + d.al.off.x + ", " + d.al.off.y + ")", "",
-           d.al.tried + " offset" + (d.al.tried === 1 ? "" : "s") + " tested") +
-      stat("Added", d.added.length, "add", d.added.length ? "copied over" : "nothing new") +
-      stat("Replaced", d.replaced.length, "modify",
-           d.replaced.length ? "swapped in" : "no swaps") +
-      stat("Removed", d.removed.length, "remove", $("rm").checked ? "deleted" : "left in place") +
-      stat("Changed", d.modified.length, "modify", "not applied") +
-      stat("Entities", (a.entities || []).length + " → " + v.entities.length, "",
-           res.wires ? res.wires + " wires carried" : "");
+    if (d.tilesOnly) {
+      $("align").innerHTML =
+        stat("Floor tiles overlaid", d.tilesAdded.length, "add",
+             res.tiles + " new cell" + (res.tiles === 1 ? "" : "s")) +
+        stat("Landed on build", matched + " cell" + (matched === 1 ? "" : "s"),
+             solid ? "" : "remove", "on " + d.al.anchor) +
+        stat("Offset", "(" + d.al.off.x + ", " + d.al.off.y + ")",
+             d.al.q ? "modify" : "",
+             d.al.q ? "turned " + (d.al.q * 90) + "°" : d.al.tried + " tested") +
+        stat("Entities", (a.entities || []).length + " (unchanged)", "", "floor only") +
+        stat("Tiles", (a.tiles || []).length + " → " + (v.tiles || []).length, "", "floor");
+    } else {
+      $("align").innerHTML =
+        stat("Tiles lined up", matched + " / " + d.eb.length, solid ? "" : "remove",
+             "on " + d.al.anchor) +
+        stat("Offset", "(" + d.al.off.x + ", " + d.al.off.y + ")", "",
+             d.al.tried + " offset" + (d.al.tried === 1 ? "" : "s") + " tested") +
+        stat("Added", d.added.length, "add", d.added.length ? "copied over" : "nothing new") +
+        stat("Replaced", d.replaced.length, "modify",
+             d.replaced.length ? "swapped in" : "no swaps") +
+        stat("Removed", d.removed.length, "remove", $("rm").checked ? "deleted" : "left in place") +
+        stat("Changed", d.modified.length, "modify", "not applied") +
+        stat("Entities", (a.entities || []).length + " → " + v.entities.length, "",
+             res.wires ? res.wires + " wires carried" : "") +
+        ((v.tiles || []).length !== (a.tiles || []).length
+          ? stat("Tiles", (a.tiles || []).length + " → " + (v.tiles || []).length, "add", res.tiles + " carried")
+          : "");
+    }
 
     $("chg-count").textContent =
       (d.added.length + d.replaced.length + d.removed.length + d.modified.length) + " total";
@@ -1732,6 +1893,15 @@
         new Set(v.entities.map(e => key(e, ZERO))).size === v.entities.length],
       ["Every parameter still binds", paramsStillBind(v)]
     ];
+    if (d.tilesAdded && d.tilesAdded.length) {
+      const vPos = new Set((v.tiles || []).map(t => t.position.x + "," + t.position.y));
+      checks.push(["Every overlaid tile landed",
+        d.tilesAdded.every(t => vPos.has(t.position.x + "," + t.position.y))]);
+      checks.push(["No two tiles on one cell",
+        vPos.size === (v.tiles || []).length]);
+      checks.push(["Tile positions are whole",
+        (v.tiles || []).every(t => Number.isInteger(t.position.x) && Number.isInteger(t.position.y))]);
+    }
     const bad = checks.filter(c => !c[1]).length;
     $("verdict").innerHTML = bad
       ? '<span style="color:var(--remove)">' + bad + " failed</span>"
@@ -1740,7 +1910,19 @@
       "<li><span class=\"" + (c[1] ? "ok" : "no") + "\">" + (c[1] ? "✓" : "✗") + "</span>" + c[0] + "</li>").join("");
 
     const notes = [];
-    if (!solid) {
+    if (d.tilesOnly) {
+      if (!solid) {
+        notes.push("<div class=\"note\"><strong>The floor didn't line up with the build.</strong> " +
+          "None of its tiles landed on an entity or an existing tile, so it was dropped on by matching " +
+          "the two corners — probably not where you want it. Type an offset in the <em>Tile offset</em> " +
+          "box (x,y in tiles) and merge again; the preview shows where it lands.</div>");
+      } else {
+        notes.push("<div class=\"note\"><strong>Floor tiles merged in, entities untouched.</strong> " +
+          "The rebuilt blueprint had only floor, so it was overlaid on the base at " +
+          "(" + d.al.off.x + ", " + d.al.off.y + ")" + (d.al.q ? " turned " + (d.al.q * 90) + "°" : "") +
+          ". Nudge it with the <em>Tile offset</em> box if it sits wrong.</div>");
+      }
+    } else if (!solid) {
       notes.push("<div class=\"note\"><strong>The alignment looks wrong.</strong> Only " + matched +
         " of " + d.eb.length + " entities line up, so these may not be two versions of the same blueprint — " +
         "or the rebuilt one was captured with pieces missing. Don't use this result until that number is close to the total.</div>");
@@ -1785,7 +1967,8 @@
     if (d.added.length) bits.push(d.added.length + " added");
     if (d.replaced.length) bits.push(d.replaced.length + " replaced");
     if (d.removed.length) bits.push(d.removed.length + " removed");
-    if (!bits.length) bits.push("no entity changes");
+    if (res.tiles) bits.push(res.tiles + " tile" + (res.tiles === 1 ? "" : "s"));
+    if (!bits.length) bits.push(d.tilesOnly ? "no new tiles" : "no entity changes");
     const s = $("status");
     s.className = "status " + (bad ? "bad" : "done");
     s.textContent = (bad ? bad + " check" + (bad === 1 ? "" : "s") + " failed — " : "merged — ") +
@@ -1827,6 +2010,10 @@
   }
 
   $("go").addEventListener("click", run);
+  // A changed tile offset only means anything once a merge is on screen; re-run then
+  // so the overlay moves as you type, and let Enter in the field trigger it too.
+  $("toff").addEventListener("change", () => { if ($("out").classList.contains("on")) run(); });
+  $("toff").addEventListener("keydown", e => { if (e.key === "Enter") run(); });
   for (const which of ["a", "b"]) {
     $(which).addEventListener("change", () => look(which));
     $(which).addEventListener("paste", () => setTimeout(() => look(which), 0));

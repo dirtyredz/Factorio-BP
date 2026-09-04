@@ -105,6 +105,19 @@ Shipped with the preview. Connector ids decoded from the stored data — 1 red i
 3 red out, 4 green out, 5 copper — and documented in CLAUDE.md's Wires section. An entity wired
 to itself gets a mark rather than a zero-length line.
 
+## ~~7. Merge floor tiles, including a tiles-only overlay~~ — **done**
+
+The merge was entity-only: `compare()` threw the moment either side had no entities, and
+`merge()` never touched `tiles` even when both sides had them. Now a rebuilt blueprint's floor is
+carried across on the same offset its entities got, and a blueprint that is *only* floor is a
+first-class case — lined up by where its tiles land on the build (`findTileOffset`/`occupiedCells`
+score tile-on-cell overlap across all four rotations, exactly as `findOffset` does for entities),
+then stamped on. A **Tile offset** box sets the placement by hand when the auto-align lands it
+wrong. Documented in CLAUDE.md's Merge behaviour section; 14 tests cover it, and the preview draws
+the floor for free since `buildPreview` already handled `tiles`.
+
+**Unverified:** nobody has pasted a merged floor down in game yet — see VERIFY-IN-GAME.md.
+
 ## Lower priority
 
 - **Blueprint books.** README calls these out as unsupported. A real limitation, a bigger change

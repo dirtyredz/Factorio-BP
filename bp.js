@@ -75,6 +75,7 @@ function describe(obj) {
   const L = [];
   L.push(`label:      ${b.label || '(none)'}`);
   L.push(`entities:   ${ents.length}`);
+  if ((b.tiles || []).length) L.push(`tiles:      ${b.tiles.length}`);
   L.push(`wires:      ${(b.wires || []).length}`);
   L.push(`snap-to-grid: ${b['snap-to-grid'] ? `${b['snap-to-grid'].x}x${b['snap-to-grid'].y}` : '(none)'}` +
          `  absolute: ${b['absolute-snapping'] ? 'yes' : 'no'}` +
@@ -100,11 +101,25 @@ const where = (e, off) => `(${e.position.x + (off ? off.x : 0)}, ${e.position.y 
 
 function report(d) {
   const L = [];
+  // A tiles-only overlay has no entities to line up on — it is placed by where its
+  // floor lands on the build, so the report is about tiles, not the entity diff.
+  if (d.tilesOnly) {
+    L.push(`alignment: floor overlay at offset (${d.al.off.x}, ${d.al.off.y})` +
+           (d.al.q ? ` turned ${d.al.q * 90}°` : '') +
+           ` — ${d.al.score} tile${d.al.score === 1 ? '' : 's'} land on the build, anchored on ${d.al.anchor}` +
+           ` (${d.al.tried} offset${d.al.tried === 1 ? '' : 's'} tested)`);
+    if (d.al.score === 0 && d.al.anchor !== 'a set offset')
+      L.push('WARNING: the floor overlapped nothing — matched corners instead; set --tile-offset=x,y');
+    L.push('');
+    L.push(`floor tiles overlaid: ${d.tilesAdded.length}`);
+    return L.join('\n');
+  }
   L.push(`alignment: offset (${d.al.off.x}, ${d.al.off.y}) anchored on "${d.al.anchor}" — ` +
          `${d.al.score}/${d.eb.length} incoming entities land on an occupied tile ` +
          `(${d.al.ident} of them identical, ${d.al.tried} offsets tested)`);
   if (d.al.score < d.eb.length - d.added.length) L.push('WARNING: alignment looks weak; check the offset above');
   L.push('');
+  if ((d.tilesAdded || []).length) L.push(`floor tiles carried: ${d.tilesAdded.length}`);
   L.push(`added:     ${d.added.length}`);
   for (const e of d.added) L.push(`  + ${e.name} ${where(e, d.al.off)}`);
   L.push(`replaced:  ${d.replaced.length}`);
@@ -131,8 +146,24 @@ function verify(base, out, d, dropped) {
     ['nothing stacked on itself', new Set(tiles).size === tiles.length],
     ['every parameter still binds', api.paramsStillBind(v)],
   ];
+  if ((d.tilesAdded || []).length) {
+    const vPos = new Set((v.tiles || []).map(t => `${t.position.x},${t.position.y}`));
+    rows.push(['every overlaid tile landed',
+      d.tilesAdded.every(t => vPos.has(`${t.position.x},${t.position.y}`))]);
+    rows.push(['no two tiles on one cell', vPos.size === (v.tiles || []).length]);
+    rows.push(['tile positions are whole',
+      (v.tiles || []).every(t => Number.isInteger(t.position.x) && Number.isInteger(t.position.y))]);
+  }
   return rows.map(([n, ok]) => `  ${ok ? 'OK  ' : 'FAIL'}  ${n}`).join('\n') +
-    `\n  entities: ${(a.entities || []).length} -> ${v.entities.length}`;
+    `\n  entities: ${(a.entities || []).length} -> ${v.entities.length}` +
+    ((d.tilesAdded || []).length ? `\n  tiles: ${(a.tiles || []).length} -> ${(v.tiles || []).length}` : '');
+}
+
+// A hand-set tile offset "x,y" from --tile-offset, whole tiles only, or null.
+function tileOffsetOpt() {
+  const s = opt('tile-offset');
+  const m = s && s.match(/^(-?\d+)\s*[, ]\s*(-?\d+)$/);
+  return m ? { x: +m[1], y: +m[2] } : null;
 }
 
 // ---------- cli ----------
@@ -172,14 +203,14 @@ async function main() {
     case 'diff': {
       if (pos.length < 2) throw new Error('usage: node bp.js diff <base> <new> [--anchor=entity-name]');
       const A = await api.decode(readSlot(pos[0])), B = await api.decode(readSlot(pos[1]));
-      console.log(report(api.compare(A, B, opt('anchor'))));
+      console.log(report(api.compare(A, B, opt('anchor'), tileOffsetOpt())));
       break;
     }
     case 'merge': {
       if (pos.length < 2) throw new Error(
-        'usage: node bp.js merge <base> <new> [out] [--anchor=name] [--apply-removals] [--no-clip]');
+        'usage: node bp.js merge <base> <new> [out] [--anchor=name] [--tile-offset=x,y] [--apply-removals] [--no-clip]');
       const A = await api.decode(readSlot(pos[0])), B = await api.decode(readSlot(pos[1]));
-      const d = api.compare(A, B, opt('anchor'));
+      const d = api.compare(A, B, opt('anchor'), tileOffsetOpt());
       const dropped = flag('apply-removals');
 
       // --apply-changes takes all of them, --apply-changes=train-stop just that type
@@ -187,7 +218,7 @@ async function main() {
       const picked = want ? d.modified.filter(e => want === '*' || e.name === want) : [];
       const applySet = new Set(picked.map(e => api.key(e, api.ZERO)));
 
-      const { out, wires } = api.merge(A, B, d, dropped, applySet);
+      const { out, wires, tiles } = api.merge(A, B, d, dropped, applySet);
       const str = await api.encode(out);
       const p = writeSlot(pos[2] || `${pos[0]}-merged`, str);
 
@@ -212,6 +243,7 @@ async function main() {
         console.log('\nNOTE: removals not applied. Re-run with --apply-removals if you meant to delete them.');
       }
       console.log(`\nwires carried over: ${wires}`);
+      if (tiles || (d.tilesAdded || []).length) console.log(`floor tiles stamped on: ${tiles} new cell${tiles === 1 ? '' : 's'}`);
       console.log(`\nverification:\n${verify(A, await api.decode(str), d, dropped)}`);
       console.log(`\nwrote ${str.length} chars to ${p}`);
       if (!flag('no-clip')) console.log(`clipboard: ${clipSetFromFile(p)} chars — paste into Factorio`);
@@ -298,6 +330,7 @@ async function main() {
   copy <name>              put a stored blueprint back on the clipboard
 
   flags:  --anchor=<entity-name>  line up on this entity type (default: best fit)
+          --tile-offset=x,y       place a floor-only <new> by hand (default: auto)
           --apply-changes         take the rebuilt settings for every changed entity
           --apply-changes=<name>  ...or just for that entity type, e.g. train-stop
           --apply-removals        also delete entities missing from <new>

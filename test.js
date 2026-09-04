@@ -20,6 +20,7 @@ const navigator = { clipboard: { writeText: async () => {} } };
 const api = new Function('document', 'navigator',
   src + '\n;return { decode, encode, compare, merge, bpOf, protect, paramsStillBind, key, ZERO,' +
         ' turnBlueprint, flipBlueprint, entBox, buildPreview, SPRITES, FOOTPRINT, wireEnd, CONNECT, beltCurves, diffMarks, gridPosition,' +
+        ' transformTiles, findTileOffset, occupiedCells,' +
         ' normalise, normaliseReport };'
 )(document, navigator);
 
@@ -958,6 +959,117 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
     ['turn: a half turn agrees with flipping both ways', same(spun[1], halfByFlip)],
     ['turn: entities are not given the tile correction',
       api.bpOf(api.turnBlueprint(tiled(), 1)).entities[0].position.x === -0.5]
+  );
+
+  // --- floor-tile overlay ---------------------------------------------------
+  // Merging a tiles-only blueprint onto a build. It has no entities, so it can't
+  // be lined up by them — it is lined up by where its floor lands on the base, and
+  // the tiles are stamped across. Every case here used to be impossible: compare()
+  // threw "no entities" the moment either side had none, and merge() never touched
+  // tiles even when it didn't. No stored blueprint has floor, so these are synthetic.
+  const posSet = tiles => new Set((tiles || []).map(t => t.position.x + ',' + t.position.y));
+
+  // Base: three chests on cells (0,0),(2,0),(0,2). Overlay: the same three-cell
+  // shape as floor, drawn 100 tiles away, so the aligner has to find (-100,-100).
+  const baseEnts = () => ({ blueprint: { item: 'blueprint', entities: [
+    { entity_number: 1, name: 'steel-chest', position: { x: 0.5, y: 0.5 } },
+    { entity_number: 2, name: 'steel-chest', position: { x: 2.5, y: 0.5 } },
+    { entity_number: 3, name: 'steel-chest', position: { x: 0.5, y: 2.5 } },
+  ] } });
+  const floorOnly = off => ({ blueprint: { item: 'blueprint', tiles: [
+    { name: 'concrete', position: { x: 0 + off, y: 0 + off } },
+    { name: 'concrete', position: { x: 2 + off, y: 0 + off } },
+    { name: 'concrete', position: { x: 0 + off, y: 2 + off } },
+  ] } });
+
+  const td = api.compare(baseEnts(), floorOnly(100));
+  const tm = api.merge(baseEnts(), floorOnly(100), td, false);
+  const tv = api.bpOf(tm.out);
+  const tRound = api.bpOf(await api.decode(await api.encode(tm.out)));
+
+  // A set offset wins over the search.
+  const mdo = api.compare(baseEnts(), floorOnly(0), '', { x: 5, y: 5 });
+  const mmo = api.merge(baseEnts(), floorOnly(0), mdo, false);
+  const mvo = api.bpOf(mmo.out);
+
+  // A rebuilt build that also brought floor: the tiles ride the entity offset across.
+  const shifted = { blueprint: { item: 'blueprint', entities: [
+    { entity_number: 1, name: 'steel-chest', position: { x: 10.5, y: 0.5 } },
+    { entity_number: 2, name: 'steel-chest', position: { x: 12.5, y: 0.5 } },
+    { entity_number: 3, name: 'steel-chest', position: { x: 10.5, y: 2.5 } },
+  ], tiles: [{ name: 'concrete', position: { x: 10, y: 0 } }] } };
+  const cd = api.compare(baseEnts(), shifted);
+  const cm = api.merge(baseEnts(), shifted, cd, false);
+  const cv = api.bpOf(cm.out);
+
+  // Overwrite: the base already floored a cell, the overlay names it differently.
+  const baseFloored = () => ({ blueprint: { item: 'blueprint',
+    entities: [{ entity_number: 1, name: 'steel-chest', position: { x: 0.5, y: 0.5 } }],
+    tiles: [{ name: 'stone-path', position: { x: 0, y: 0 } }] } });
+  const overlayCell = { blueprint: { item: 'blueprint', tiles: [{ name: 'concrete', position: { x: 0, y: 0 } }] } };
+  const odc = api.compare(baseFloored(), overlayCell);
+  const omc = api.merge(baseFloored(), overlayCell, odc, false);
+  const ovc = api.bpOf(omc.out);
+
+  checks.push(
+    ['tiles: a floor-only rebuild is merged as tiles, not entities',
+      td.tilesOnly === true && td.added.length === 0 && td.removed.length === 0],
+    ['tiles: it is auto-aligned by where the floor lands on the build',
+      td.al.off.x === -100 && td.al.off.y === -100 && td.al.score === 3],
+    ['tiles: the base entities are left untouched', tv.entities.length === 3],
+    ['tiles: the floor is stamped onto the build\'s cells',
+      same(posSet(tv.tiles), new Set(['0,0', '2,0', '0,2'])) && tm.tiles === 3],
+    ['tiles: every merged tile sits on a whole cell',
+      tv.tiles.every(t => Number.isInteger(t.position.x) && Number.isInteger(t.position.y))],
+    ['tiles: the overlay survives an encode/decode round trip',
+      same(posSet(tRound.tiles), new Set(['0,0', '2,0', '0,2']))],
+    ['tiles: a set offset overrides the search',
+      mdo.al.off.x === 5 && mdo.al.off.y === 5 && /set offset/.test(mdo.al.anchor) &&
+      same(posSet(mvo.tiles), new Set(['5,5', '7,5', '5,7']))],
+    ['tiles: a rebuild\'s own floor rides the entity offset across',
+      cd.tilesOnly === false && cd.al.off.x === -10 && cd.al.off.y === 0 &&
+      cv.entities.length === 3 && same(posSet(cv.tiles), new Set(['0,0'])) && cm.tiles === 1],
+    ['tiles: the overlay wins where both name the same cell',
+      ovc.tiles.length === 1 && ovc.tiles[0].name === 'concrete' && omc.tiles === 0],
+    ['tiles: rotating an overlay uses the corner nudge, like a turn',
+      (() => {
+        const r = api.transformTiles([{ name: 'concrete', position: { x: 0, y: 0 } }], 1, { x: 0, y: 0 });
+        return r[0].position.x === -1 && r[0].position.y === 0;
+      })()],
+    ['tiles: ...and the offset is added after the rotation',
+      (() => {
+        const r = api.transformTiles([{ name: 'concrete', position: { x: 0, y: 0 } }], 1, { x: 5, y: 3 });
+        return r[0].position.x === 4 && r[0].position.y === 3;
+      })()],
+    ['tiles: an overlay that overlaps nothing falls back to matching corners',
+      (() => {
+        const r = api.findTileOffset({ entities: [] }, { tiles: [{ name: 'concrete', position: { x: 4, y: 6 } }] });
+        return r.score === 0 && r.off.x === -4 && r.off.y === -6 && /corners/.test(r.anchor);
+      })()],
+    ['tiles: a rebuild with neither entities nor tiles is rejected clearly',
+      (() => {
+        try { api.compare(baseEnts(), { blueprint: { item: 'blueprint', entities: [], tiles: [] } }); return false; }
+        catch (e) { return /nothing in it/.test(e.message); }
+      })()],
+    // An overlay captured turned. The base cells spell an asymmetric L so only the
+    // right rotation lines it up; the overlay is that same floor turned a quarter and
+    // moved off, and the aligner has to turn it back and land all four tiles.
+    ['tiles: a floor captured rotated is turned back to line up',
+      (() => {
+        const L = { blueprint: { item: 'blueprint', entities: [
+          { entity_number: 1, name: 'steel-chest', position: { x: 0.5, y: 0.5 } },
+          { entity_number: 2, name: 'steel-chest', position: { x: 1.5, y: 0.5 } },
+          { entity_number: 3, name: 'steel-chest', position: { x: 2.5, y: 0.5 } },
+          { entity_number: 4, name: 'steel-chest', position: { x: 0.5, y: 1.5 } },
+        ] } };
+        const turnedFloor = api.transformTiles(
+          [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 0, y: 1 }].map(p => ({ name: 'concrete', position: p })),
+          1, { x: 50, y: 50 });
+        const rd = api.compare(L, { blueprint: { item: 'blueprint', tiles: turnedFloor } });
+        const rv = api.bpOf(api.merge(L, { blueprint: { item: 'blueprint', tiles: turnedFloor } }, rd, false).out);
+        return rd.al.q === 3 && rd.al.score === 4 &&
+          same(posSet(rv.tiles), new Set(['0,0', '1,0', '2,0', '0,1']));
+      })()]
   );
 
   let bad = 0;

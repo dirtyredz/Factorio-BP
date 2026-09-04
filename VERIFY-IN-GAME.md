@@ -127,3 +127,22 @@ Cheap sanity check to run alongside 1, since normalising touches every entity po
 - **Inserters still reach** their chests — `pickup_position` and `drop_position` are absolute
   coordinates and are translated too, so this would break loudly if that were wrong.
 - The **circuit wires** are still connected.
+
+## 8. Does a merged floor land on the right tiles?
+
+New: the merge now carries floor tiles across, and lines up a tiles-only overlay by where its
+tiles land on the build. Tested in the arithmetic and drawn right in the preview, but no merged
+floor has been pasted in game.
+
+- In game, over one of your builds, lay some **concrete or landfill**, select **just the floor**
+  into a fresh blueprint, and copy it.
+- On the **Merge** page, put your normal build in **Base** and that floor in **Rebuilt**, and
+  merge. Leave *Tile offset* blank first — it should auto-place the floor under the build.
+- Copy the result, paste it in game, and check the floor sits on **the same tiles** it did when
+  you drew it — not shifted by a cell or a rotation.
+- **If it's off:** say by how many tiles (and whether it's turned). Then type that correction into
+  the **Tile offset** box and merge again — confirm the box moves it the way you'd expect.
+
+The uncertainty is the auto-align, not the stamping: `findTileOffset` guesses the offset from tile
+overlap, and a build whose floor doesn't sit *under* its entities (a border of concrete *around* a
+build, say) is the case most likely to land wrong and lean on the manual offset.
