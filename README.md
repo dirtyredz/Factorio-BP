@@ -121,9 +121,11 @@ can't: a preview reporting `102 drawn, 1 as boxes` means an entity ended up faci
 with no sprite, which is exactly what a flip does to a chain signal.
 
 The art is extracted from your local Factorio install into `sprites/`, which has to sit next to
-`index.html`. It is **not** part of what gets shared — the sprites are Wube's and the mod
-authors' assets, so the published copy has no `sprites/` folder and draws every entity as an
-amber box instead. Same layout, same information, no artwork.
+`index.html`. The art is Wube's (plus one mod author's — `aai-containers` retextures the steel chest). This tool
+is free and non-commercial, so publishing it is fine, and the public Pages site ships the sprites
+(`deploy.ps1` stages `index.html` + `sprites/*.png`). The page still degrades gracefully wherever
+the art is absent: any entity with no sprite, and any image that fails to load, becomes an amber box
+at the right footprint — same layout, same information, no artwork. Keep that fallback working.
 
 Entity types that were never extracted also draw as boxes at their correct footprint. Only the
 13 types appearing in the stored blueprints have sprites; adding more is a re-run of the

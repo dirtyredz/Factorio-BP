@@ -10,7 +10,8 @@ Thumbs.db
 *.log
 
 # structure-review gate marker (local, per-checkout)
-.structure-review-pending
+.structure-review-pending*
+.structure-review-paused
 
 # Cloudflare Pages staging dir, rebuilt by deploy.ps1 each time
 dist/

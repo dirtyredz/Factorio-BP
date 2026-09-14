@@ -45,7 +45,7 @@ so that can't recur. Don't `wrangler pages deploy .` from the repo root.
 | `debug.js` | Drives the page's `run()` against a fake DOM, so UI-path errors surface in the terminal. |
 | `deploy.ps1` | Deploys the public site — stages `index.html` + `sprites/*.png` and runs `wrangler pages deploy`. See [Deployment](#deployment--the-public-site). |
 | `blueprints/*.txt` | Real blueprints from the owner. One string per file, no trailing newline. |
-| `sprites/*.png` | Entity art cut out of the owner's own Factorio install, one file per entity *and direction*. **Game assets** — kept out of the shared Artifact; they DO ship to the owner's own Pages site (via `deploy.ps1`), never to anywhere else. |
+| `sprites/*.png` | Entity art cut out of the owner's own Factorio install, one file per entity *and direction*. Game assets, but this tool is free and non-commercial, so publishing them is fine — they ship to the public Pages site via `deploy.ps1`. |
 | `tools/*` | One-off scripts that produce `sprites/`. Not needed to run the tools; needed to regenerate the art. See [Sprites](#sprites). |
 | `VERIFY-IN-GAME.md` | Checks that pass their tests but have never been confirmed against Factorio. Raise these when the owner says they are in game. |
 | `IDEAS.md` | Agreed but unbuilt work, ranked, with what's known vs assumed for each. Move an item into this file and the README when it ships. |
@@ -249,10 +249,12 @@ position they correct a 90° turn to, that pins it.
 All three pages draw a preview of the blueprint. The art is cut out of the owner's own install
 at `C:\Program Files (x86)\Steam\steamapps\common\Factorio` (2.1.12 + Space Age, ~25 mods).
 
-**These are Wube's and the mod authors' assets. Local use only — do not publish `sprites/` to
-the Artifact.** The page degrades on its own: any entity with no sprite, and any image that
-fails to load, becomes an amber box at the right footprint, so the shared copy shows a readable
-schematic instead of an empty panel. Keep that fallback working.
+**These are Wube's assets (plus `aai-containers`' steel-chest retexture). This tool is free and
+non-commercial, so publishing them is fine** — `deploy.ps1` ships them to the public Pages site.
+*(This reverses an earlier "local use only, never publish" rule; the owner settled it 2026-09-14.)*
+The page still degrades on its own: any entity with no sprite, and any image that fails to load,
+becomes an amber box at the right footprint, so a copy without the art shows a readable schematic
+instead of an empty panel. Keep that fallback working.
 
 ### The one rule that matters
 
