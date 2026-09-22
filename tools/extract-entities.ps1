@@ -2,7 +2,9 @@
 # entity's layers into one PNG per direction. Source sheets are cached because
 # the rail art is a handful of very large files hit ~40 times each.
 #
-# Game assets, local use only -- see README.
+# Game assets. This tool is free and non-commercial, so publishing them is fine --
+# deploy.ps1 ships them to the public Pages site. (Reverses an earlier "local use
+# only" rule; the owner settled it 2026-09-14 -- see CLAUDE.md.)
 
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.IO.Compression.FileSystem

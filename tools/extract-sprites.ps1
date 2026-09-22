@@ -3,7 +3,9 @@
 # leftmost 64x64 square is the full-res image, the rest are shrunken copies.
 # Mod icons live inside the mod .zip and are read out without unpacking it.
 #
-# These are Wube's (and mod authors') assets. Local use only -- see README.
+# These are Wube's (and mod authors') assets. This tool is free and non-commercial,
+# so publishing them is fine -- deploy.ps1 ships them to the public Pages site.
+# (Reverses an earlier "local use only" rule; the owner settled it 2026-09-14 -- see CLAUDE.md.)
 
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.IO.Compression.FileSystem
