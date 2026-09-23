@@ -11,6 +11,7 @@ factorio-bp/
   CLAUDE.md             how to work here — deploy flow, format facts, sprite pipeline, gotchas
   STRUCTURE.md          this file
   IDEAS.md              agreed but unbuilt work, ranked
+  BACKLOG.md            prioritized task trough, deferred work, known issues
   VERIFY-IN-GAME.md     checks that pass their tests but are unconfirmed against Factorio
   index.html          the tool itself — a single-page, buildless Factorio blueprint renderer
   bp.js               blueprint string decode/encode (CLI-usable)
