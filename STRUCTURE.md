@@ -11,7 +11,8 @@ factorio-bp/
   CLAUDE.md             how to work here — deploy flow, format facts, sprite pipeline, gotchas
   STRUCTURE.md          this file
   IDEAS.md              agreed but unbuilt work, ranked
-  BACKLOG.md            prioritized task trough, deferred work, known issues
+  BACKLOG.md            pointer to the Docket items in docs/items/
+  GOTCHAS.md            non-obvious traps
   VERIFY-IN-GAME.md     checks that pass their tests but are unconfirmed against Factorio
   index.html          the tool itself — a single-page, buildless Factorio blueprint renderer
   bp.js               blueprint string decode/encode (CLI-usable)
@@ -46,7 +47,7 @@ appears, that is the signal this repo has outgrown flat, not a reason to widen t
 
 ## Structural debt
 
-**Tracked in `BACKLOG.md`** (repo root) — full list with priority, file:line, why, and direction
+**Tracked as Docket items** (`dk list`; files in `docs/items/`) — full list with priority, file:line, why, and direction
 for each item. Confirmed by the 2026-09-22 baseline review (3 Claude structure lenses + a Codex
 cross-model sign-off; see the stamp below). Summary:
 

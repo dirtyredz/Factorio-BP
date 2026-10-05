@@ -551,3 +551,10 @@ Keep the split between **verified** (checked against Factorio's own output or a 
 **inferred**. Most of the wasted effort here came from confident reasoning about grid semantics
 that turned out wrong three times; each was settled in one round by asking for real data. When
 something gets confirmed, say what confirmed it.
+
+## Work items (Docket)
+
+Track work in `docs/items/` through `dk`. Use filtered `dk list --json` and `dk show`; use `add`, `set`,
+and `link` for changes. Never invent IDs or ranks. Claim work in the current worktree, release it when
+finished, and run `dk check` before pushing. Drop items instead of deleting them. Living docs remain
+ordinary Markdown.
