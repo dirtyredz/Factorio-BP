@@ -1092,6 +1092,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
   // Shared Node-tool decode helper: checks live beside it.
   checks.push(...require('./tools/lib/blueprint.test'));
   checks.push(...require('./tools/lib/page-api.test'));
+  checks.push(...require('./tools/lib/merge-checks.test'));
   checks.push(...require('./tools/render/belt-curves.test'));
 
   let bad = 0;

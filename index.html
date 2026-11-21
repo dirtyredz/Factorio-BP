@@ -1714,6 +1714,34 @@
 
   const same = (x, y) => JSON.stringify(x) === JSON.stringify(y);
 
+  /* Does a merge result still honour everything the base promised? One predicate
+     per check, shared by the page's verification list and bp.js's verify(). Returns
+     booleans under stable ids; the floor-tile ids exist only when the diff carried
+     tiles. stackingKey names an entity's identity for "nothing stacked on itself":
+     the page rounds positions (key at ZERO), the CLI passes its raw serializer. */
+  function mergeChecks(base, result, diff, dropped, stackingKey) {
+    const a = base, v = result;
+    const sk = stackingKey || (e => key(e, ZERO));
+    const r = {
+      label: a.label === v.label,
+      snapToGrid: same(a["snap-to-grid"], v["snap-to-grid"]),
+      absoluteSnapping: a["absolute-snapping"] === v["absolute-snapping"],
+      gridOffset: same(a["position-relative-to-grid"], v["position-relative-to-grid"]),
+      parameters: same(a.parameters, v.parameters),
+      entityCount: v.entities.length === (a.entities || []).length + diff.added.length - (dropped ? diff.removed.length : 0),
+      noStacking: new Set(v.entities.map(sk)).size === v.entities.length,
+      paramsBind: paramsStillBind(v)
+    };
+    if (diff.overlayTiles && diff.overlayTiles.length) {
+      const cell = t => t.position.x + "," + t.position.y;
+      const vPos = new Set((v.tiles || []).map(cell));
+      r.tilesLanded = diff.overlayTiles.every(t => vPos.has(cell(t)));
+      r.tilesUnique = vPos.size === (v.tiles || []).length;
+      r.tilesWhole = (v.tiles || []).every(t => Number.isInteger(t.position.x) && Number.isInteger(t.position.y));
+    }
+    return r;
+  }
+
   function label(e, off) {
     const o = off || ZERO;
     const d = e.direction === undefined ? 0 : e.direction;
@@ -1883,27 +1911,22 @@
       });
     }
 
+    const mc = mergeChecks(a, v, d, $("rm").checked);
     const checks = [
       ["Alignment is solid", solid],
       ["Result re-decodes", true],
-      ["Snap-to-grid kept", same(a["snap-to-grid"], v["snap-to-grid"])],
-      ["Absolute snapping kept", a["absolute-snapping"] === v["absolute-snapping"]],
-      ["Grid offset kept", same(a["position-relative-to-grid"], v["position-relative-to-grid"])],
-      ["Parameters kept", same(a.parameters, v.parameters)],
-      ["Entity count adds up",
-        v.entities.length === (a.entities || []).length + d.added.length - ($("rm").checked ? d.removed.length : 0)],
-      ["Nothing stacked on itself",
-        new Set(v.entities.map(e => key(e, ZERO))).size === v.entities.length],
-      ["Every parameter still binds", paramsStillBind(v)]
+      ["Snap-to-grid kept", mc.snapToGrid],
+      ["Absolute snapping kept", mc.absoluteSnapping],
+      ["Grid offset kept", mc.gridOffset],
+      ["Parameters kept", mc.parameters],
+      ["Entity count adds up", mc.entityCount],
+      ["Nothing stacked on itself", mc.noStacking],
+      ["Every parameter still binds", mc.paramsBind]
     ];
-    if (d.overlayTiles && d.overlayTiles.length) {
-      const vPos = new Set((v.tiles || []).map(t => t.position.x + "," + t.position.y));
-      checks.push(["Every overlaid tile landed",
-        d.overlayTiles.every(t => vPos.has(t.position.x + "," + t.position.y))]);
-      checks.push(["No two tiles on one cell",
-        vPos.size === (v.tiles || []).length]);
-      checks.push(["Tile positions are whole",
-        (v.tiles || []).every(t => Number.isInteger(t.position.x) && Number.isInteger(t.position.y))]);
+    if (mc.tilesLanded !== undefined) {
+      checks.push(["Every overlaid tile landed", mc.tilesLanded]);
+      checks.push(["No two tiles on one cell", mc.tilesUnique]);
+      checks.push(["Tile positions are whole", mc.tilesWhole]);
     }
     const bad = checks.filter(c => !c[1]).length;
     $("verdict").innerHTML = bad

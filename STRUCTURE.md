@@ -25,7 +25,7 @@ factorio-bp/
   sprites/            GENERATED game art (PNG) + entities.json / meta.json / recipe.json
   tools/sprites/      10 hand-run scripts — sprite extraction pipeline and sprite diagnostics
   tools/render/       6 hand-run scripts — renderers, page seeding, belt-curve/grid-position diagnostics
-  tools/lib/          blueprint.js — shared decode + book unwrap; page-api.js — loadPageApi() pulls named functions out of index.html; blueprint.test.js / page-api.test.js — their checks
+  tools/lib/          blueprint.js — shared decode + book unwrap; page-api.js — loadPageApi() pulls named functions out of index.html; blueprint.test.js / page-api.test.js / merge-checks.test.js — their checks
                       blueprint.test.js — its checks, required by test.js
 ```
 
@@ -65,9 +65,6 @@ cross-model sign-off; see the stamp below). Summary:
   `extract-sprites.ps1`, and partially `dump-connectors.js` — adding entity support needs
   coordinated edits and can silently omit icons, footprints, connectors, or directional art.
   Direction: one responsibility-named entity manifest.
-- **[P1] Merge verification reimplemented in `bp.js`** separately from the browser checks at
-  `index.html:1886` — CLI and page can accept different outputs for the same merge contract.
-  Direction: one page-owned `mergeChecks()` rendered by both.
 - **[P1] `test.js`'s 206 checks live in one stateful IIFE** sharing setup and mutable fixtures
   across merge, transforms, sprites, wires, grids, and floor overlays. Direction: keep `test.js`
   as the page-API loader/runner; move scenario suites into responsibility-named test modules.
@@ -83,4 +80,4 @@ cross-model sign-off; see the stamp below). Summary:
 **Last full review: 2026-09-22.** Baseline over the whole codebase — 3 Claude structure lenses
 (componentization, abstraction, topology) plus a Codex cross-model sign-off. **Verdict: PASS, no
 P0.** The findings above are the remaining backlog; the tools/ split, the shared blueprint decode and
-the shared page loader (`tools/lib/page-api.js`) have since landed and were removed from the list.
+the shared page loader (`tools/lib/page-api.js`) and the page-owned `mergeChecks()` have since landed and were removed from the list.

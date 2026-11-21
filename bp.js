@@ -14,7 +14,7 @@ const STORE = path.join(ROOT, 'blueprints');
 
 // ---------- load the page's logic ----------
 
-const api = loadPageApi(['decode', 'encode', 'compare', 'merge', 'bpOf', 'tally', 'paramBound', 'key', 'ZERO', 'paramsStillBind', 'parseOffset', 'turnBlueprint', 'flipBlueprint', 'normalise', 'normaliseReport']);
+const api = loadPageApi(['decode', 'encode', 'compare', 'merge', 'bpOf', 'tally', 'paramBound', 'key', 'ZERO', 'paramsStillBind', 'mergeChecks', 'parseOffset', 'turnBlueprint', 'flipBlueprint', 'normalise', 'normaliseReport']);
 
 // ---------- clipboard ----------
 
@@ -116,26 +116,22 @@ function report(d) {
 
 function verify(base, out, d, dropped) {
   const a = api.bpOf(base), v = api.bpOf(out);
-  const same = (x, y) => JSON.stringify(x) === JSON.stringify(y);
-  const tiles = v.entities.map(e => `${e.name}@${e.position.x},${e.position.y}`);
+  // The CLI has always keyed stacking on raw coordinates; the page rounds. Kept as is.
+  const c = api.mergeChecks(a, v, d, dropped, e => `${e.name}@${e.position.x},${e.position.y}`);
   const rows = [
-    ['label kept', a.label === v.label],
-    ['snap-to-grid kept', same(a['snap-to-grid'], v['snap-to-grid'])],
-    ['absolute snapping kept', a['absolute-snapping'] === v['absolute-snapping']],
-    ['grid offset kept', same(a['position-relative-to-grid'], v['position-relative-to-grid'])],
-    ['parameters kept', same(a.parameters, v.parameters)],
-    ['entity count adds up',
-      v.entities.length === (a.entities || []).length + d.added.length - (dropped ? d.removed.length : 0)],
-    ['nothing stacked on itself', new Set(tiles).size === tiles.length],
-    ['every parameter still binds', api.paramsStillBind(v)],
+    ['label kept', c.label],
+    ['snap-to-grid kept', c.snapToGrid],
+    ['absolute snapping kept', c.absoluteSnapping],
+    ['grid offset kept', c.gridOffset],
+    ['parameters kept', c.parameters],
+    ['entity count adds up', c.entityCount],
+    ['nothing stacked on itself', c.noStacking],
+    ['every parameter still binds', c.paramsBind],
   ];
-  if ((d.overlayTiles || []).length) {
-    const vPos = new Set((v.tiles || []).map(t => `${t.position.x},${t.position.y}`));
-    rows.push(['every overlaid tile landed',
-      d.overlayTiles.every(t => vPos.has(`${t.position.x},${t.position.y}`))]);
-    rows.push(['no two tiles on one cell', vPos.size === (v.tiles || []).length]);
-    rows.push(['tile positions are whole',
-      (v.tiles || []).every(t => Number.isInteger(t.position.x) && Number.isInteger(t.position.y))]);
+  if (c.tilesLanded !== undefined) {
+    rows.push(['every overlaid tile landed', c.tilesLanded]);
+    rows.push(['no two tiles on one cell', c.tilesUnique]);
+    rows.push(['tile positions are whole', c.tilesWhole]);
   }
   return rows.map(([n, ok]) => `  ${ok ? 'OK  ' : 'FAIL'}  ${n}`).join('\n') +
     `\n  entities: ${(a.entities || []).length} -> ${v.entities.length}` +
