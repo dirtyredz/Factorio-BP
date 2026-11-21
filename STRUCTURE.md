@@ -58,9 +58,6 @@ appears, that is the signal this repo has outgrown flat, not a reason to widen t
 for each item. Confirmed by the 2026-09-22 baseline review (3 Claude structure lenses + a Codex
 cross-model sign-off; see the stamp below). Summary:
 
-- **[P1] Four independent reimplementations of the load-`index.html`-as-API trick** (`bp.js`,
-  `test.js`, `debug.js`, `tools/render/render-png.js`), each re-deriving slice boundaries, DOM stub shape
-  and export list. Direction: one `loadPageApi(names, extraGlobals)`.
 - **[P1] `tools/render/render.js` duplicates `render-png.js`'s job** with its own reimplemented
   entity-placement/z-order logic instead of loading the page's `entBox()`/`drawRank()`/`SPRITES`.
   Undocumented in CLAUDE.md/README. Direction: delete if superseded, or make it consume the page.
@@ -88,4 +85,5 @@ cross-model sign-off; see the stamp below). Summary:
 
 **Last full review: 2026-09-22.** Baseline over the whole codebase — 3 Claude structure lenses
 (componentization, abstraction, topology) plus a Codex cross-model sign-off. **Verdict: PASS, no
-P0.** All P1/P2 findings above are backlogged, not fixed, per that review's scope.
+P0.** The findings above are the remaining backlog; the tools/ split, the shared blueprint decode and
+the shared page loader (`tools/lib/page-api.js`) have since landed and were removed from the list.
