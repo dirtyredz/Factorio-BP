@@ -25,7 +25,7 @@ factorio-bp/
   blueprints/         fixture data — real blueprint strings used by the harnesses
   sprites/            GENERATED game art (PNG) + entities.json / meta.json / recipe.json
   tools/sprites/      10 hand-run scripts — sprite extraction pipeline and sprite diagnostics
-  tools/render/       6 hand-run scripts — renderers, page seeding, belt-curve/grid-position diagnostics
+  tools/render/       5 hand-run scripts — renderers, page seeding, belt-curve/grid-position diagnostics
   tools/lib/          blueprint.js — shared decode + book unwrap; page-api.js — loadPageApi() pulls named functions out of index.html; blueprint.test.js / page-api.test.js / merge-checks.test.js — their checks
                       blueprint.test.js — its checks, required by test.js
 ```
@@ -42,7 +42,7 @@ factorio-bp/
 - `sprites/` — generated assets. Flat by nature; exempt from fan-out.
 - `tools/sprites/` — hand-run sprite pipeline (dump, recipe, extract, manifest) and sprite
   diagnostics. None are needed to run the tool itself.
-- `tools/render/` — hand-run renderers (`render.js`, `render-png.js/.ps1`), `seed-page.js`, and the
+- `tools/render/` — hand-run renderers (`render-png.js/.ps1`), `seed-page.js`, and the
   belt-curve / grid-position diagnostics.
 - `tools/lib/` — code shared by `tools/` scripts and the root harnesses (bp.js, test.js, debug.js); the blueprint decode + book unwrap helper and
   the page-api loader. Add a helper only when two or more scripts need it.
@@ -61,21 +61,10 @@ appears, that is the signal this repo has outgrown flat, not a reason to widen t
 for each item. Confirmed by the 2026-09-22 baseline review (3 Claude structure lenses + a Codex
 cross-model sign-off; see the stamp below). Summary:
 
-- **[P1] `tools/render/render.js` duplicates `render-png.js`'s job** with its own reimplemented
-  entity-placement/z-order logic instead of loading the page's `entBox()`/`drawRank()`/`SPRITES`.
-  Undocumented in CLAUDE.md/README. Direction: delete if superseded, or make it consume the page.
 - **[P1] Supported-entity inventory hard-coded separately** in `build-recipe.js`, `dump-meta.js`,
   `extract-sprites.ps1`, and partially `dump-connectors.js` — adding entity support needs
   coordinated edits and can silently omit icons, footprints, connectors, or directional art.
   Direction: one responsibility-named entity manifest.
-- **[P2] Stable architecture and gotchas live in `CLAUDE.md`** instead of the documented living-doc
-  locations. Direction: extract design into `docs/ARCHITECTURE.md`, hazards into `docs/GOTCHAS.md`,
-  leaving links in `CLAUDE.md`.
-- **[P2] Two implementations of mod-relative path resolution** (`tools/sprites/extract-sprites.ps1`,
-  `tools/sprites/build-recipe.js`) — one PowerShell, one JS. Low priority; the languages can't share code
-  directly. (Codex checked `extract-entities.ps1` for the same pattern and found it does not
-  repeat mod-reference parsing — it consumes an already-resolved recipe, so it is not a third
-  copy.)
 
 **Last full review: 2026-09-22.** Baseline over the whole codebase — 3 Claude structure lenses
 (componentization, abstraction, topology) plus a Codex cross-model sign-off. **Verdict: PASS, no

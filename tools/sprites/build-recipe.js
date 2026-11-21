@@ -44,6 +44,8 @@ const DIR8 = ["north", "northeast", "east", "southeast",
 
 // ---- file resolution -------------------------------------------------------
 
+// Mirrors Get-IconBitmap in extract-sprites.ps1 (direct data/<mod>/ file, else newest <mod>_*.zip entry);
+// keep the two in step - PowerShell and Node cannot share code.
 const zipCache = {};
 function resolve(ref) {
   const m = /^__([\w-]+)__\/(.+)$/.exec(ref);
