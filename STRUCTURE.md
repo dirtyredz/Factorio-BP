@@ -25,6 +25,7 @@ factorio-bp/
   sprites/            GENERATED game art (PNG) + entities.json / meta.json / recipe.json
   tools/              16 hand-run dev scripts — sprite pipeline, rendering, diagnostics
   tools/lib/          blueprint.js — shared decode + book unwrap (blueprintsOf / loadBlueprint)
+                      blueprint.test.js — its checks, required by test.js
 ```
 
 **Enforced homes** (what the placement hook reads):
