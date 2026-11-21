@@ -17,7 +17,7 @@ factorio-bp/
   index.html          the tool itself — a single-page, buildless Factorio blueprint renderer
   bp.js               blueprint string decode/encode (CLI-usable)
   test.js             test loader/runner — page API, batch order, reporter, exit handling
-  tests/              page scenario suites required by test.js: transforms, merge (+ marks), sprites (+ belts)
+  tests/              page scenario suites required by test.js: transforms, merge (+ marks), sprites (+ belts), overlays (grid, wires, floor)
   debug.js            debug harness
   deploy.ps1          deploy entrypoint — stages dist/ and runs `wrangler pages deploy`
   test-strings.txt    scratch blueprint strings for the harnesses
@@ -68,8 +68,6 @@ cross-model sign-off; see the stamp below). Summary:
   `extract-sprites.ps1`, and partially `dump-connectors.js` — adding entity support needs
   coordinated edits and can silently omit icons, footprints, connectors, or directional art.
   Direction: one responsibility-named entity manifest.
-- **[P1] `test.js` still carries the grid, wire and floor-overlay scenarios inline** (merge, transforms and
-  sprites already moved to `tests/`). Direction: move them into one `tests/overlays.test.js`.
 - **[P2] Stable architecture and gotchas live in `CLAUDE.md`** instead of the documented living-doc
   locations. Direction: extract design into `docs/ARCHITECTURE.md`, hazards into `docs/GOTCHAS.md`,
   leaving links in `CLAUDE.md`.
