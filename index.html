@@ -2074,29 +2074,42 @@
   const FEEDS = /transport-belt$|underground-belt$|splitter$|loader/;
   const CURVES = /(^|-)transport-belt$/;
 
-  function beltCurves(ents) {
-    const at = {}, curve = {};
+  // Per-belt detail behind beltCurves(): one row per plain belt, in entity order,
+  // with every belt-ish neighbour that feeds it (`feeders`, direction numbers in
+  // N E S W order) and the direction it turns from (`curve`, null when straight).
+  function beltAnalysis(ents) {
+    const at = {}, rows = [];
     let any = false;
     for (const e of ents) {
       if (FEEDS.test(e.name)) { at[e.position.x + "," + e.position.y] = e; any = true; }
     }
-    if (!any) return curve;
+    if (!any) return rows;
 
     for (const e of ents) {
       if (!CURVES.test(e.name)) continue;
       const d = e.direction === undefined ? 0 : e.direction;
       if (!BELT_UNIT[d]) continue;
 
+      const feeders = [];
       let behind = false, sides = 0, from = null;
       for (const nd of [0, 4, 8, 12]) {
         const u = BELT_UNIT[nd];
         const n = at[(e.position.x - u[0]) + "," + (e.position.y - u[1])];
         if (!n) continue;
         if ((n.direction === undefined ? 0 : n.direction) !== nd) continue;
+        feeders.push(nd);
         if (nd === d) behind = true;
         else { sides++; from = nd; }
       }
-      if (!behind && sides === 1) curve[e.entity_number] = from;
+      rows.push({ ent: e, dir: d, feeders, curve: !behind && sides === 1 ? from : null });
+    }
+    return rows;
+  }
+
+  function beltCurves(ents) {
+    const curve = {};
+    for (const r of beltAnalysis(ents)) {
+      if (r.curve !== null) curve[r.ent.entity_number] = r.curve;
     }
     return curve;
   }

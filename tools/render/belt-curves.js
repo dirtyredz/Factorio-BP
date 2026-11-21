@@ -1,62 +1,24 @@
-// Works out which belts in a blueprint should render as curves.
+// Reports which belts in a blueprint should render as curves.
 //
 //   node tools/render/belt-curves.js [blueprint]
 //
-// A blueprint stores only each belt's `direction`; whether it draws curved is
-// derived from its neighbours, the same way the game derives it. The rule:
-//
-//   a belt curves when exactly one belt feeds it from a perpendicular side
-//   and nothing feeds it from directly behind
-//
-// Feeding is defined by output tile: a belt at Q facing d outputs into
-// Q + unit(d). So B is fed by N when N's output tile is B's own tile.
+// The neighbour rule lives in index.html (beltAnalysis); this is only the
+// text formatter over it, so the report cannot drift from what the page draws.
 
 const fs = require('fs');
 const path = require('path');
+const { loadPageApi } = require('../lib/page-api');
 
-const UNIT = { 0: [0, -1], 4: [1, 0], 8: [0, 1], 12: [-1, 0] };   // N E S W
 const NAME = { 0: 'N', 4: 'E', 8: 'S', 12: 'W' };
 
-// Anything that moves items along and can feed a belt.
-const FEEDER = /transport-belt$|underground-belt$|splitter$|loader/;
-// Only plain belts curve; undergrounds and splitters are always straight.
-const CURVABLE = /(^|-)transport-belt$/;
-
 function analyse(bp) {
-  const ents = bp.entities || [];
-  const at = {};
-  for (const e of ents) at[e.position.x + ',' + e.position.y] = e;
-
-  const out = [];
-  for (const e of ents) {
-    if (!CURVABLE.test(e.name)) continue;
-    const d = e.direction === undefined ? 0 : e.direction;
-    if (!UNIT[d]) continue;                       // belts are 4-way
-
-    const feeders = [];
-    for (const nd of [0, 4, 8, 12]) {
-      // The neighbour that would have to face `nd` to output into this tile.
-      const [ux, uy] = UNIT[nd];
-      const n = at[(e.position.x - ux) + ',' + (e.position.y - uy)];
-      if (!n || !FEEDER.test(n.name)) continue;
-      if ((n.direction === undefined ? 0 : n.direction) !== nd) continue;
-      feeders.push({ from: nd, ent: n });
-    }
-
-    const behind = feeders.filter(f => f.from === d);
-    const sides = feeders.filter(f => f.from !== d);
-
-    let curve = null;
-    if (!behind.length && sides.length === 1) curve = sides[0].from;
-
-    out.push({
-      x: e.position.x, y: e.position.y, dir: d,
-      feeders: feeders.map(f => NAME[f.from]),
-      curve,                       // the direction the belt turns FROM
-      label: curve === null ? 'straight' : NAME[curve] + '->' + NAME[d],
-    });
-  }
-  return out;
+  const { beltAnalysis } = loadPageApi(['beltAnalysis']);
+  return beltAnalysis(bp.entities || []).map(r => ({
+    x: r.ent.position.x, y: r.ent.position.y, dir: r.dir,
+    feeders: r.feeders.map(nd => NAME[nd]),
+    curve: r.curve,                // the direction the belt turns FROM
+    label: r.curve === null ? 'straight' : NAME[r.curve] + '->' + NAME[r.dir],
+  }));
 }
 
 if (require.main === module) {

@@ -8,7 +8,7 @@ const path = require('path');
 const { loadPageApi } = require('./tools/lib/page-api');
 
 const api = loadPageApi(['decode', 'encode', 'compare', 'merge', 'bpOf', 'protect', 'paramsStillBind', 'key', 'ZERO',
-  'turnBlueprint', 'flipBlueprint', 'entBox', 'buildPreview', 'SPRITES', 'FOOTPRINT', 'wireEnd', 'CONNECT', 'beltCurves', 'diffMarks', 'gridPosition',
+  'turnBlueprint', 'flipBlueprint', 'entBox', 'buildPreview', 'SPRITES', 'FOOTPRINT', 'wireEnd', 'CONNECT', 'beltCurves', 'beltAnalysis', 'diffMarks', 'gridPosition',
   'transformTiles', 'findTileOffset', 'occupiedCells',
   'normalise', 'normaliseReport']);
 
@@ -1092,6 +1092,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
   // Shared Node-tool decode helper: checks live beside it.
   checks.push(...require('./tools/lib/blueprint.test'));
   checks.push(...require('./tools/lib/page-api.test'));
+  checks.push(...require('./tools/render/belt-curves.test'));
 
   let bad = 0;
   for (const [name, ok] of checks) {

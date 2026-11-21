@@ -61,9 +61,6 @@ cross-model sign-off; see the stamp below). Summary:
 - **[P1] `tools/render/render.js` duplicates `render-png.js`'s job** with its own reimplemented
   entity-placement/z-order logic instead of loading the page's `entBox()`/`drawRank()`/`SPRITES`.
   Undocumented in CLAUDE.md/README. Direction: delete if superseded, or make it consume the page.
-- **[P1] `tools/render/belt-curves.js` reimplements the belt-neighbor algorithm** that `beltCurves()` in
-  `index.html` already owns, so the diagnostic can disagree with the product it's meant to
-  validate. Direction: load the page's `beltCurves()`; keep the script to formatting only.
 - **[P1] Supported-entity inventory hard-coded separately** in `build-recipe.js`, `dump-meta.js`,
   `extract-sprites.ps1`, and partially `dump-connectors.js` — adding entity support needs
   coordinated edits and can silently omit icons, footprints, connectors, or directional art.
