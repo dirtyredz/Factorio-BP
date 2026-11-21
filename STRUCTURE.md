@@ -37,6 +37,8 @@ factorio-bp/
 - `sprites/` — generated assets. Flat by nature; exempt from fan-out.
 - `tools/` — hand-run development scripts: the sprite pipeline, the renderers, and the
   diagnostics. None are needed to run the tool itself.
+- `tools/lib/` — code shared by `tools/` scripts; for now only the blueprint decode + book
+  unwrap helper. Add a helper only when two or more scripts need it.
 
 ## Why the root holds code
 
