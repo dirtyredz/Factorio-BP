@@ -91,7 +91,7 @@ Normalise is the tool for repositioning afterwards.
 ## 5. Do the belt curves run the right way?
 
 The preview derives belt curves from the neighbours, the way the game does, and the *edges*
-each curve joins were verified by measuring the sprites (`tools/check-belt-curves.ps1`).
+each curve joins were verified by measuring the sprites (`tools/sprites/check-belt-curves.ps1`).
 
 What that measurement **cannot** settle is flow direction within a pair: the two curves joining
 the same two edges cover identical edges and differ only in which way items travel. That half
@@ -102,7 +102,7 @@ game and in the preview, and compare the chevron direction on the four curved ti
 
 - **Expected:** chevrons sweep the same way in both.
 - **If they run backwards**, the two curves in that pair are swapped, and the fix is exchanging
-  the paired entries in `CURVE` in `tools/build-recipe.js` — `0c12`/`4c8`, `0c4`/`12c8`,
+  the paired entries in `CURVE` in `tools/sprites/build-recipe.js` — `0c12`/`4c8`, `0c4`/`12c8`,
   `4c0`/`8c12`, `12c0`/`8c4`.
 
 ## 6. Two flip rules that no stored blueprint exercises

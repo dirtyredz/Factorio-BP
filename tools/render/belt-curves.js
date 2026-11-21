@@ -1,6 +1,6 @@
 // Works out which belts in a blueprint should render as curves.
 //
-//   node tools/belt-curves.js [blueprint]
+//   node tools/render/belt-curves.js [blueprint]
 //
 // A blueprint stores only each belt's `direction`; whether it draws curved is
 // derived from its neighbours, the same way the game derives it. The rule:
@@ -61,9 +61,9 @@ function analyse(bp) {
 
 if (require.main === module) {
   const name = process.argv[2] || 'dropoff-a';
-  const root = path.join(__dirname, '..');
+  const root = path.join(__dirname, '..', '..');
   const s = fs.readFileSync(path.join(root, 'blueprints', name + '.txt'), 'utf8').trim();
-  const bp = require('./lib/blueprint').loadBlueprint(s);
+  const bp = require('../lib/blueprint').loadBlueprint(s);
 
   const rows = analyse(bp);
   const curved = rows.filter(r => r.curve !== null);

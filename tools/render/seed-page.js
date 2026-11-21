@@ -1,10 +1,10 @@
 // Writes a throwaway copy of index.html with stored blueprints already in its
 // input boxes, for eyeballing a page without pasting by hand.
 //
-//   node tools/seed-page.js <out.html> <blueprint>@<textarea-id> ...
+//   node tools/render/seed-page.js <out.html> <blueprint>@<textarea-id> ...
 //
-//   node tools/seed-page.js seeded.html dropoff-a@ins-in
-//   node tools/seed-page.js seeded.html dropoff-a@a dropoff-a-signals@b
+//   node tools/render/seed-page.js seeded.html dropoff-a@ins-in
+//   node tools/render/seed-page.js seeded.html dropoff-a@a dropoff-a-signals@b
 //
 // The strings are copied straight from blueprints/ and never retyped — a single
 // wrong character makes a blueprint undecodable.
@@ -12,12 +12,12 @@
 const fs = require("fs");
 const path = require("path");
 
-const root = path.join(__dirname, "..");
+const root = path.join(__dirname, "..", "..");
 const args = process.argv.slice(2);
 const outFile = args.shift();
 
 if (!outFile || !args.length) {
-  console.error("usage: node tools/seed-page.js <out.html> <blueprint>@<textarea-id> ...");
+  console.error("usage: node tools/render/seed-page.js <out.html> <blueprint>@<textarea-id> ...");
   process.exit(1);
 }
 

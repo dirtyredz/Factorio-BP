@@ -15,7 +15,7 @@ const path = require("path");
 const DUMP = path.join(process.env.APPDATA, "Factorio", "script-output", "data-raw-dump.json");
 const GAME = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio";
 const MODS = path.join(process.env.APPDATA, "Factorio", "mods");
-const OUT = path.join(__dirname, "..", "sprites");
+const OUT = path.join(__dirname, "..", "..", "sprites");
 
 const raw = JSON.parse(fs.readFileSync(DUMP, "utf8"));
 const PPT = 32; // screen pixels per tile
@@ -149,7 +149,7 @@ const PICKERS = {
     // the east edge and leaves by the north one, so the flow is travelling west
     // and turns north. Getting that backwards inverts every curve, and it was
     // caught by measuring which tile edges each sprite's art actually meets —
-    // see tools/check-belt-curves.ps1.
+    // see tools/sprites/check-belt-curves.ps1.
     const CURVE = {
       "0c12": 4,   // east_to_north   in E, out N
       "4c8": 5,    // north_to_east   in N, out E

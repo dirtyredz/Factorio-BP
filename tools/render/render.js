@@ -3,19 +3,19 @@
 // pre-drawn frame, and each frame is placed at its own size using the ox/oy
 // offset recorded in entities.json.
 //
-//   node tools/render.js <blueprint-name> <out.html> [tilePx]
+//   node tools/render/render.js <blueprint-name> <out.html> [tilePx]
 
 const fs = require("fs");
 const path = require("path");
 
 const name = process.argv[2] || "dropoff-a";
-const outFile = process.argv[3] || path.join(__dirname, "..", "render.html");
+const outFile = process.argv[3] || path.join(__dirname, "..", "..", "render.html");
 const TILE = Number(process.argv[4]) || 20;
 
-const root = path.join(__dirname, "..");
+const root = path.join(__dirname, "..", "..");
 const man = JSON.parse(fs.readFileSync(path.join(root, "sprites", "entities.json"), "utf8"));
 const str = fs.readFileSync(path.join(root, "blueprints", name + ".txt"), "utf8").trim();
-const bp = require("./lib/blueprint").loadBlueprint(str);
+const bp = require("../lib/blueprint").loadBlueprint(str);
 
 const spriteDir = path.relative(path.dirname(path.resolve(outFile)),
   path.join(root, "sprites")).split(path.sep).join("/");

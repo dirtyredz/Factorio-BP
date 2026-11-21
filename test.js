@@ -492,7 +492,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
   if (full) {
     try {
       const emitted = require('child_process')
-        .execFileSync(process.execPath, [path.join(__dirname, 'tools', 'emit-manifest.js')],
+        .execFileSync(process.execPath, [path.join(__dirname, 'tools', 'sprites', 'emit-manifest.js')],
           { encoding: 'utf8' });
       const line = /^ {2}const SPRITES = .*;$/m.exec(emitted);
       const inPage = /^ {2}const SPRITES = .*;$/m.exec(src);
@@ -511,7 +511,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
 
   for (const l of lossy.slice(0, 6)) console.log('    fold lost: ' + l);
   for (const t of thin) console.log('    too few directions: ' + t);
-  if (stale) console.log('    index.html is stale — run: node tools/emit-manifest.js --write');
+  if (stale) console.log('    index.html is stale — run: node tools/sprites/emit-manifest.js --write');
 
   // --- grid position --------------------------------------------------------
   // The one piece of ground truth in the project: the owner hand-corrected Drop

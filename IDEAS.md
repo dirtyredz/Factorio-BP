@@ -124,8 +124,8 @@ the floor for free since `buildPreview` already handled `tiles`.
   than anything above.
 - **Click an entity in the preview for its settings.** Read a decider's conditions or a stop's
   station string without decoding by hand.
-- **Self-maintaining sprite extraction.** `ENTITIES` in `tools/build-recipe.js` is hardcoded,
-  while `tools/used-dirs.js` already computes what the stored blueprints need. Wiring them
+- **Self-maintaining sprite extraction.** `ENTITIES` in `tools/sprites/build-recipe.js` is hardcoded,
+  while `tools/sprites/used-dirs.js` already computes what the stored blueprints need. Wiring them
   together means a new blueprint pulls its own art instead of silently falling back to boxes.
 
 ### Tile-overlay refinements (deferred from the merge review)

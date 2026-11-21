@@ -6,7 +6,7 @@
 
 Add-Type -AssemblyName System.Drawing
 
-$root = Split-Path -Parent $PSScriptRoot
+$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $out  = Join-Path $root "sprites"
 $dest = if ($args[0]) { $args[0] } else { Join-Path $root "sheet.png" }
 

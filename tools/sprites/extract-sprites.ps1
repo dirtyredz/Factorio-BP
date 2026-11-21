@@ -10,7 +10,7 @@
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-$root  = Split-Path -Parent $PSScriptRoot
+$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $game  = "C:\Program Files (x86)\Steam\steamapps\common\Factorio"
 $mods  = "$env:APPDATA\Factorio\mods"
 $out   = Join-Path $root "sprites"

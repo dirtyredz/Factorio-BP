@@ -10,7 +10,7 @@
 
 Add-Type -AssemblyName System.Drawing
 
-$root = Split-Path -Parent $PSScriptRoot
+$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $dir = Join-Path $root "sprites"
 
 # key -> expected edges, worked out from the key alone

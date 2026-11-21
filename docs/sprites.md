@@ -25,32 +25,32 @@ junk. If a preview looks tilted, that's the bug returning.
 
 ```bash
 "C:\Program Files (x86)\Steam\steamapps\common\Factorio\bin\x64\factorio.exe" --dump-data
-node tools/build-recipe.js        # dump -> sprites/recipe.json + entities.json
-tools/extract-entities.ps1        # recipe -> sprites/*_<dir>.png
-node tools/emit-manifest.js --write   # entities.json -> the SPRITES table in index.html
-node tools/dump-meta.js           # collision boxes + tile sizes -> sprites/meta.json
+node tools/sprites/build-recipe.js        # dump -> sprites/recipe.json + entities.json
+tools/sprites/extract-entities.ps1        # recipe -> sprites/*_<dir>.png
+node tools/sprites/emit-manifest.js --write   # entities.json -> the SPRITES table in index.html
+node tools/sprites/dump-meta.js           # collision boxes + tile sizes -> sprites/meta.json
 ```
 
 To produce a PNG of a blueprint — for sharing, or for looking at something too small to see in
 the page:
 
 ```bash
-node tools/render-png.js dropoff-a draw.json 56 56 -1 96 15   # last four crop, in tiles
-tools/render-png.ps1 draw.json out.png
+node tools/render/render-png.js dropoff-a draw.json 56 56 -1 96 15   # last four crop, in tiles
+tools/render/render-png.ps1 draw.json out.png
 ```
 
 It loads the page's own `entBox()` and `SPRITES` through the same `new Function` trick as
 `bp.js`, so a rendered PNG cannot drift from what the preview draws.
 
 `--dump-data` writes a 44 MB `data-raw-dump.json` into `%APPDATA%\Factorio\script-output\`.
-It is regenerable and safe to delete. `tools/contact-sheet.ps1` lays every sprite on a labelled
+It is regenerable and safe to delete. `tools/sprites/contact-sheet.ps1` lays every sprite on a labelled
 grid — **look at it after any change here**, since a wrong frame index still produces a
 plausible-looking file.
 
 All 16 directions are extracted for every entity, not just the ones the stored blueprints use:
 a flip negates direction and a turn adds to it, so the tools routinely produce facings no saved
 blueprint contains. Frames that resolve to identical art share one file, so 82 PNGs cover 208
-entity/direction pairs. `tools/used-dirs.js` reports which pairs actually occur.
+entity/direction pairs. `tools/sprites/used-dirs.js` reports which pairs actually occur.
 
 ### Traps, all of which cost time
 
@@ -59,7 +59,7 @@ entity/direction pairs. `tools/used-dirs.js` reports which pairs actually occur.
   one and it paints an opaque black box over the entity. They're skipped by PNG colour type,
   not by filename.
 - **Icons are mipmap strips.** `graphics/icons/*.png` are 120×64 — 64+32+16+8. Only the
-  leftmost square is full-res. (`tools/extract-sprites.ps1` pulls these; the page doesn't use
+  leftmost square is full-res. (`tools/sprites/extract-sprites.ps1` pulls these; the page doesn't use
   them, but they suit a legend.)
 - **Sprite frames are padded.** A belt frame is 128 px at `scale 0.5` = 2 tiles, but only the
   middle ~1.1 tiles is opaque. That is correct — don't "fix" it. Measure the alpha bounding box
@@ -76,12 +76,12 @@ entity/direction pairs. `tools/used-dirs.js` reports which pairs actually occur.
 script block, regenerated with `emit-manifest.js --write`. `<img src="sprites/…">` is exempt
 from that rule, which is why the PNGs can stay as loose files.
 
-`tools/seed-page.js` writes a throwaway copy of the page with blueprints already in its inputs,
+`tools/render/seed-page.js` writes a throwaway copy of the page with blueprints already in its inputs,
 so a page can be checked in a browser without pasting by hand:
 
 ```bash
-node tools/seed-page.js seeded.html dropoff-a@rot-in
-node tools/seed-page.js seeded.html dropoff-a@a dropoff-a-signals@b
+node tools/render/seed-page.js seeded.html dropoff-a@rot-in
+node tools/render/seed-page.js seeded.html dropoff-a@a dropoff-a-signals@b
 ```
 
 ### What the tests hold down

@@ -23,7 +23,8 @@ factorio-bp/
   open-tools.url      convenience shortcut
   blueprints/         fixture data — real blueprint strings used by the harnesses
   sprites/            GENERATED game art (PNG) + entities.json / meta.json / recipe.json
-  tools/              16 hand-run dev scripts — sprite pipeline, rendering, diagnostics
+  tools/sprites/      10 hand-run scripts — sprite extraction pipeline and sprite diagnostics
+  tools/render/       6 hand-run scripts — renderers, page seeding, belt-curve/grid-position diagnostics
   tools/lib/          blueprint.js — shared decode + book unwrap (blueprintsOf / loadBlueprint)
                       blueprint.test.js — its checks, required by test.js
 ```
@@ -36,8 +37,10 @@ factorio-bp/
   source root would be a folder of one file plus three harnesses.
 - `blueprints/` — fixture data (blueprint strings). Flat by nature; exempt from fan-out.
 - `sprites/` — generated assets. Flat by nature; exempt from fan-out.
-- `tools/` — hand-run development scripts: the sprite pipeline, the renderers, and the
+- `tools/sprites/` — hand-run sprite pipeline (dump, recipe, extract, manifest) and sprite
   diagnostics. None are needed to run the tool itself.
+- `tools/render/` — hand-run renderers (`render.js`, `render-png.js/.ps1`), `seed-page.js`, and the
+  belt-curve / grid-position diagnostics.
 - `tools/lib/` — code shared by `tools/` scripts; for now only the blueprint decode + book
   unwrap helper. Add a helper only when two or more scripts need it.
 
@@ -55,17 +58,13 @@ appears, that is the signal this repo has outgrown flat, not a reason to widen t
 for each item. Confirmed by the 2026-09-22 baseline review (3 Claude structure lenses + a Codex
 cross-model sign-off; see the stamp below). Summary:
 
-- **[P1] `tools/` is at 16 files** — past the 12-file general cap and double the 8-file cap for a
-  generically-named bucket. Three distinct responsibilities (sprite pipeline & inspection ~10,
-  rendering 3, dev diagnostics 3) should split into responsibility-named folders. Confirmed by
-  both a Claude lens and Codex.
 - **[P1] Four independent reimplementations of the load-`index.html`-as-API trick** (`bp.js`,
-  `test.js`, `debug.js`, `tools/render-png.js`), each re-deriving slice boundaries, DOM stub shape
+  `test.js`, `debug.js`, `tools/render/render-png.js`), each re-deriving slice boundaries, DOM stub shape
   and export list. Direction: one `loadPageApi(names, extraGlobals)`.
-- **[P1] `tools/render.js` duplicates `render-png.js`'s job** with its own reimplemented
+- **[P1] `tools/render/render.js` duplicates `render-png.js`'s job** with its own reimplemented
   entity-placement/z-order logic instead of loading the page's `entBox()`/`drawRank()`/`SPRITES`.
   Undocumented in CLAUDE.md/README. Direction: delete if superseded, or make it consume the page.
-- **[P1] `tools/belt-curves.js` reimplements the belt-neighbor algorithm** that `beltCurves()` in
+- **[P1] `tools/render/belt-curves.js` reimplements the belt-neighbor algorithm** that `beltCurves()` in
   `index.html` already owns, so the diagnostic can disagree with the product it's meant to
   validate. Direction: load the page's `beltCurves()`; keep the script to formatting only.
 - **[P1] Supported-entity inventory hard-coded separately** in `build-recipe.js`, `dump-meta.js`,
@@ -81,14 +80,11 @@ cross-model sign-off; see the stamp below). Summary:
 - **[P2] Stable architecture and gotchas live in `CLAUDE.md`** instead of the documented living-doc
   locations. Direction: extract design into `docs/ARCHITECTURE.md`, hazards into `docs/GOTCHAS.md`,
   leaving links in `CLAUDE.md`.
-- **[P2] Two implementations of mod-relative path resolution** (`tools/extract-sprites.ps1`,
-  `tools/build-recipe.js`) — one PowerShell, one JS. Low priority; the languages can't share code
+- **[P2] Two implementations of mod-relative path resolution** (`tools/sprites/extract-sprites.ps1`,
+  `tools/sprites/build-recipe.js`) — one PowerShell, one JS. Low priority; the languages can't share code
   directly. (Codex checked `extract-entities.ps1` for the same pattern and found it does not
   repeat mod-reference parsing — it consumes an already-resolved recipe, so it is not a third
   copy.)
-
-Not accretion — git history shows the original 16 `tools/` files arrived in the initial import, so
-the bucket's size is original shape, not drift.
 
 **Last full review: 2026-09-22.** Baseline over the whole codebase — 3 Claude structure lenses
 (componentization, abstraction, topology) plus a Codex cross-model sign-off. **Verdict: PASS, no

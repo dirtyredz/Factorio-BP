@@ -1,7 +1,7 @@
 // Extracts where wires actually attach, per entity and direction, and splices
 // the table into index.html as CONNECT.
 //
-//   node tools/dump-connectors.js [--write]
+//   node tools/sprites/dump-connectors.js [--write]
 //
 // A wire's connector id says which point it lands on:
 //
@@ -20,7 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const root = path.join(__dirname, '..');
+const root = path.join(__dirname, '..', '..');
 const DUMP = path.join(process.env.APPDATA, 'Factorio', 'script-output', 'data-raw-dump.json');
 const raw = JSON.parse(fs.readFileSync(DUMP, 'utf8'));
 

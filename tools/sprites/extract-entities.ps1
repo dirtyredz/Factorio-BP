@@ -9,7 +9,7 @@
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-$root   = Split-Path -Parent $PSScriptRoot
+$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $out    = Join-Path $root "sprites"
 $recipe = Get-Content (Join-Path $out "recipe.json") -Raw | ConvertFrom-Json
 

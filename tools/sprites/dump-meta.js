@@ -12,7 +12,7 @@ const fs = require("fs");
 const path = require("path");
 
 const DUMP = path.join(process.env.APPDATA, "Factorio", "script-output", "data-raw-dump.json");
-const OUT = path.join(__dirname, "..", "sprites", "meta.json");
+const OUT = path.join(__dirname, "..", "..", "sprites", "meta.json");
 
 // Prototype categories that share names with entities but aren't placeable.
 const NOT_AN_ENTITY = new Set([

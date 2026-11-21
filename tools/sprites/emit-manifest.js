@@ -6,7 +6,7 @@
 // the browser treats it as a cross-origin request. <img src="sprites/x.png">
 // is not subject to that, which is why the PNGs can stay as loose files.
 //
-//   node tools/emit-manifest.js
+//   node tools/sprites/emit-manifest.js
 //
 // Shape: { "entity-name": { "<direction>": [ox, oy, w, h, src] } }
 // ox/oy are the sprite's top-left offset from the entity centre, in tiles, and
@@ -17,7 +17,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const root = path.join(__dirname, "..");
+const root = path.join(__dirname, "..", "..");
 const man = JSON.parse(fs.readFileSync(path.join(root, "sprites", "entities.json"), "utf8"));
 const meta = JSON.parse(fs.readFileSync(path.join(root, "sprites", "meta.json"), "utf8"));
 

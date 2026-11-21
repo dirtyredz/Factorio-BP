@@ -26,7 +26,7 @@ travelling west. Rows 4–11 of the belt sheet are the curves.
 so the flow is travelling **west** and turns north. Reading it as "was going east, now going
 north" gives the mirror image of the right answer.
 
-That was caught without the game by `tools/check-belt-curves.ps1`, which measures how much of
+That was caught without the game by `tools/sprites/check-belt-curves.ps1`, which measures how much of
 each tile edge a curve sprite's art actually covers and compares it against what the key
 implies. Worth keeping: it turns a question about a naming convention into a measurement.
 
@@ -56,7 +56,7 @@ So: **5 is copper, odd is red, even is green.** All 17 wires in `dropoff-a` clas
 The preview draws them as an SVG layer between the entities and the grid overlay.
 
 **Where a wire lands is real data, not the entity centre.** `CONNECT` in `index.html` holds the
-offsets, extracted by `tools/dump-connectors.js --write` from the prototypes, keyed by entity,
+offsets, extracted by `tools/sprites/dump-connectors.js --write` from the prototypes, keyed by entity,
 direction and connector id. The first attempt drew centre to centre and the owner spotted three
 separate things wrong with it in one go:
 

@@ -1,6 +1,6 @@
 // Working out what Factorio shows as "Grid position" in the blueprint dialog.
 //
-//   node tools/gridpos.js
+//   node tools/render/gridpos.js
 //
 // CLAUDE.md's note: gridpos ~= 1 - min(entity centre), but the constant is not
 // reliable because it depends on the true bounding box, and the gap between that
@@ -11,11 +11,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const root = path.join(__dirname, '..');
+const root = path.join(__dirname, '..', '..');
 const meta = JSON.parse(fs.readFileSync(path.join(root, 'sprites', 'meta.json'), 'utf8'));
 
 const read = n => fs.readFileSync(path.join(root, 'blueprints', n + '.txt'), 'utf8').trim();
-const { loadBlueprint } = require('./lib/blueprint');
+const { loadBlueprint } = require('../lib/blueprint');
 
 // Footprint in tiles, with axes swapped on a quarter turn.
 function foot(e) {

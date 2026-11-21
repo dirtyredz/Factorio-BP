@@ -43,7 +43,9 @@ so that can't recur. Don't `wrangler pages deploy .` from the repo root.
 | `deploy.ps1` | Deploys the public site — stages `index.html` + `sprites/*.png` and runs `wrangler pages deploy`. See [Deployment](#deployment--the-public-site). |
 | `blueprints/*.txt` | Real blueprints from the owner. One string per file, no trailing newline. |
 | `sprites/*.png` | Entity art cut out of the owner's own Factorio install, one file per entity *and direction*. Game assets, but this tool is free and non-commercial, so publishing them is fine — they ship to the public Pages site via `deploy.ps1`. |
-| `tools/*` | One-off scripts that produce `sprites/`. Not needed to run the tools; needed to regenerate the art. See `docs/sprites.md`. |
+| `tools/sprites/*` | One-off scripts that produce `sprites/` (extraction pipeline) plus sprite diagnostics. Not needed to run the tools; needed to regenerate the art. See `docs/sprites.md`. |
+| `tools/render/*` | Renderers (`render.js`, `render-png.js/.ps1`), `seed-page.js`, `belt-curves.js`, `gridpos.js`. Hand-run. |
+| `tools/lib/*` | Shared decode helper (`blueprint.js`) and its checks. |
 | `VERIFY-IN-GAME.md` | Checks that pass their tests but have never been confirmed against Factorio. Raise these when the owner says they are in game. |
 | `IDEAS.md` | Agreed but unbuilt work, ranked, with what's known vs assumed for each. Move an item into this file and the README when it ships. |
 

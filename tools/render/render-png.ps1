@@ -1,6 +1,6 @@
 # Rasterises the draw list from render-png.js into a PNG.
 #
-#   node tools/render-png.js dropoff-a draw.json 32
+#   node tools/render/render-png.js dropoff-a draw.json 32
 #   .\tools\render-png.ps1 draw.json out.png
 #
 # Wires are drawn over the entities, the way the game layers them.
@@ -11,7 +11,7 @@ $listFile = $args[0]
 $dest = $args[1]
 if (-not $listFile -or -not $dest) { throw "usage: render-png.ps1 <draw.json> <out.png>" }
 
-$root = Split-Path -Parent $PSScriptRoot
+$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $spriteDir = Join-Path $root "sprites"
 $d = Get-Content $listFile -Raw | ConvertFrom-Json
 

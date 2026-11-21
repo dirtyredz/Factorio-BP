@@ -1,10 +1,10 @@
 // Which (entity, direction) pairs actually appear across the stored blueprints.
 // Only these need sprites extracted.
 const fs = require("fs");
-const { decode, blueprintsOf } = require("./lib/blueprint");
+const { decode, blueprintsOf } = require("../lib/blueprint");
 const path = require("path");
 
-const dir = path.join(__dirname, "..", "blueprints");
+const dir = path.join(__dirname, "..", "..", "blueprints");
 const seen = {};
 
 for (const f of fs.readdirSync(dir)) {

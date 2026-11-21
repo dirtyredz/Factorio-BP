@@ -1,6 +1,6 @@
 // Emits a flat draw list for render-png.ps1, which rasterises it.
 //
-//   node tools/render-png.js <blueprint> <out.json> [tilePx] [x0 y0 x1 y1]
+//   node tools/render/render-png.js <blueprint> <out.json> [tilePx] [x0 y0 x1 y1]
 //
 // The placement comes from the page's own entBox() and SPRITES table, loaded the
 // same way bp.js and test.js load them, so a rendered PNG can't drift from what
@@ -9,7 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const root = path.join(__dirname, '..');
+const root = path.join(__dirname, '..', '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const src = html.slice(html.lastIndexOf('<script>') + 8, html.lastIndexOf('</' + 'script>'));
 
@@ -29,7 +29,7 @@ const TILE = Number(process.argv[4]) || 32;
 const crop = process.argv.slice(5).map(Number);
 
 const str = fs.readFileSync(path.join(root, 'blueprints', name + '.txt'), 'utf8').trim();
-const b = require('./lib/blueprint').loadBlueprint(str);
+const b = require('../lib/blueprint').loadBlueprint(str);
 const ents = b.entities || [];
 
 const curves = api.beltCurves(ents);
