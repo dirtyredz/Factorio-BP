@@ -45,7 +45,7 @@ so that can't recur. Don't `wrangler pages deploy .` from the repo root.
 | `sprites/*.png` | Entity art cut out of the owner's own Factorio install, one file per entity *and direction*. Game assets, but this tool is free and non-commercial, so publishing them is fine — they ship to the public Pages site via `deploy.ps1`. |
 | `tools/sprites/*` | One-off scripts that produce `sprites/` (extraction pipeline) plus sprite diagnostics. Not needed to run the tools; needed to regenerate the art. See `docs/sprites.md`. |
 | `tools/render/*` | Renderers (`render.js`, `render-png.js/.ps1`), `seed-page.js`, `belt-curves.js`, `gridpos.js`. Hand-run. |
-| `tools/lib/*` | Shared decode helper (`blueprint.js`) and its checks. |
+| `tools/lib/*` | Shared helpers and their checks: `blueprint.js` (decode), `page-api.js` (loads the page's functions). |
 | `VERIFY-IN-GAME.md` | Checks that pass their tests but have never been confirmed against Factorio. Raise these when the owner says they are in game. |
 | `IDEAS.md` | Agreed but unbuilt work, ranked, with what's known vs assumed for each. Move an item into this file and the README when it ships. |
 
@@ -54,9 +54,10 @@ so that can't recur. Don't `wrangler pages deploy .` from the repo root.
 node test.js
 ```
 
-`bp.js` and `test.js` both do `html.slice(html.lastIndexOf('<script>') ...)` — **keep `index.html`
-to a single `<script>` block at the end**, or both break. When adding a function they need,
-extend the `return { ... }` list in their `new Function(...)` call.
+`bp.js`, `test.js`, `debug.js` and `tools/render/render-png.js` all load the page's functions through
+`tools/lib/page-api.js` (`loadPageApi(names, extraGlobals)`), which slices the last `<script>` — **keep
+`index.html` to a single `<script>` block at the end**, or all of them break. When adding a function a
+caller needs, add its name to that caller's `loadPageApi([...])` list.
 
 ## Working with the owner
 

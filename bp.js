@@ -7,31 +7,14 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const { loadPageApi } = require('./tools/lib/page-api');
 
 const ROOT = __dirname;
 const STORE = path.join(ROOT, 'blueprints');
 
 // ---------- load the page's logic ----------
 
-function loadApi() {
-  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  const open = html.lastIndexOf('<script>') + '<script>'.length;
-  const close = html.lastIndexOf('</' + 'script>');
-  const src = html.slice(open, close);
-
-  const stub = () => ({
-    addEventListener() {}, classList: { add() {}, remove() {} },
-    value: '', textContent: '', innerHTML: '', className: '', checked: false,
-    removeAttribute() {}, setAttribute() {}, select() {},
-  });
-
-  return new Function('document', 'navigator',
-    src + '\n;return { decode, encode, compare, merge, bpOf, tally, paramBound, key, ZERO, paramsStillBind, parseOffset, turnBlueprint, flipBlueprint, normalise, normaliseReport };'
-  )({ getElementById: stub, querySelectorAll: () => [] },
-    { clipboard: { writeText: async () => {} } });
-}
-
-const api = loadApi();
+const api = loadPageApi(['decode', 'encode', 'compare', 'merge', 'bpOf', 'tally', 'paramBound', 'key', 'ZERO', 'paramsStillBind', 'parseOffset', 'turnBlueprint', 'flipBlueprint', 'normalise', 'normaliseReport']);
 
 // ---------- clipboard ----------
 

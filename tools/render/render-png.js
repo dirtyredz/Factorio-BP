@@ -8,20 +8,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { loadPageApi } = require('../lib/page-api');
 
 const root = path.join(__dirname, '..', '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const src = html.slice(html.lastIndexOf('<script>') + 8, html.lastIndexOf('</' + 'script>'));
-
-const stub = () => ({
-  addEventListener() {}, classList: { add() {}, remove() {} },
-  value: '', textContent: '', innerHTML: '', className: '', checked: false,
-  removeAttribute() {}, setAttribute() {}, select() {},
-});
-const api = new Function('document', 'navigator',
-  src + '\n;return { entBox, drawRank, wireEnd, beltCurves };'
-)({ getElementById: stub, querySelectorAll: () => [] },
-  { clipboard: { writeText: async () => {} } });
+const api = loadPageApi(['entBox', 'drawRank', 'wireEnd', 'beltCurves']);
 
 const name = process.argv[2] || 'dropoff-a';
 const outFile = process.argv[3] || path.join(root, 'draw.json');

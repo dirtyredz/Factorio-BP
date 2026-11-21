@@ -4,8 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
-const src = html.slice(html.lastIndexOf('<script>') + 8, html.lastIndexOf('</' + 'script>'));
+const { loadPageApi } = require('./tools/lib/page-api');
 
 const els = new Map();
 function el(id) {
@@ -28,9 +27,9 @@ function el(id) {
 const win = { matchMedia: () => ({ matches: false }) };
 const doc = { getElementById: el, querySelectorAll: () => [] };
 
-const api = new Function('document', 'navigator', 'window', 'requestAnimationFrame',
-  src + '\n;return { run: run, applyMods: applyMods };'
-)(doc, { clipboard: { writeText: async () => {} } }, win, fn => fn());
+const api = loadPageApi(['run', 'applyMods'], {
+  document: doc, window: win, requestAnimationFrame: fn => fn(),
+});
 
 const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt'), 'utf8').trim();
 

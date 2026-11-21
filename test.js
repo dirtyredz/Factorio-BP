@@ -5,24 +5,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
-const src = html.slice(html.lastIndexOf('<script>') + 8, html.lastIndexOf('</' + 'script>'));
+const { loadPageApi } = require('./tools/lib/page-api');
 
-// minimal DOM so the page's event wiring doesn't throw under node
-const stub = () => ({
-  addEventListener() {}, classList: { add() {}, remove() {} },
-  value: '', textContent: '', innerHTML: '', className: '', checked: false,
-  removeAttribute() {}, setAttribute() {}, select() {},
-});
-const document = { getElementById: stub, querySelectorAll: () => [] };
-const navigator = { clipboard: { writeText: async () => {} } };
-
-const api = new Function('document', 'navigator',
-  src + '\n;return { decode, encode, compare, merge, bpOf, protect, paramsStillBind, key, ZERO,' +
-        ' turnBlueprint, flipBlueprint, entBox, buildPreview, SPRITES, FOOTPRINT, wireEnd, CONNECT, beltCurves, diffMarks, gridPosition,' +
-        ' transformTiles, findTileOffset, occupiedCells,' +
-        ' normalise, normaliseReport };'
-)(document, navigator);
+const api = loadPageApi(['decode', 'encode', 'compare', 'merge', 'bpOf', 'protect', 'paramsStillBind', 'key', 'ZERO',
+  'turnBlueprint', 'flipBlueprint', 'entBox', 'buildPreview', 'SPRITES', 'FOOTPRINT', 'wireEnd', 'CONNECT', 'beltCurves', 'diffMarks', 'gridPosition',
+  'transformTiles', 'findTileOffset', 'occupiedCells',
+  'normalise', 'normaliseReport']);
 
 const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt'), 'utf8').trim();
 
@@ -410,8 +398,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
 
   // Rebuild the entry the check above deleted, so later checks see a clean table.
   {
-    const fresh = new Function('document', 'navigator',
-      src + '\n;return SPRITES;')(document, navigator);
+    const fresh = loadPageApi(['SPRITES']).SPRITES;
     api.SPRITES['decider-combinator'] = fresh['decider-combinator'];
   }
 
@@ -495,7 +482,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
         .execFileSync(process.execPath, [path.join(__dirname, 'tools', 'sprites', 'emit-manifest.js')],
           { encoding: 'utf8' });
       const line = /^ {2}const SPRITES = .*;$/m.exec(emitted);
-      const inPage = /^ {2}const SPRITES = .*;$/m.exec(src);
+      const inPage = /^ {2}const SPRITES = .*;$/m.exec(fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8'));
       stale = !line || !inPage || line[0] !== inPage[0];
     } catch (e) { stale = null; }   // generator unavailable; skip rather than fail
   }
@@ -1104,6 +1091,7 @@ const read = n => fs.readFileSync(path.join(__dirname, 'blueprints', n + '.txt')
 
   // Shared Node-tool decode helper: checks live beside it.
   checks.push(...require('./tools/lib/blueprint.test'));
+  checks.push(...require('./tools/lib/page-api.test'));
 
   let bad = 0;
   for (const [name, ok] of checks) {
