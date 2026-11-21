@@ -16,7 +16,8 @@ factorio-bp/
   VERIFY-IN-GAME.md     checks that pass their tests but are unconfirmed against Factorio
   index.html          the tool itself — a single-page, buildless Factorio blueprint renderer
   bp.js               blueprint string decode/encode (CLI-usable)
-  test.js             test harness
+  test.js             test loader/runner — page API, batch order, reporter, exit handling
+  tests/              page scenario suites required by test.js: transforms, merge (+ marks), sprites (+ belts)
   debug.js            debug harness
   deploy.ps1          deploy entrypoint — stages dist/ and runs `wrangler pages deploy`
   test-strings.txt    scratch blueprint strings for the harnesses
@@ -35,6 +36,8 @@ factorio-bp/
   CLI/test/debug/deploy entrypoints (`bp.js`, `test.js`, `debug.js`, `deploy.ps1`). There is no
   `src/` tree and there should not be one — the tool is a single page with no build step, so a
   source root would be a folder of one file plus three harnesses.
+- `tests/` — scenario suites for the page (`*.test.js`), each exporting `async (api) => batches` of `[name, ok]` pairs
+  with no work at require time; `test.js` owns the API, the batch order and the reporter. Fixtures resolve from the repo root.
 - `blueprints/` — fixture data (blueprint strings). Flat by nature; exempt from fan-out.
 - `sprites/` — generated assets. Flat by nature; exempt from fan-out.
 - `tools/sprites/` — hand-run sprite pipeline (dump, recipe, extract, manifest) and sprite
@@ -65,9 +68,8 @@ cross-model sign-off; see the stamp below). Summary:
   `extract-sprites.ps1`, and partially `dump-connectors.js` — adding entity support needs
   coordinated edits and can silently omit icons, footprints, connectors, or directional art.
   Direction: one responsibility-named entity manifest.
-- **[P1] `test.js`'s 206 checks live in one stateful IIFE** sharing setup and mutable fixtures
-  across merge, transforms, sprites, wires, grids, and floor overlays. Direction: keep `test.js`
-  as the page-API loader/runner; move scenario suites into responsibility-named test modules.
+- **[P1] `test.js` still carries the grid, wire and floor-overlay scenarios inline** (merge, transforms and
+  sprites already moved to `tests/`). Direction: move them into one `tests/overlays.test.js`.
 - **[P2] Stable architecture and gotchas live in `CLAUDE.md`** instead of the documented living-doc
   locations. Direction: extract design into `docs/ARCHITECTURE.md`, hazards into `docs/GOTCHAS.md`,
   leaving links in `CLAUDE.md`.

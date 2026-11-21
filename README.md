@@ -248,7 +248,7 @@ you meant before committing to it.
 node test.js
 ```
 
-179 checks, running the page's own logic against real blueprints: the signal merge verified
+215 checks, running the page's own logic against real blueprints: the signal merge verified
 against a result confirmed in game, a synthetic upgrade-and-shift case covering replacement
 pairing and anchor override, a settings update that must not break parametrisation, rotation
 round-trips, and the flip — whose curved-rail handling is checked against the mirror-symmetric
