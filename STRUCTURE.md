@@ -25,7 +25,7 @@ factorio-bp/
   sprites/            GENERATED game art (PNG) + entities.json / meta.json / recipe.json
   tools/sprites/      10 hand-run scripts — sprite extraction pipeline and sprite diagnostics
   tools/render/       6 hand-run scripts — renderers, page seeding, belt-curve/grid-position diagnostics
-  tools/lib/          blueprint.js — shared decode + book unwrap; page-api.js — loadPageApi() pulls named functions out of index.html
+  tools/lib/          blueprint.js — shared decode + book unwrap; page-api.js — loadPageApi() pulls named functions out of index.html; blueprint.test.js / page-api.test.js — their checks
                       blueprint.test.js — its checks, required by test.js
 ```
 
@@ -41,7 +41,7 @@ factorio-bp/
   diagnostics. None are needed to run the tool itself.
 - `tools/render/` — hand-run renderers (`render.js`, `render-png.js/.ps1`), `seed-page.js`, and the
   belt-curve / grid-position diagnostics.
-- `tools/lib/` — code shared by `tools/` scripts; the blueprint decode + book unwrap helper and
+- `tools/lib/` — code shared by `tools/` scripts and the root harnesses (bp.js, test.js, debug.js); the blueprint decode + book unwrap helper and
   the page-api loader. Add a helper only when two or more scripts need it.
 
 ## Why the root holds code
