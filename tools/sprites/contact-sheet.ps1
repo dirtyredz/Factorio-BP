@@ -2,7 +2,7 @@
 # Each cell is drawn at a fixed tiles-per-cell scale with the entity centre
 # marked, which is what catches a wrong frame or a bad shift.
 #
-#   .\tools\contact-sheet.ps1 [outfile.png]
+#   .\tools\sprites\contact-sheet.ps1 [outfile.png]
 
 Add-Type -AssemblyName System.Drawing
 

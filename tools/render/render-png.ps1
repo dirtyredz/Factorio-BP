@@ -1,7 +1,7 @@
 # Rasterises the draw list from render-png.js into a PNG.
 #
 #   node tools/render/render-png.js dropoff-a draw.json 32
-#   .\tools\render-png.ps1 draw.json out.png
+#   .\tools\render\render-png.ps1 draw.json out.png
 #
 # Wires are drawn over the entities, the way the game layers them.
 
