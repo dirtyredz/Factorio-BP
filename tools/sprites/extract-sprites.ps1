@@ -34,7 +34,7 @@ $icons = [ordered]@{
 }
 
 # Returns a Bitmap for a __mod__/path icon reference, or $null.
-# Mirrors resolve() in build-recipe.js (direct data<mod> file, else newest <mod>_*.zip entry);
+# Mirrors resolve() in build-recipe.js (direct data/<mod>/ file, else the lexicographically last matching <mod>_*.zip entry);
 # keep the two in step - PowerShell and Node cannot share code.
 function Get-IconBitmap($ref) {
   if ($ref -notmatch '^__([^_]+(?:[-_][^_]+)*)__/(.+)$') { return $null }
