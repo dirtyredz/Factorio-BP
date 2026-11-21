@@ -24,6 +24,7 @@ factorio-bp/
   blueprints/         fixture data — real blueprint strings used by the harnesses
   sprites/            GENERATED game art (PNG) + entities.json / meta.json / recipe.json
   tools/              16 hand-run dev scripts — sprite pipeline, rendering, diagnostics
+  tools/lib/          blueprint.js — shared decode + book unwrap (blueprintsOf / loadBlueprint)
 ```
 
 **Enforced homes** (what the placement hook reads):
@@ -55,11 +56,6 @@ cross-model sign-off; see the stamp below). Summary:
   generically-named bucket. Three distinct responsibilities (sprite pipeline & inspection ~10,
   rendering 3, dev diagnostics 3) should split into responsibility-named folders. Confirmed by
   both a Claude lens and Codex.
-- **[P1] Duplicated blueprint-book decode/unwrap** across five `tools/` scripts, with a **latent
-  correctness bug**: `used-dirs.js` processes every top-level blueprint in a book while
-  `belt-curves.js`/`render.js`/`gridpos.js` each silently take only the first, so valid book input
-  produces inconsistent or silently partial results across the tools. Codex-confirmed.
-  Direction: one shared sync decode+unwrap helper.
 - **[P1] Four independent reimplementations of the load-`index.html`-as-API trick** (`bp.js`,
   `test.js`, `debug.js`, `tools/render-png.js`), each re-deriving slice boundaries, DOM stub shape
   and export list. Direction: one `loadPageApi(names, extraGlobals)`.
@@ -76,7 +72,7 @@ cross-model sign-off; see the stamp below). Summary:
 - **[P1] Merge verification reimplemented in `bp.js`** separately from the browser checks at
   `index.html:1886` — CLI and page can accept different outputs for the same merge contract.
   Direction: one page-owned `mergeChecks()` rendered by both.
-- **[P1] `test.js`'s 202 checks live in one stateful IIFE** sharing setup and mutable fixtures
+- **[P1] `test.js`'s 206 checks live in one stateful IIFE** sharing setup and mutable fixtures
   across merge, transforms, sprites, wires, grids, and floor overlays. Direction: keep `test.js`
   as the page-API loader/runner; move scenario suites into responsibility-named test modules.
 - **[P2] Stable architecture and gotchas live in `CLAUDE.md`** instead of the documented living-doc

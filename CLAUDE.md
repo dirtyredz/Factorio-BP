@@ -38,7 +38,7 @@ so that can't recur. Don't `wrangler pages deploy .` from the repo root.
 |---|---|
 | `index.html` | The whole product. Markup, styles, and **all the logic**. Hash-routed: `#/merge`, `#/rotate` (turns *and* flips), `#/normalise`, `#/inspect`. |
 | `bp.js` | CLI front end. **Loads its logic out of `index.html`** so the two can't drift. |
-| `test.js` | 202 checks, same trick — pulls the page's functions and runs them against real blueprints. |
+| `test.js` | 206 checks, same trick — pulls the page's functions and runs them against real blueprints. |
 | `debug.js` | Drives the page's `run()` against a fake DOM, so UI-path errors surface in the terminal. |
 | `deploy.ps1` | Deploys the public site — stages `index.html` + `sprites/*.png` and runs `wrangler pages deploy`. See [Deployment](#deployment--the-public-site). |
 | `blueprints/*.txt` | Real blueprints from the owner. One string per file, no trailing newline. |

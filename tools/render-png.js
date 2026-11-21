@@ -8,7 +8,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const zlib = require('zlib');
 
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -20,7 +19,7 @@ const stub = () => ({
   removeAttribute() {}, setAttribute() {}, select() {},
 });
 const api = new Function('document', 'navigator',
-  src + '\n;return { bpOf, entBox, drawRank, wireEnd, beltCurves };'
+  src + '\n;return { entBox, drawRank, wireEnd, beltCurves };'
 )({ getElementById: stub, querySelectorAll: () => [] },
   { clipboard: { writeText: async () => {} } });
 
@@ -30,7 +29,7 @@ const TILE = Number(process.argv[4]) || 32;
 const crop = process.argv.slice(5).map(Number);
 
 const str = fs.readFileSync(path.join(root, 'blueprints', name + '.txt'), 'utf8').trim();
-const b = api.bpOf(JSON.parse(zlib.inflateSync(Buffer.from(str.slice(1), 'base64')).toString()));
+const b = require('./lib/blueprint').loadBlueprint(str);
 const ents = b.entities || [];
 
 const curves = api.beltCurves(ents);

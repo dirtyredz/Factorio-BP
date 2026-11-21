@@ -13,7 +13,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const zlib = require('zlib');
 
 const UNIT = { 0: [0, -1], 4: [1, 0], 8: [0, 1], 12: [-1, 0] };   // N E S W
 const NAME = { 0: 'N', 4: 'E', 8: 'S', 12: 'W' };
@@ -64,8 +63,7 @@ if (require.main === module) {
   const name = process.argv[2] || 'dropoff-a';
   const root = path.join(__dirname, '..');
   const s = fs.readFileSync(path.join(root, 'blueprints', name + '.txt'), 'utf8').trim();
-  const j = JSON.parse(zlib.inflateSync(Buffer.from(s.slice(1), 'base64')).toString());
-  const bp = j.blueprint || j.blueprint_book.blueprints[0].blueprint;
+  const bp = require('./lib/blueprint').loadBlueprint(s);
 
   const rows = analyse(bp);
   const curved = rows.filter(r => r.curve !== null);

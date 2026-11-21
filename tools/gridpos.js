@@ -10,14 +10,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const zlib = require('zlib');
 
 const root = path.join(__dirname, '..');
 const meta = JSON.parse(fs.readFileSync(path.join(root, 'sprites', 'meta.json'), 'utf8'));
 
 const read = n => fs.readFileSync(path.join(root, 'blueprints', n + '.txt'), 'utf8').trim();
-const decode = s => JSON.parse(zlib.inflateSync(Buffer.from(s.slice(1), 'base64')).toString());
-const bpOf = o => o.blueprint || (o.blueprint_book && o.blueprint_book.blueprints[0].blueprint);
+const { loadBlueprint } = require('./lib/blueprint');
 
 // Footprint in tiles, with axes swapped on a quarter turn.
 function foot(e) {
@@ -53,7 +51,7 @@ console.log('-'.repeat(110));
 
 const rows = {};
 for (const n of names) {
-  const bp = bpOf(decode(read(n)));
+  const bp = loadBlueprint(read(n));
   const m = measure(bp);
   const g = bp['snap-to-grid'];
   rows[n] = m;

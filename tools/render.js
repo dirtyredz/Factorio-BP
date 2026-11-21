@@ -6,7 +6,6 @@
 //   node tools/render.js <blueprint-name> <out.html> [tilePx]
 
 const fs = require("fs");
-const zlib = require("zlib");
 const path = require("path");
 
 const name = process.argv[2] || "dropoff-a";
@@ -16,8 +15,7 @@ const TILE = Number(process.argv[4]) || 20;
 const root = path.join(__dirname, "..");
 const man = JSON.parse(fs.readFileSync(path.join(root, "sprites", "entities.json"), "utf8"));
 const str = fs.readFileSync(path.join(root, "blueprints", name + ".txt"), "utf8").trim();
-const json = JSON.parse(zlib.inflateSync(Buffer.from(str.slice(1), "base64")).toString());
-const bp = json.blueprint || json.blueprint_book.blueprints[0].blueprint;
+const bp = require("./lib/blueprint").loadBlueprint(str);
 
 const spriteDir = path.relative(path.dirname(path.resolve(outFile)),
   path.join(root, "sprites")).split(path.sep).join("/");
